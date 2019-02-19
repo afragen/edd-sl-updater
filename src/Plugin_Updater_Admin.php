@@ -34,7 +34,6 @@ class Plugin_Updater_Admin {
 			[
 				'file'        => '',
 				'api_url'     => 'http://easydigitaldownloads.com',
-				'plugin_slug' => '',
 				'item_name'   => '',
 				'download_id' => '',
 				'version'     => '',
@@ -58,7 +57,7 @@ class Plugin_Updater_Admin {
 		$this->api_url     = $config['api_url'];
 		$this->name        = $config['item_name'];
 		$this->file        = plugin_basename( $config['file'] );
-		$this->slug        = sanitize_key( $config['plugin_slug'] );
+		$this->slug        = dirname( $this->file );
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
 		$this->download_id = $config['download_id'];
@@ -66,7 +65,6 @@ class Plugin_Updater_Admin {
 		$this->beta        = $config['beta'];
 		$this->license     = trim( get_option( $this->slug . '_license_key' ) );
 		$this->api_data    = $config;
-		// $this->slug        = basename( $config['file'], '.php' );
 		$this->version     = $config['version'];
 		$this->wp_override = isset( $config['wp_override'] ) ? (bool) $config['wp_override'] : false;
 		$this->beta        = ! empty( $this->api_data['beta'] ) ? true : false;
@@ -156,37 +154,44 @@ class Plugin_Updater_Admin {
 		$status  = get_option( $this->slug . '_license_status' );
 		?>
 		<div class="wrap">
-		<h2><?php _e( 'Plugin License Options' ); ?></h2>
+		<h2>
+		<?php
+			printf(
+				esc_html__( '%s License Options', 'edd-sl-updater' ),
+				esc_attr( $this->name )
+			);
+		?>
+		</h2>
 		<form method="post" action="options.php">
 			<?php settings_fields( $this->slug . '_license' ); ?>
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
 						<th scope="row" valign="top">
-							<?php _e( 'License Key' ); ?>
+							<?php _e( 'License Key', 'edd-sl-updater' ); ?>
 						</th>
 						<td>
-							<input id="<?php echo $this->slug; ?>_license_key" name="<?php echo $this->slug; ?>_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license ); ?>" />
-							<label class="description" for="<?php echo $this->slug; ?>_license_key"><?php _e( 'Enter your license key' ); ?></label>
+							<input id="<?php echo $this->slug; ?>_license_key" name="<?php echo $this->slug; ?>_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license, 'edd-sl-updater' ); ?>" />
+							<label class="description" for="<?php echo $this->slug; ?>_license_key"><?php _e( 'Enter your license key', 'edd-sl-updater' ); ?></label>
 						</td>
 					</tr>
 					<?php if ( $license ) { ?>
 						<tr valign="top">
 							<th scope="row" valign="top">
-								<?php _e( 'Activate License' ); ?>
+								<?php _e( 'Activate License', 'edd-sl-updater' ); ?>
 							</th>
 							<td>
 								<?php
 								wp_nonce_field( $this->slug . '_nonce', $this->slug . '_nonce' );
 								if ( 'valid' === $status ) {
 									?>
-									<span style="color:green;"><?php _e( 'active' ); ?></span>
+									<span style="color:green;"><?php _e( 'active', 'edd-sl-updater' ); ?></span>
 
-									<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_deactivate" value="<?php _e( 'Deactivate License' ); ?>"/>
+									<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_deactivate" value="<?php _e( 'Deactivate License', 'edd-sl-updater' ); ?>"/>
 									<?php
 								} else {
 									?>
-									<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_activate" value="<?php _e( 'Activate License' ); ?>"/>
+									<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_activate" value="<?php _e( 'Activate License', 'edd-sl-updater' ); ?>"/>
 									<?php
 								}
 								?>

@@ -2,6 +2,19 @@
 
 ## Plugin Updater Example
 
+```php
+	( new EDD\Software_Licensing\Updater\Plugin_Updater_Admin(
+		array(
+			'file' => __FILE__,
+			'api_url' => 'http://easydigitaldownloads.com',
+			'item_name' => 'Sample Plugin',
+			'item_id' => 123,       // ID of the product
+			'version' => '1.0',                    // current version number
+			'author'  => 'Easy Digital Downloads', // author of this plugin
+			'beta'    => false,
+		)
+		) )->load_hooks();
+```
 
 ## Theme Updater Example
 

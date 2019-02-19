@@ -497,7 +497,7 @@ class Plugin_Updater {
 				'beta'       => ! empty( $data['beta'] ),
 			];
 
-			$verify_ssl   = $this->verify_ssl();
+			//$verify_ssl   = $this->verify_ssl();
 			$version_info = $this->get_api_response( $this->api_url, $api_params );
 
 			// $request    = wp_remote_post(

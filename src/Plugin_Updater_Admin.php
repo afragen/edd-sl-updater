@@ -23,6 +23,7 @@ class Plugin_Updater_Admin {
 	private $file        = '';
 	private $slug        = '';
 	private $version     = '';
+	private $license     = '';
 	private $wp_override = false;
 	private $cache_key   = '';
 
@@ -54,9 +55,8 @@ class Plugin_Updater_Admin {
 		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
 
 		// Set config arguments
-		$this->api_url = $config['api_url'];
-		$this->name    = $config['item_name'];
-		// $this->file        = $config['file'];
+		$this->api_url     = $config['api_url'];
+		$this->name        = $config['item_name'];
 		$this->file        = plugin_basename( $config['file'] );
 		$this->slug        = sanitize_key( $config['plugin_slug'] );
 		$this->version     = $config['version'];
@@ -64,9 +64,8 @@ class Plugin_Updater_Admin {
 		$this->download_id = $config['download_id'];
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
-		// $this->license_key = $config['license_key'];
-		// $this->api_url     = trailingslashit( $this->api_url );
-		$this->api_data = $config;
+		$this->license     = trim( get_option( $this->slug . '_license_key' ) );
+		$this->api_data    = $config;
 		// $this->slug        = basename( $config['file'], '.php' );
 		$this->version     = $config['version'];
 		$this->wp_override = isset( $config['wp_override'] ) ? (bool) $config['wp_override'] : false;
@@ -83,9 +82,6 @@ class Plugin_Updater_Admin {
 			$plugin        = get_plugin_data( $config['file'] );
 			$this->version = $plugin['Version'];
 		}
-
-		// Strings passed in from the updater config
-		// $this->strings = $strings;
 	}
 
 	public function load_hooks() {
@@ -93,10 +89,7 @@ class Plugin_Updater_Admin {
 		add_action( 'admin_menu', [ $this, 'license_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_option' ] );
 		add_action( 'admin_init', [ $this, 'license_action' ] );
-		// add_action( 'admin_init', [ $this, 'activate_license' ] );
-		// add_action( 'admin_init', [ $this, 'deactivate_license' ] );
 		add_action( 'update_option_' . $this->slug . '_license_key', [ $this, 'activate_license' ] );
-		// add_action( 'admin_notices', [ $this, 'edd_sample_admin_notices' ] );
 	}
 
 	/************************************
@@ -115,7 +108,6 @@ class Plugin_Updater_Admin {
 	}
 
 	public function register_option() {
-		// creates our settings in the options table
 		register_setting(
 			$this->slug . '_license',
 			$this->slug . '_license_key',
@@ -124,7 +116,7 @@ class Plugin_Updater_Admin {
 	}
 
 	public function sanitize_license( $new ) {
-		$old = get_option( $this->slug . '_license_key' );
+		$old = $this->license;
 		if ( $old && $old !== $new ) {
 			delete_option( $this->slug . '_license_status' ); // new license has been entered, so must reactivate
 		}
@@ -149,7 +141,7 @@ class Plugin_Updater_Admin {
 				'file'        => $this->file,
 				'slug'        => $this->slug,
 				'version'     => $this->version,
-				'license'     => trim( get_option( $this->slug . '_license_key' ) ),
+				'license'     => $this->license,
 				'author'      => $this->author,
 				'wp_override' => $this->wp_override,
 				'beta'        => $this->beta,
@@ -159,15 +151,13 @@ class Plugin_Updater_Admin {
 	}
 
 	public function license_page() {
-		$license = get_option( $this->slug . '_license_key' );
+		$license = $this->license;
 		$status  = get_option( $this->slug . '_license_status' );
 		?>
-	<div class="wrap">
+		<div class="wrap">
 		<h2><?php _e( 'Plugin License Options' ); ?></h2>
 		<form method="post" action="options.php">
-
 			<?php settings_fields( $this->slug . '_license' ); ?>
-
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
@@ -221,13 +211,10 @@ class Plugin_Updater_Admin {
 				return; // get out if we didn't click the Activate button
 			}
 
-			// retrieve the license from the database
-			$license = get_option( $this->slug . '_license_key' );
-
 			// data to send in our API request
 			$api_params = [
 				'edd_action' => 'activate_license',
-				'license'    => trim( $license ),
+				'license'    => $this->license,
 				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD
 				'url'        => home_url(),
 			];
@@ -289,7 +276,6 @@ class Plugin_Updater_Admin {
 				}
 			}
 			update_option( $this->slug . '_license_status', $license_data->license );
-
 		}
 
 		if ( ! empty( $message ) ) {
@@ -318,7 +304,6 @@ class Plugin_Updater_Admin {
 		// wp_redirect( admin_url( 'plugins.php?page=' . $this->slug . '-license' ) );
 		// exit();
 		$this->redirect( $error_data );
-
 	}
 
 
@@ -337,13 +322,10 @@ class Plugin_Updater_Admin {
 				return; // get out if we didn't click the Activate button
 			}
 
-			// retrieve the license from the database
-			$license = trim( get_option( $this->slug . '_license_key' ) );
-
 			// data to send in our API request
 			$api_params = array(
 				'edd_action' => 'deactivate_license',
-				'license'    => $license,
+				'license'    => $this->license,
 				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD
 				'url'        => home_url(),
 			);
@@ -386,11 +368,7 @@ class Plugin_Updater_Admin {
 			if ( 'deactivated' === $license_data->license ) {
 				delete_option( $this->slug . '_license_status' );
 			}
-
-			// wp_redirect( admin_url( 'plugins.php?page=' . $this->slug . '-license' ) );
-			// exit();
 			$this->redirect();
-
 		}
 	}
 
@@ -422,14 +400,11 @@ class Plugin_Updater_Admin {
 	 *************************************/
 
 	public function check_license() {
-
 		global $wp_version;
-
-		$license = trim( get_option( $this->slug . '_license_key' ) );
 
 		$api_params = array(
 			'edd_action' => 'check_license',
-			'license'    => $license,
+			'license'    => $this->license,
 			'item_name'  => rawurlencode( $this->name ),
 			'url'        => home_url(),
 		);
@@ -457,32 +432,6 @@ class Plugin_Updater_Admin {
 		} else {
 			echo 'invalid';
 			exit; // this license is no longer valid
-		}
-	}
-
-	/**
-	 * This is a means of catching errors from the activation method above and displaying it to the customer
-	 */
-	function edd_sample_admin_notices() {
-		if ( isset( $_GET['sl_activation'] ) && ! empty( $_GET['message'] ) ) {
-
-			switch ( $_GET['sl_activation'] ) {
-
-				case 'false':
-					$message = urldecode( $_GET['message'] );
-					?>
-				<div class="error">
-					<p><?php echo $message; ?></p>
-				</div>
-					<?php
-					break;
-
-				case 'true':
-				default:
-					// Developers can put a custom success message here for when activation is successful if they way.
-					break;
-
-			}
 		}
 	}
 

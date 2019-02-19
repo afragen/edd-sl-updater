@@ -1,13 +1,17 @@
-# EDD Sofware Licensing Updater
+<?php
+/**
+ * Easy Digital Downloads Theme Updater
+ *
+ * @package EDD Sample Theme
+ */
 
-## Plugin Updater Example
+// Includes the files needed for the theme updater
+if ( ! class_exists( 'EDD_Theme_Updater_Admin' ) ) {
+	// include( dirname( __FILE__ ) . '/theme-updater-admin.php' );
+}
 
-
-## Theme Updater Example
-
-```php
 // Loads the updater classes
-( new Theme_Updater_Admin(
+( new EDD\Software_Licensing\Updater\Theme_Updater_Admin(
 
 	// Config settings
 	$config = array(
@@ -20,7 +24,6 @@
 		'renew_url'      => '', // Optional, allows for a custom license renewal link
 		'beta'           => false, // Optional, set to true to opt into beta versions
 	),
-
 	// Strings
 	$strings = array(
 		'theme-license'             => __( 'Theme License', 'edd-theme-updater' ),
@@ -44,8 +47,6 @@
 		'site-is-inactive'          => __( 'Site is inactive.', 'edd-theme-updater' ),
 		'license-status-unknown'    => __( 'License status is unknown.', 'edd-theme-updater' ),
 		'update-notice'             => __( "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update.", 'edd-theme-updater' ),
-		'update-available'          => __('<strong>%1$s %2$s</strong> is available. <a href="%3$s" class="thickbox" title="%4s">Check out what\'s new</a> or <a href="%5$s"%6$s>update now</a>.', 'edd-theme-updater' ),
+		'update-available'          => __( '<strong>%1$s %2$s</strong> is available. <a href="%3$s" class="thickbox" title="%4s">Check out what\'s new</a> or <a href="%5$s"%6$s>update now</a>.', 'edd-theme-updater' ),
 	)
-
-) )->load_hooks();
-```
+))->load_hooks();

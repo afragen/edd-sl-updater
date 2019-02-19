@@ -1,0 +1,37 @@
+/*
+Theme Name: EDD Theme Updater
+Theme URI: http://pippinsplugins.com
+Description: An example theme to show how EDD licensing works
+Author: Pippin Williamson, Devin Price
+Author URI: http://pippinsplugins.com
+Version: 1.0.0
+License: GNU General Public License v2.0 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+body {
+	margin:0;
+	background:#eee;
+}
+
+body, input, textarea {
+	color: #373737;
+	font: 15px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	line-height: 1.625;
+}
+
+p {
+	margin:0 0 10px 0;
+}
+
+h1, h2, h3 {
+	margin:0 0 15px 0;
+}
+
+article {
+	background:#000;
+	color:#fff;
+	margin:14% 0 0 6%;
+	padding:2%;
+}

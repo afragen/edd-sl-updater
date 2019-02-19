@@ -53,8 +53,7 @@ class Plugin_Updater {
 		$this->version     = $args['version'];
 		$this->wp_override = $args['wp_override'];
 		$this->beta        = $args['beta'];
-		$this->cache_key   = $args['cache_key'];
-
+		// $this->cache_key   = $args['cache_key'];
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
 		/**
@@ -497,7 +496,7 @@ class Plugin_Updater {
 				'beta'       => ! empty( $data['beta'] ),
 			];
 
-			//$verify_ssl   = $this->verify_ssl();
+			// $verify_ssl   = $this->verify_ssl();
 			$version_info = $this->get_api_response( $this->api_url, $api_params );
 
 			// $request    = wp_remote_post(

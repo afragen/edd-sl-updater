@@ -130,7 +130,7 @@ class Plugin_Updater_Admin {
 
 		/* If there is no valid license key status, don't allow updates. */
 		if ( 'valid' !== get_option( $this->slug . '_license_key_status', false ) ) {
-			// return;
+			 return;
 		}
 
 		( new Plugin_Updater(
@@ -145,6 +145,7 @@ class Plugin_Updater_Admin {
 				'author'      => $this->author,
 				'wp_override' => $this->wp_override,
 				'beta'        => $this->beta,
+				// 'cache_key'=>$this->cache_key,
 			]
 		) )->load_hooks();
 

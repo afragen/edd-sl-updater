@@ -25,7 +25,7 @@ class Plugin_Updater {
 
 	private $api_url     = '';
 	private $api_data    = [];
-	private $name        = '';
+	private $file        = '';
 	private $slug        = '';
 	private $version     = '';
 	private $wp_override = false;
@@ -46,14 +46,14 @@ class Plugin_Updater {
 	public function __construct( $args = [] ) {
 		global $edd_plugin_data;
 
-		$this->api_url     = trailingslashit( $args['api_url'] );
+		$this->api_url     = $args['api_url'];
 		$this->api_data    = $args;
-		$this->name        = plugin_basename( $args['file'] );
-		$this->slug        = basename( $args['file'], '.php' );
+		$this->file        = $args['file'];
+		$this->slug        = $args['slug'];
 		$this->version     = $args['version'];
-		$this->wp_override = isset( $args['wp_override'] ) ? (bool) $args['wp_override'] : false;
-		$this->beta        = ! empty( $this->api_data['beta'] ) ? true : false;
-		$this->cache_key   = 'edd_sl_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
+		$this->wp_override = $args['wp_override'];
+		$this->beta        = $args['beta'];
+		$this->cache_key   = $args['cache_key'];
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
@@ -77,8 +77,8 @@ class Plugin_Updater {
 	public function load_hooks() {
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 		add_filter( 'plugins_api', [ $this, 'plugins_api_filter' ], 10, 3 );
-		remove_action( 'after_plugin_row_' . $this->name, 'wp_plugin_update_row', 10 );
-		add_action( 'after_plugin_row_' . $this->name, [ $this, 'show_update_notification' ], 10, 2 );
+		remove_action( 'after_plugin_row_' . $this->file, 'wp_plugin_update_row', 10 );
+		add_action( 'after_plugin_row_' . $this->file, [ $this, 'show_update_notification' ], 10, 2 );
 		add_action( 'admin_init', [ $this, 'show_changelog' ] );
 		add_action( 'admin_notices', [ $this, 'show_error' ] );
 	}
@@ -107,7 +107,7 @@ class Plugin_Updater {
 			return $_transient_data;
 		}
 
-		if ( ! empty( $_transient_data->response ) && ! empty( $_transient_data->response[ $this->name ] ) && false === $this->wp_override ) {
+		if ( ! empty( $_transient_data->response ) && ! empty( $_transient_data->response[ $this->file ] ) && false === $this->wp_override ) {
 			return $_transient_data;
 		}
 
@@ -127,14 +127,14 @@ class Plugin_Updater {
 
 		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$_transient_data->response[ $this->name ] = $version_info;
+				$_transient_data->response[ $this->file ] = $version_info;
 
-				// Make sure the plugin property is set to the plugin's name/location. See issue 1463 on Software Licensing's GitHub repo.
-				$_transient_data->response[ $this->name ]->plugin = $this->name;
+				// Make sure the plugin property is set to the plugin's file/location. See issue 1463 on Software Licensing's GitHub repo.
+				$_transient_data->response[ $this->file ]->plugin = $this->file;
 			}
 
 			$_transient_data->last_checked           = time();
-			$_transient_data->checked[ $this->name ] = $this->version;
+			$_transient_data->checked[ $this->file ] = $this->version;
 		}
 
 		return $_transient_data;
@@ -159,7 +159,7 @@ class Plugin_Updater {
 			return;
 		}
 
-		if ( $this->name !== $file ) {
+		if ( $this->file !== $file ) {
 			return;
 		}
 
@@ -169,7 +169,7 @@ class Plugin_Updater {
 		$update_cache = get_site_transient( 'update_plugins' );
 		$update_cache = is_object( $update_cache ) ? $update_cache : new stdClass();
 
-		if ( empty( $update_cache->response ) || empty( $update_cache->response[ $this->name ] ) ) {
+		if ( empty( $update_cache->response ) || empty( $update_cache->response[ $this->file ] ) ) {
 			$version_info = $this->get_cached_version_info();
 
 			if ( false === $version_info ) {
@@ -202,21 +202,21 @@ class Plugin_Updater {
 			}
 
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$update_cache->response[ $this->name ] = $version_info;
+				$update_cache->response[ $this->file ] = $version_info;
 			}
 
 			$update_cache->last_checked           = time();
-			$update_cache->checked[ $this->name ] = $this->version;
+			$update_cache->checked[ $this->file ] = $this->version;
 
 			set_site_transient( 'update_plugins', $update_cache );
 		} else {
-			$version_info = $update_cache->response[ $this->name ];
+			$version_info = $update_cache->response[ $this->file ];
 		}
 
 		// Restore our filter
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
-		if ( ! empty( $update_cache->response[ $this->name ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
+		if ( ! empty( $update_cache->response[ $this->file ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
 			// build a plugin list row, with update notification
 			$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 			// <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
@@ -224,7 +224,7 @@ class Plugin_Updater {
 			echo '<td colspan="3" class="plugin-update colspanchange">';
 			echo '<div class="update-message notice inline notice-warning notice-alt">';
 
-			$changelog_link = self_admin_url( 'index.php?edd_sl_action=view_plugin_changelog&plugin=' . $this->name . '&slug=' . $this->slug . '&TB_iframe=true&width=772&height=911' );
+			$changelog_link = self_admin_url( 'index.php?edd_sl_action=view_plugin_changelog&plugin=' . $this->file . '&slug=' . $this->slug . '&TB_iframe=true&width=772&height=911' );
 
 			if ( empty( $version_info->download_link ) ) {
 				printf(
@@ -241,7 +241,7 @@ class Plugin_Updater {
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),
 					'</a>',
-					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) . '">',
+					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->file, 'upgrade-plugin_' . $this->file ) ) . '">',
 					'</a>'
 				);
 			}
@@ -316,7 +316,7 @@ class Plugin_Updater {
 		}
 
 		if ( ! isset( $_data->plugin ) ) {
-			$_data->plugin = $this->name;
+			$_data->plugin = $this->file;
 		}
 
 		return $_data;

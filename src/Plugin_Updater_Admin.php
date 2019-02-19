@@ -20,6 +20,7 @@ class Plugin_Updater_Admin {
 	private $api_url     = '';
 	private $api_data    = [];
 	private $name        = '';
+	private $file        = '';
 	private $slug        = '';
 	private $version     = '';
 	private $wp_override = false;
@@ -53,8 +54,10 @@ class Plugin_Updater_Admin {
 		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
 
 		// Set config arguments
-		$this->api_url     = $config['api_url'];
-		$this->name        = $config['item_name'];
+		$this->api_url = $config['api_url'];
+		$this->name    = $config['item_name'];
+		// $this->file        = $config['file'];
+		$this->file        = plugin_basename( $config['file'] );
 		$this->slug        = sanitize_key( $config['plugin_slug'] );
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
@@ -64,7 +67,6 @@ class Plugin_Updater_Admin {
 		// $this->license_key = $config['license_key'];
 		// $this->api_url     = trailingslashit( $this->api_url );
 		$this->api_data = $config;
-		// $this->name        = plugin_basename( $config['file'] );
 		// $this->slug        = basename( $config['file'], '.php' );
 		$this->version     = $config['version'];
 		$this->wp_override = isset( $config['wp_override'] ) ? (bool) $config['wp_override'] : false;
@@ -136,18 +138,15 @@ class Plugin_Updater_Admin {
 
 		/* If there is no valid license key status, don't allow updates. */
 		if ( 'valid' !== get_option( $this->slug . '_license_key_status', false ) ) {
-			return;
+			// return;
 		}
 
-		// if ( ! class_exists( 'EDD_Theme_Updater' ) ) {
-		// Load our custom theme updater
-		// include dirname( __FILE__ ) . '/theme-updater-class.php';
-		// }
 		( new Plugin_Updater(
 			[
 				'api_url'     => $this->api_url,
 				'api_data'    => $this->api_data,
 				'name'        => $this->name,
+				'file'        => $this->file,
 				'slug'        => $this->slug,
 				'version'     => $this->version,
 				'license'     => trim( get_option( $this->slug . '_license_key' ) ),
@@ -209,8 +208,6 @@ class Plugin_Updater_Admin {
 		</form>
 		<?php
 	}
-
-
 
 	/************************************
 	 this illustrates how to activate
@@ -452,15 +449,14 @@ class Plugin_Updater_Admin {
 		// }
 		// $license_data = json_decode( wp_remote_retrieve_body( $response ) );
 		add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
-		 $license_data = $this->get_api_response( $this->api_url, $api_params );
+		$license_data = $this->get_api_response( $this->api_url, $api_params );
+
 		if ( 'valid' === $license_data->license ) {
 			echo 'valid';
-			exit;
-			// this license is still valid
+			exit; // this license is still valid
 		} else {
 			echo 'invalid';
-			exit;
-			// this license is no longer valid
+			exit; // this license is no longer valid
 		}
 	}
 

@@ -16,28 +16,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Bootstrap {
 
-    protected $file;
+	protected $file;
 	protected $dir;
 
 	public function __construct( $file ) {
-        $this->file = $file;
-		$this->dir = dirname($file);
+		$this->file = $file;
+		$this->dir  = dirname( $file );
 	}
 
 	public function run() {
 		require_once $this->dir . '/vendor/autoload.php';
 		( new Plugin_Updater_Admin(
 			array(
-				'file'        => __FILE__,
-				'api_url'     => 'http://easydigitaldownloads.com',
-				'plugin_slug' => 'edd-sl-updater',
-				'item_name'   => 'EDD SL Updater',
-				'item_id'     => 123,       // ID of the product
-				'version'     => '1.0',                    // current version number
-				'author'      => 'Easy Digital Downloads', // author of this plugin
-				'beta'        => false,
-			),
-			array()
+				'file'      => $this->file,
+				'api_url'   => 'http://easydigitaldownloads.com',
+				'item_name' => 'EDD SL Updater',
+				'item_id'   => 123,
+				'version'   => '1.0',
+				'author'    => 'Easy Digital Downloads',
+				'beta'      => false,
+			)
 		) )->load_hooks();
 	}
 }

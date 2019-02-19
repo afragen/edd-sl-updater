@@ -21,9 +21,12 @@
  * Requires PHP:      5.4
  */
 
+namespace EDD\Software_Licensing\Updater;
+
 // Exit if called directly.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/Bootstrap.php';
+( new Bootstrap( __FILE__ ) )->run();

@@ -269,7 +269,7 @@ class Theme_Updater_Admin {
 			'url'        => home_url(),
 		];
 
-		$license_data = $this->get_api_response( $api_params );
+		$license_data = $this->get_api_response( $this->remote_api_url, $api_params );
 
 		if ( $license_data->success ) {
 			switch ( $license_data->error ) {
@@ -335,7 +335,7 @@ class Theme_Updater_Admin {
 			'url'        => home_url(),
 		];
 
-		$license_data = $this->get_api_response( $api_params );
+		$license_data = $this->get_api_response( $this->remote_api_url, $api_params );
 
 		// $license_data->license will be either "deactivated" or "failed"
 		if ( $license_data && ( 'deactivated' === $license_data->license ) ) {
@@ -406,7 +406,7 @@ class Theme_Updater_Admin {
 			'url'        => home_url(),
 		];
 
-		$license_data = $this->get_api_response( $api_params );
+		$license_data = $this->get_api_response( $this->remote_api_url, $api_params );
 
 		// If response doesn't include license data, return
 		if ( ! isset( $license_data->license ) ) {

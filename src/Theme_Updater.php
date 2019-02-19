@@ -16,6 +16,8 @@ namespace EDD\Software_Licensing\Updater;
  * @version 1.0.3
  */
 class Theme_Updater {
+	use API_Common;
+
 	private $remote_api_url;
 	private $request_data;
 	private $response_key;
@@ -159,20 +161,19 @@ class Theme_Updater {
 				'beta'       => $this->beta,
 			];
 
-			$response = wp_remote_post(
-				$this->remote_api_url,
-				[
-					'timeout' => 15,
-					'body'    => $api_params,
-				]
-			);
-
+			// $response = wp_remote_post(
+			// $this->remote_api_url,
+			// [
+			// 'timeout' => 15,
+			// 'body'    => $api_params,
+			// ]
+			// );
 			// Make sure the response was successful
-			if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-				$failed = true;
-			}
-
-			$update_data = json_decode( wp_remote_retrieve_body( $response ) );
+			// if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+			// $failed = true;
+			// }
+			// $update_data = json_decode( wp_remote_retrieve_body( $response ) );
+			$update_data = get_api_response( $this->remote_api_url, $api_params );
 
 			if ( ! is_object( $update_data ) ) {
 				$failed = true;

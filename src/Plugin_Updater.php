@@ -437,7 +437,7 @@ class Plugin_Updater {
 		// if ( ! is_wp_error( $request ) ) {
 		// $request = json_decode( wp_remote_retrieve_body( $request ) );
 		// }
-		$request = $this->get_api_response( $api_params );
+		$request = $this->get_api_response( $this->api_url, $api_params );
 
 		if ( $request && isset( $request->sections ) ) {
 			$request->sections = maybe_unserialize( $request->sections );
@@ -498,7 +498,7 @@ class Plugin_Updater {
 			];
 
 			$verify_ssl   = $this->verify_ssl();
-			$version_info = $this->get_api_response( $api_params );
+			$version_info = $this->get_api_response( $this->api_url, $api_params );
 
 			// $request    = wp_remote_post(
 			// $this->api_url,

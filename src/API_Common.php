@@ -23,11 +23,11 @@ trait API_Common {
 	 * @param  array $api_params to be used for wp_remote_get.
 	 * @return array $response decoded JSON response.
 	 */
-	public function get_api_response( $api_params ) {
+	public function get_api_response( $url, $api_params ) {
 		// Call the custom API.
 		$verify_ssl = (bool) apply_filters( 'edd_sl_api_request_verify_ssl', true );
 		$response   = wp_remote_post(
-			$this->remote_api_url,
+			$url,
 			[
 				'timeout'   => 15,
 				'sslverify' => $verify_ssl,
@@ -41,14 +41,14 @@ trait API_Common {
 			$error_data['success']       = false;
 			$error_data['error_code']    = __( 'WP_Error' );
 			$error_data['error_message'] = $response->get_error_message();
-			$this->redirect_to_themes( $error_data );
+			$this->redirect( $error_data );
 		}
 
 		if ( 200 !== $code ) {
 			$error_data['success']       = false;
 			$error_data['error_code']    = __( 'HTTP Error Code' );
 			$error_data['error_message'] = $code;
-			$this->redirect_to_themes( $error_data );
+			$this->redirect( $error_data );
 		}
 
 		$response          = json_decode( wp_remote_retrieve_body( $response ) );
@@ -75,7 +75,7 @@ trait API_Common {
 		if ( $this instanceof Plugin_Updater_Admin ) {
 			$redirect_url = wp_nonce_url( admin_url( 'plugins.php' ) );
 			$location     = add_query_arg(
-				[ 'page' => $this->plugin_slug . '-license' ],
+				[ 'page' => $this->slug . '-license' ],
 				$redirect_url
 			);
 		}

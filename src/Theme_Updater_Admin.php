@@ -30,13 +30,13 @@ class Theme_Updater_Admin {
 	 * @type string
 	 */
 	protected $api_url     = null;
-	protected $theme_slug     = null;
-	protected $version        = null;
-	protected $author         = null;
-	protected $download_id    = null;
-	protected $item_id        = null;
-	protected $renew_url      = null;
-	protected $strings        = null;
+	protected $theme_slug  = null;
+	protected $version     = null;
+	protected $author      = null;
+	protected $download_id = null;
+	protected $item_id     = null;
+	protected $renew_url   = null;
+	protected $strings     = null;
 
 	/**
 	 * Initialize the class.
@@ -48,15 +48,15 @@ class Theme_Updater_Admin {
 			$config,
 			[
 				'api_url'     => 'http://easydigitaldownloads.com',
-				'theme_slug'     => get_template(),
-				'item_name'      => '',
-				'item_id'        => '',
-				'license'        => '',
-				'version'        => '',
-				'author'         => '',
-				'download_id'    => '',
-				'renew_url'      => '',
-				'beta'           => false,
+				'theme_slug'  => get_template(),
+				'item_name'   => '',
+				'item_id'     => '',
+				'download_id' => '',
+				'license'     => '',
+				'version'     => '',
+				'author'      => '',
+				'renew_url'   => '',
+				'beta'        => false,
 			]
 		);
 
@@ -71,14 +71,14 @@ class Theme_Updater_Admin {
 
 		// Set config arguments
 		$this->api_url     = $config['api_url'];
-		$this->item_name      = $config['item_name'];
-		$this->item_id        = $config['item_id'];
-		$this->theme_slug     = sanitize_key( $config['theme_slug'] );
-		$this->version        = $config['version'];
-		$this->author         = $config['author'];
-		$this->download_id    = $config['download_id'];
-		$this->renew_url      = $config['renew_url'];
-		$this->beta           = $config['beta'];
+		$this->item_name   = $config['item_name'];
+		$this->item_id     = $config['item_id'];
+		$this->download_id = $config['download_id'];
+		$this->theme_slug  = sanitize_key( $config['theme_slug'] );
+		$this->version     = $config['version'];
+		$this->author      = $config['author'];
+		$this->renew_url   = $config['renew_url'];
+		$this->beta        = $config['beta'];
 
 		// Populate version fallback
 		if ( empty( $config['version'] ) ) {
@@ -122,12 +122,12 @@ class Theme_Updater_Admin {
 		( new Theme_Updater(
 			[
 				'api_url'   => $this->api_url,
-				'version'        => $this->version,
-				'license'        => trim( get_option( $this->theme_slug . '_license_key' ) ),
-				'item_name'      => $this->item_name,
-				'item_id'        => $this->item_id,
-				'author'         => $this->author,
-				'beta'           => $this->beta,
+				'version'   => $this->version,
+				'license'   => trim( get_option( $this->theme_slug . '_license_key' ) ),
+				'item_name' => $this->item_name,
+				'item_id'   => $this->item_id,
+				'author'    => $this->author,
+				'beta'      => $this->beta,
 			],
 			$this->strings
 		) )->load_hooks();
@@ -424,5 +424,4 @@ class Theme_Updater_Admin {
 
 		return $r;
 	}
-
 }

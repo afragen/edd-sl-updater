@@ -17,16 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin_Updater_Admin {
 	use API_Common;
 
-	private $api_url     = null;
-	private $api_data    = [];
-	private $name        = null;
+	protected $api_url     = null;
+	protected $api_data    = [];
+	protected $name        = null;
 	protected $item_name   = null;
-	private $file        = null;
+	protected $item_id     = null;
 	protected $download_id = null;
-	private $version     = null;
-	private $license     = null;
-	private $wp_override = false;
-	private $cache_key   = null;
+	protected $file        = null;
+	protected $slug        = null;
+	protected $version     = null;
+	protected $license     = null;
+	protected $wp_override = false;
+	protected $cache_key   = null;
 	protected $strings     = null;
 
 	public function __construct( $config ) {
@@ -308,24 +310,6 @@ class Plugin_Updater_Admin {
 		} else {
 			$error_data = null;
 		}
-
-		// Check if anything passed on a message constituting a failure
-		// if ( ! empty( $message ) ) {
-		// $base_url = admin_url( 'plugins.php?page=' . $this->slug . '-license' );
-		// $redirect = add_query_arg(
-		// array(
-		// 'sl_activation' => 'false',
-		// 'message'       => rawurlencode( $message ),
-		// ),
-		// $base_url
-		// );
-		//
-		// wp_redirect( $redirect );
-		// exit();
-		// }
-		// $license_data->license will be either "valid" or "invalid"
-		// wp_redirect( admin_url( 'plugins.php?page=' . $this->slug . '-license' ) );
-		// exit();
 		$this->redirect( $error_data );
 	}
 
@@ -357,37 +341,7 @@ class Plugin_Updater_Admin {
 			// Call the custom API.
 			add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
 			$license_data = $this->get_api_response( $this->api_url, $api_params );
-			// $response = wp_remote_post(
-			// $this->api_url,
-			// array(
-			// 'timeout'   => 15,
-			// 'sslverify' => false,
-			// 'body'      => $api_params,
-			// )
-			// );
-			// make sure the response came back okay
-			// if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			//
-			// if ( is_wp_error( $response ) ) {
-			// $message = $response->get_error_message();
-			// } else {
-			// $message = __( 'An error occurred, please try again.' );
-			// }
-			//
-			// $base_url = admin_url( 'plugins.php?page=' . $this->slug . '-license' );
-			// $redirect = add_query_arg(
-			// array(
-			// 'sl_activation' => 'false',
-			// 'message'       => urlencode( $message ),
-			// ),
-			// $base_url
-			// );
-			//
-			// wp_redirect( $redirect );
-			// exit();
-			// }
-			// decode the license data
-			// $license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
 			// $license_data->license will be either "deactivated" or "failed"
 			if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
 				$message = __( 'An error occurred, please try again.', 'edd-sl-updater' );

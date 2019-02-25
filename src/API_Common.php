@@ -239,5 +239,4 @@ trait API_Common {
 		);
 		echo '</p></div>';
 	}
-
 }

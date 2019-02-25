@@ -36,26 +36,26 @@ class Theme_Updater {
 	public function __construct( $args = [], $strings = [] ) {
 		$defaults = [
 			'api_url'      => 'http://easydigitaldownloads.com',
-			'request_data'   => [],
-			'theme_slug'     => get_template(), // use get_stylesheet() for child theme updates
-			'item_name'      => '',
-			'license'        => '',
-			'version'        => '',
-			'author'         => '',
-			'beta'           => false,
+			'request_data' => [],
+			'theme_slug'   => get_template(), // use get_stylesheet() for child theme updates
+			'item_name'    => '',
+			'license'      => '',
+			'version'      => '',
+			'author'       => '',
+			'beta'         => false,
 		];
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$this->license        = $args['license'];
-		$this->item_name      = $args['item_name'];
-		$this->version        = $args['version'];
-		$this->theme_slug     = sanitize_key( $args['theme_slug'] );
-		$this->author         = $args['author'];
-		$this->beta           = $args['beta'];
+		$this->license      = $args['license'];
+		$this->item_name    = $args['item_name'];
+		$this->version      = $args['version'];
+		$this->theme_slug   = sanitize_key( $args['theme_slug'] );
+		$this->author       = $args['author'];
+		$this->beta         = $args['beta'];
 		$this->api_url      = $args['api_url'];
-		$this->response_key   = $this->theme_slug . '-' . $this->beta . '-update-response';
-		$this->strings        = $strings;
+		$this->response_key = $this->theme_slug . '-' . $this->beta . '-update-response';
+		$this->strings      = $strings;
 	}
 
 	public function load_hooks() {

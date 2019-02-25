@@ -152,6 +152,39 @@ class Theme_Updater_Admin {
 	}
 
 	/**
+	 * Registers the option used to store the license key in the options table.
+	 *
+	 * since 1.0.0
+	 */
+	public function register_option() {
+		register_setting(
+			$this->theme_slug . '-license',
+			$this->theme_slug . '_license_key',
+			[ $this, 'sanitize_license' ]
+		);
+	}
+
+	/**
+	 * Sanitizes the license key.
+	 *
+	 * since 1.0.0
+	 *
+	 * @param  string $new License key that was submitted.
+	 * @return string $new Sanitized license key.
+	 */
+	public function sanitize_license( $new ) {
+		$old = get_option( $this->theme_slug . '_license_key' );
+
+		if ( $old && $old !== $new ) {
+			// New license has been entered, so must reactivate
+			delete_option( $this->theme_slug . '_license_key_status' );
+			delete_transient( $this->theme_slug . '_license_message' );
+		}
+
+		return $new;
+	}
+
+	/**
 	 * Outputs the markup used on the theme license page.
 	 *
 	 * since 1.0.0
@@ -171,8 +204,9 @@ class Theme_Updater_Admin {
 			$message = get_transient( $this->theme_slug . '_license_message' );
 		} ?>
 		<div class="wrap">
-			<h2><?php esc_attr_e( $this->strings['theme-license'] . ' - ' . $this->item_name ); ?>
-</h2>
+			<h2>
+			<?php esc_attr_e( $this->strings['theme-license'] . ' - ' . $this->item_name ); ?>
+			</h2>
 			<form method="post" action="options.php">
 				<?php settings_fields( $this->theme_slug . '-license' ); ?>
 				<table class="form-table">
@@ -218,39 +252,6 @@ class Theme_Updater_Admin {
 				<?php submit_button(); ?>
 			</form>
 		<?php
-	}
-
-	/**
-	 * Registers the option used to store the license key in the options table.
-	 *
-	 * since 1.0.0
-	 */
-	public function register_option() {
-		register_setting(
-			$this->theme_slug . '-license',
-			$this->theme_slug . '_license_key',
-			[ $this, 'sanitize_license' ]
-		);
-	}
-
-	/**
-	 * Sanitizes the license key.
-	 *
-	 * since 1.0.0
-	 *
-	 * @param  string $new License key that was submitted.
-	 * @return string $new Sanitized license key.
-	 */
-	public function sanitize_license( $new ) {
-		$old = get_option( $this->theme_slug . '_license_key' );
-
-		if ( $old && $old !== $new ) {
-			// New license has been entered, so must reactivate
-			delete_option( $this->theme_slug . '_license_key_status' );
-			delete_transient( $this->theme_slug . '_license_message' );
-		}
-
-		return $new;
 	}
 
 	/**

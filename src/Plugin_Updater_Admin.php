@@ -209,7 +209,7 @@ class Plugin_Updater_Admin {
 							<input id="<?php echo $this->slug; ?>_license_key" name="<?php echo $this->slug; ?>_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license, 'edd-sl-updater' ); ?>" />
 							<label class="description" for="<?php echo $this->slug; ?>_license_key"></label>
 							<p class="description">
-									<?php echo $message; ?>
+								<?php echo $message; ?>
 							</p>
 					</td>
 					</tr>
@@ -264,24 +264,7 @@ class Plugin_Updater_Admin {
 
 			add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
 			$license_data = $this->get_api_response( $this->api_url, $api_params );
-			// Call the custom API.
-			// $response = wp_remote_post(
-			// EDD_SAMPLE_STORE_URL,
-			// array(
-			// 'timeout'   => 15,
-			// 'sslverify' => false,
-			// 'body'      => $api_params,
-			// )
-			// );
-			// make sure the response came back okay
-			// if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			// if ( is_wp_error( $response ) ) {
-			// $message = $response->get_error_message();
-			// } else {
-			// $message = __( 'An error occurred, please try again.' );
-			// }
-			// } else {
-			// $license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
 			if ( $license_data->success && isset( $license_data->error ) ) {
 				switch ( $license_data->error ) {
 					case 'expired':

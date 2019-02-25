@@ -426,18 +426,6 @@ class Plugin_Updater {
 			'beta'       => ! empty( $data['beta'] ),
 		];
 
-		// $request = wp_remote_post(
-		// $this->api_url,
-		// [
-		// 'timeout'   => 15,
-		// 'sslverify' => $verify_ssl,
-		// 'body'      => $api_params,
-		// ]
-		// );
-		//
-		// if ( ! is_wp_error( $request ) ) {
-		// $request = json_decode( wp_remote_retrieve_body( $request ) );
-		// }
 		$request = $this->get_api_response( $this->api_url, $api_params );
 
 		if ( $request && isset( $request->sections ) ) {
@@ -502,17 +490,6 @@ class Plugin_Updater {
 			// $verify_ssl   = $this->verify_ssl();
 			$version_info = $this->get_api_response( $this->api_url, $api_params );
 
-			// $request    = wp_remote_post(
-			// $this->api_url,
-			// [
-			// 'timeout'   => 15,
-			// 'sslverify' => $verify_ssl,
-			// 'body'      => $api_params,
-			// ]
-			// );
-			// if ( ! is_wp_error( $request ) ) {
-			// $version_info = json_decode( wp_remote_retrieve_body( $request ) );
-			// }
 			if ( ! empty( $version_info ) && isset( $version_info->sections ) ) {
 				$version_info->sections = maybe_unserialize( $version_info->sections );
 			} else {

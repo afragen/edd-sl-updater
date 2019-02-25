@@ -46,14 +46,14 @@ class Plugin_Updater {
 	public function __construct( $args = [] ) {
 		global $edd_plugin_data;
 
-		$this->api_url     = $args['api_url'];
-		$this->api_data    = $args;
-		$this->file        = $args['file'];
-		$this->slug        = $args['slug'];
-		$this->version     = $args['version'];
-		$this->wp_override = $args['wp_override'];
-		$this->beta        = $args['beta'];
-		// $this->cache_key   = $args['cache_key'];
+		$this->api_url                  = $args['api_url'];
+		$this->api_data                 = $args;
+		$this->file                     = $args['file'];
+		$this->slug                     = $args['slug'];
+		$this->version                  = $args['version'];
+		$this->wp_override              = $args['wp_override'];
+		$this->beta                     = $args['beta'];
+		$this->cache_key                = $args['cache_key'];
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
 		/**
@@ -79,7 +79,6 @@ class Plugin_Updater {
 		remove_action( 'after_plugin_row_' . $this->file, 'wp_plugin_update_row', 10 );
 		add_action( 'after_plugin_row_' . $this->file, [ $this, 'show_update_notification' ], 10, 2 );
 		add_action( 'admin_init', [ $this, 'show_changelog' ] );
-		add_action( 'admin_notices', [ $this, 'show_error' ] );
 	}
 
 	/**
@@ -281,6 +280,7 @@ class Plugin_Updater {
 		];
 
 		$cache_key = 'edd_api_request_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
+		$cache_key = $this->cache_key;
 
 		// Get the transient where we store the api request for this plugin for 24 hours
 		$edd_api_request_transient = $this->get_cached_version_info( $cache_key );
@@ -415,7 +415,7 @@ class Plugin_Updater {
 		$api_params = [
 			'edd_action' => 'get_version',
 			'license'    => ! empty( $data['license'] ) ? $data['license'] : '',
-			'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
+			'item_name'  => isset( $data['name'] ) ? $data['name'] : false,
 			'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
 			'version'    => isset( $data['version'] ) ? $data['version'] : false,
 			'slug'       => $data['slug'],
@@ -483,6 +483,7 @@ class Plugin_Updater {
 		$data         = $edd_plugin_data[ $_REQUEST['slug'] ];
 		$beta         = ! empty( $data['beta'] ) ? true : false;
 		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
+		$cache_key    = $this->cache_key;
 		$version_info = $this->get_cached_version_info( $cache_key );
 
 		if ( false === $version_info ) {

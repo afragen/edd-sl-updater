@@ -13,6 +13,11 @@
         "email": "andy@thefragens.com",
         "homepage": "https://thefragens.com",
         "role": "Developer"
+      },
+      {
+        "name": "Easy Digital Downloads",
+        "homepage": "https://easydigitaldownloads.com",
+        "role": "Developer"
       }
     ],
     "repositories": [

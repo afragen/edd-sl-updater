@@ -34,6 +34,7 @@ class Theme_Updater_Admin {
 	protected $version        = null;
 	protected $author         = null;
 	protected $download_id    = null;
+	protected $item_id        = null;
 	protected $renew_url      = null;
 	protected $strings        = null;
 
@@ -42,13 +43,14 @@ class Theme_Updater_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct( $config = [], $strings = [] ) {
+	public function __construct( $config = [] ) {
 		$config = wp_parse_args(
 			$config,
 			[
 				'remote_api_url' => 'http://easydigitaldownloads.com',
 				'theme_slug'     => get_template(),
 				'item_name'      => '',
+				'item_id'        => '',
 				'license'        => '',
 				'version'        => '',
 				'author'         => '',
@@ -70,6 +72,7 @@ class Theme_Updater_Admin {
 		// Set config arguments
 		$this->remote_api_url = $config['remote_api_url'];
 		$this->item_name      = $config['item_name'];
+		$this->item_id        = $config['item_id'];
 		$this->theme_slug     = sanitize_key( $config['theme_slug'] );
 		$this->version        = $config['version'];
 		$this->author         = $config['author'];
@@ -83,15 +86,55 @@ class Theme_Updater_Admin {
 			$this->version = $theme->get( 'Version' );
 		}
 
-		// Strings passed in from the updater config
-		$this->strings = $strings;
+		$this->strings = $this->get_strings();
+	}
+
+	/**
+	 * Get default strings.
+	 *
+	 * @return array $default_strings
+	 */
+	public function get_strings() {
+		$default_strings = [
+			'theme-license'             => __( 'Theme License', 'edd-sl-updater' ),
+			'enter-key'                 => __( 'Enter your theme license key.', 'edd-sl-updater' ),
+			'license-key'               => __( 'License Key', 'edd-sl-updater' ),
+			'license-action'            => __( 'License Action', 'edd-sl-updater' ),
+			'deactivate-license'        => __( 'Deactivate License', 'edd-sl-updater' ),
+			'activate-license'          => __( 'Activate License', 'edd-sl-updater' ),
+			'status-unknown'            => __( 'License status is unknown.', 'edd-sl-updater' ),
+			'renew'                     => __( 'Renew?', 'edd-sl-updater' ),
+			'unlimited'                 => __( 'unlimited', 'edd-sl-updater' ),
+			'license-key-is-active'     => __( 'License key is active.', 'edd-sl-updater' ),
+			'expires%s'                 => __( 'Expires %s.', 'edd-sl-updater' ),
+			'expires-never'             => __( 'Lifetime License.', 'edd-sl-updater' ),
+			'%1$s/%2$-sites'            => __( 'You have %1$s / %2$s sites activated.', 'edd-sl-updater' ),
+			'license-key-expired-%s'    => __( 'License key expired %s.', 'edd-sl-updater' ),
+			'license-key-expired'       => __( 'License key has expired.', 'edd-sl-updater' ),
+			'license-keys-do-not-match' => __( 'License keys do not match.', 'edd-sl-updater' ),
+			'license-is-inactive'       => __( 'License is inactive.', 'edd-sl-updater' ),
+			'license-key-is-disabled'   => __( 'License key is disabled.', 'edd-sl-updater' ),
+			'site-is-inactive'          => __( 'Site is inactive.', 'edd-sl-updater' ),
+			'license-status-unknown'    => __( 'License status is unknown.', 'edd-sl-updater' ),
+			'update-notice'             => __( "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update.", 'edd-sl-updater' ),
+			'update-available'          => __( '<strong>%1$s %2$s</strong> is available. <a href="%3$s" class="thickbox" title="%4s">Check out what\'s new</a> or <a href="%5$s"%6$s>update now</a>.', 'edd-sl-updater' ),
+		];
+
+		/**
+		 * Filter the default theme strings.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $default_strings Array of default strings for theme updater.
+		 */
+		return apply_filters( 'edd_sl_theme_strings', $default_strings );
 	}
 
 	public function load_hooks() {
 		add_action( 'init', [ $this, 'updater' ] );
+		add_action( 'admin_menu', [ $this, 'license_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_option' ] );
 		add_action( 'admin_init', [ $this, 'license_action' ] );
-		add_action( 'admin_menu', [ $this, 'license_menu' ] );
 		add_action( 'admin_notices', [ $this, 'show_error' ] );
 		add_action( 'update_option_' . $this->theme_slug . '_license_key', [ $this, 'activate_license' ], 10, 2 );
 		add_filter( 'http_request_args', [ $this, 'disable_wporg_request' ], 5, 2 );
@@ -112,16 +155,13 @@ class Theme_Updater_Admin {
 			return;
 		}
 
-		// if ( ! class_exists( 'EDD_Theme_Updater' ) ) {
-		// Load our custom theme updater
-		// include dirname( __FILE__ ) . '/theme-updater-class.php';
-		// }
 		( new Theme_Updater(
 			[
 				'remote_api_url' => $this->remote_api_url,
 				'version'        => $this->version,
 				'license'        => trim( get_option( $this->theme_slug . '_license_key' ) ),
 				'item_name'      => $this->item_name,
+				'item_id'        => $this->item_id,
 				'author'         => $this->author,
 				'beta'           => $this->beta,
 			],
@@ -266,12 +306,13 @@ class Theme_Updater_Admin {
 			'edd_action' => 'activate_license',
 			'license'    => $license,
 			'item_name'  => rawurlencode( $this->item_name ),
+			'item_id'    => $this->item_id,
 			'url'        => home_url(),
 		];
 
 		$license_data = $this->get_api_response( $this->remote_api_url, $api_params );
 
-		if ( $license_data->success ) {
+		if ( $license_data->success && isset( $license_data->error ) ) {
 			switch ( $license_data->error ) {
 				case 'expired':
 					$message = sprintf(
@@ -332,17 +373,30 @@ class Theme_Updater_Admin {
 			'edd_action' => 'deactivate_license',
 			'license'    => $license,
 			'item_name'  => rawurlencode( $this->item_name ),
+			'item_id'    => $this->item_id,
 			'url'        => home_url(),
 		];
 
+		add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
 		$license_data = $this->get_api_response( $this->remote_api_url, $api_params );
+
+		if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
+			$message = __( 'An error occurred, please try again.', 'edd-sl-updater' );
+		}
+		if ( ! empty( $message ) ) {
+			$error_data['success']       = false;
+			$error_data['error_code']    = __( 'deactivate_plugin_license' );
+			$error_data['error_message'] = $message;
+		} else {
+			$error_data['success'] = true;
+		}
 
 		// $license_data->license will be either "deactivated" or "failed"
 		if ( $license_data && ( 'deactivated' === $license_data->license ) ) {
 			delete_option( $this->theme_slug . '_license_key_status' );
 			delete_transient( $this->theme_slug . '_license_message' );
 		}
-		$this->redirect();
+		$this->redirect( $error_data );
 	}
 
 	/**
@@ -403,6 +457,7 @@ class Theme_Updater_Admin {
 			'edd_action' => 'check_license',
 			'license'    => $license,
 			'item_name'  => rawurlencode( $this->item_name ),
+			'item_id'    => $this->item_id,
 			'url'        => home_url(),
 		];
 

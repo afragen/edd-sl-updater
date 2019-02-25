@@ -17,15 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin_Updater_Admin {
 	use API_Common;
 
-	private $api_url     = '';
+	private $api_url     = null;
 	private $api_data    = [];
-	private $name        = '';
-	private $file        = '';
-	private $slug        = '';
-	private $version     = '';
-	private $license     = '';
+	private $name        = null;
+	private $item_id     = null;
+	private $file        = null;
+	private $slug        = null;
+	private $version     = null;
+	private $license     = null;
 	private $wp_override = false;
-	private $cache_key   = '';
+	private $cache_key   = null;
 
 	public function __construct( $config ) {
 		global $edd_plugin_data;
@@ -35,6 +36,7 @@ class Plugin_Updater_Admin {
 				'file'        => '',
 				'api_url'     => 'http://easydigitaldownloads.com',
 				'item_name'   => '',
+				'item_id'     => '',
 				'download_id' => '',
 				'version'     => '',
 				'license'     => '',
@@ -56,11 +58,12 @@ class Plugin_Updater_Admin {
 		// Set config arguments
 		$this->api_url     = $config['api_url'];
 		$this->name        = $config['item_name'];
+		$this->item_id     = $config['item_id'];
 		$this->file        = plugin_basename( $config['file'] );
 		$this->slug        = dirname( $this->file );
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
-		$this->download_id = $config['download_id'];
+		$this->download_id = $config['item_id'];
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
 		$this->license     = trim( get_option( $this->slug . '_license_key' ) );
@@ -87,6 +90,7 @@ class Plugin_Updater_Admin {
 		add_action( 'admin_menu', [ $this, 'license_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_option' ] );
 		add_action( 'admin_init', [ $this, 'license_action' ] );
+		add_action( 'admin_notices', [ $this, 'show_error' ] );
 		add_action( 'update_option_' . $this->slug . '_license_key', [ $this, 'activate_license' ] );
 	}
 
@@ -127,8 +131,8 @@ class Plugin_Updater_Admin {
 		}
 
 		/* If there is no valid license key status, don't allow updates. */
-		if ( 'valid' !== get_option( $this->slug . '_license_key_status', false ) ) {
-			 return;
+		if ( 'valid' !== get_option( $this->slug . '_license_status', false ) ) {
+			return;
 		}
 
 		( new Plugin_Updater(
@@ -137,13 +141,14 @@ class Plugin_Updater_Admin {
 				'api_data'    => $this->api_data,
 				'name'        => $this->name,
 				'file'        => $this->file,
+				'item_id'     => $this->item_id,
 				'slug'        => $this->slug,
 				'version'     => $this->version,
 				'license'     => $this->license,
 				'author'      => $this->author,
 				'wp_override' => $this->wp_override,
 				'beta'        => $this->beta,
-				// 'cache_key'=>$this->cache_key,
+				'cache_key'   => $this->cache_key,
 			]
 		) )->load_hooks();
 
@@ -222,6 +227,7 @@ class Plugin_Updater_Admin {
 				'edd_action' => 'activate_license',
 				'license'    => $this->license,
 				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD
+				'item_id'    => $this->item_id,
 				'url'        => home_url(),
 			];
 
@@ -245,7 +251,7 @@ class Plugin_Updater_Admin {
 			// }
 			// } else {
 			// $license_data = json_decode( wp_remote_retrieve_body( $response ) );
-			if ( $license_data->success ) {
+			if ( $license_data->success && isset( $license_data->error ) ) {
 				switch ( $license_data->error ) {
 					case 'expired':
 						$message = sprintf(
@@ -253,35 +259,35 @@ class Plugin_Updater_Admin {
 							date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
 						);
 						break;
-
 					case 'disabled':
 					case 'revoked':
 						$message = __( 'Your license key has been disabled.' );
 						break;
-
 					case 'missing':
 						$message = __( 'Invalid license.' );
 						break;
-
 					case 'invalid':
 					case 'site_inactive':
 						$message = __( 'Your license is not active for this URL.' );
 						break;
-
 					case 'item_name_mismatch':
 						$message = sprintf( __( 'This appears to be an invalid license key for %s.' ), $this->item_name );
 						break;
-
 					case 'no_activations_left':
 						$message = __( 'Your license key has reached its activation limit.' );
 						break;
-
 					default:
 						$message = __( 'An error occurred, please try again.' );
 						break;
 				}
 			}
+			// update_option( $this->slug . '_license_status', $license_data->license );
+		}
+
+		// $response->license will be either "active" or "inactive"
+		if ( $license_data && isset( $license_data->license ) ) {
 			update_option( $this->slug . '_license_status', $license_data->license );
+			// delete_transient( $this->theme_slug . '_license_message' );
 		}
 
 		if ( ! empty( $message ) ) {
@@ -321,7 +327,7 @@ class Plugin_Updater_Admin {
 	public function deactivate_license() {
 
 		// listen for our activate button to be clicked
-		if ( isset( $_POST['edd_license_deactivate'] ) ) {
+		if ( isset( $_POST[ $this->slug . '_license_deactivate' ] ) ) {
 
 			// run a quick security check
 			if ( ! check_admin_referer( $this->slug . '_nonce', $this->slug . '_nonce' ) ) {
@@ -333,6 +339,7 @@ class Plugin_Updater_Admin {
 				'edd_action' => 'deactivate_license',
 				'license'    => $this->license,
 				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD
+				'item_id'    => $this->item_id,
 				'url'        => home_url(),
 			);
 
@@ -371,10 +378,21 @@ class Plugin_Updater_Admin {
 			// decode the license data
 			// $license_data = json_decode( wp_remote_retrieve_body( $response ) );
 			// $license_data->license will be either "deactivated" or "failed"
+			if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
+				$message = __( 'An error occurred, please try again.', 'edd-sl-updater' );
+			}
+			if ( ! empty( $message ) ) {
+				$error_data['success']       = false;
+				$error_data['error_code']    = __( 'deactivate_plugin_license' );
+				$error_data['error_message'] = $message;
+			} else {
+				$error_data['success'] = true;
+			}
+
 			if ( 'deactivated' === $license_data->license ) {
 				delete_option( $this->slug . '_license_status' );
 			}
-			$this->redirect();
+			$this->redirect( $error_data );
 		}
 	}
 

@@ -173,7 +173,7 @@ class Theme_Updater {
 			// $failed = true;
 			// }
 			// $update_data = json_decode( wp_remote_retrieve_body( $response ) );
-			$update_data = get_api_response( $this->remote_api_url, $api_params );
+			$update_data = $this->get_api_response( $this->remote_api_url, $api_params );
 
 			if ( ! is_object( $update_data ) ) {
 				$failed = true;

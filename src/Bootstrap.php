@@ -26,16 +26,16 @@ class Bootstrap {
 
 	public function run() {
 		require_once $this->dir . '/vendor/autoload.php';
-		( new Plugin_Updater_Admin(
-			array(
-				'file'      => $this->file,
-				'api_url'   => 'http://easydigitaldownloads.com',
-				'item_name' => 'EDD SL Updater',
-				'item_id'   => 123,
-				'version'   => '1.0',
-				'author'    => 'Easy Digital Downloads',
-				'beta'      => false,
-			)
-		) )->load_hooks();
+		// ( new Plugin_Updater_Admin(
+		// array(
+		// 'file'      => $this->file,
+		// 'api_url'   => 'http://easydigitaldownloads.com',
+		// 'item_name' => 'EDD SL Updater',
+		// 'item_id'   => 123,
+		// 'version'   => '1.0',
+		// 'author'    => 'Easy Digital Downloads',
+		// 'beta'      => false,
+		// )
+		// ) )->load_hooks();
 	}
 }

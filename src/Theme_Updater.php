@@ -25,7 +25,7 @@ class Theme_Updater {
 	private $license_key;
 	private $version;
 	private $author;
-	protected $strings = null;
+	private $strings = null;
 
 	/**
 	 * Initiate the Theme updater

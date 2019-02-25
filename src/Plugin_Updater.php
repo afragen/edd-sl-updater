@@ -30,6 +30,7 @@ class Plugin_Updater {
 	private $version     = '';
 	private $wp_override = false;
 	private $cache_key   = '';
+	private $strings     = null;
 
 	private $health_check_timeout = 5;
 
@@ -43,7 +44,7 @@ class Plugin_Updater {
 	 * @param string $_plugin_file Path to the plugin file.
 	 * @param array  $_api_data    Optional data to send with API calls.
 	 */
-	public function __construct( $args = [] ) {
+	public function __construct( $args = [], $strings = [] ) {
 		global $edd_plugin_data;
 
 		$this->api_url                  = $args['api_url'];
@@ -54,6 +55,7 @@ class Plugin_Updater {
 		$this->wp_override              = $args['wp_override'];
 		$this->beta                     = $args['beta'];
 		$this->cache_key                = $args['cache_key'];
+		$this->strings                  = $strings;
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
 		/**

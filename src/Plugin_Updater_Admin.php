@@ -27,6 +27,7 @@ class Plugin_Updater_Admin {
 	private $license     = null;
 	private $wp_override = false;
 	private $cache_key   = null;
+	protected $strings     = null;
 
 	public function __construct( $config ) {
 		global $edd_plugin_data;
@@ -83,6 +84,8 @@ class Plugin_Updater_Admin {
 			$plugin        = get_plugin_data( $config['file'] );
 			$this->version = $plugin['Version'];
 		}
+
+		$this->strings = $this->get_strings();
 	}
 
 	public function load_hooks() {
@@ -149,7 +152,8 @@ class Plugin_Updater_Admin {
 				'wp_override' => $this->wp_override,
 				'beta'        => $this->beta,
 				'cache_key'   => $this->cache_key,
-			]
+			],
+			$this->strings
 		) )->load_hooks();
 
 	}

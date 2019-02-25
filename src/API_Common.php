@@ -16,6 +16,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 trait API_Common {
 	/**
+	 * Get default strings.
+	 *
+	 * @return array $default_strings
+	 */
+	public function get_strings() {
+		$default_strings = [
+			'theme-license'             => __( 'Theme License', 'edd-sl-updater' ),
+			'plugin-license'            => __( 'Plugin License', 'edd-sl-updater' ),
+			'enter-key'                 => __( 'Enter your theme license key.', 'edd-sl-updater' ),
+			'license-key'               => __( 'License Key', 'edd-sl-updater' ),
+			'license-action'            => __( 'License Action', 'edd-sl-updater' ),
+			'deactivate-license'        => __( 'Deactivate License', 'edd-sl-updater' ),
+			'activate-license'          => __( 'Activate License', 'edd-sl-updater' ),
+			'status-unknown'            => __( 'License status is unknown.', 'edd-sl-updater' ),
+			'renew'                     => __( 'Renew?', 'edd-sl-updater' ),
+			'unlimited'                 => __( 'unlimited', 'edd-sl-updater' ),
+			'license-key-is-active'     => __( 'License key is active.', 'edd-sl-updater' ),
+			'expires%s'                 => __( 'Expires %s.', 'edd-sl-updater' ),
+			'expires-never'             => __( 'Lifetime License.', 'edd-sl-updater' ),
+			'%1$s/%2$-sites'            => __( 'You have %1$s / %2$s sites activated.', 'edd-sl-updater' ),
+			'license-key-expired-%s'    => __( 'License key expired %s.', 'edd-sl-updater' ),
+			'license-key-expired'       => __( 'License key has expired.', 'edd-sl-updater' ),
+			'license-keys-do-not-match' => __( 'License keys do not match.', 'edd-sl-updater' ),
+			'license-is-inactive'       => __( 'License is inactive.', 'edd-sl-updater' ),
+			'license-key-is-disabled'   => __( 'License key is disabled.', 'edd-sl-updater' ),
+			'site-is-inactive'          => __( 'Site is inactive.', 'edd-sl-updater' ),
+			'license-status-unknown'    => __( 'License status is unknown.', 'edd-sl-updater' ),
+			'update-notice'             => __( "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update.", 'edd-sl-updater' ),
+			'update-available'          => __( '<strong>%1$s %2$s</strong> is available. <a href="%3$s" class="thickbox" title="%4s">Check out what\'s new</a> or <a href="%5$s"%6$s>update now</a>.', 'edd-sl-updater' ),
+		];
+
+		/**
+		 * Filter the default theme strings.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $default_strings Array of default strings for theme updater.
+		 */
+		return apply_filters( 'edd_sl_strings', $default_strings );
+	}
+
+	/**
 	 * Makes a call to the API.
 	 *
 	 * @since 1.0.0

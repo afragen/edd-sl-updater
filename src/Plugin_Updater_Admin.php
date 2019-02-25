@@ -123,7 +123,8 @@ class Plugin_Updater_Admin {
 	public function sanitize_license( $new ) {
 		$old = $this->license;
 		if ( $old && $old !== $new ) {
-			delete_option( $this->slug . '_license_status' ); // new license has been entered, so must reactivate
+			delete_option( $this->slug . '_license_status' );
+			delete_transient( $this->slug . '_license_message' );
 		}
 		return $new;
 	}
@@ -155,21 +156,26 @@ class Plugin_Updater_Admin {
 			],
 			$this->strings
 		) )->load_hooks();
-
 	}
 
 	public function license_page() {
 		$license = $this->license;
 		$status  = get_option( $this->slug . '_license_status' );
+
+		// Checks license status to display under license key
+		if ( ! $license ) {
+			$message = $this->strings['enter-key'];
+		} else {
+			// delete_transient( $this->slug . '_license_message' );
+			if ( ! get_transient( $this->slug . '_license_message', false ) ) {
+				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), ( 60 * 60 * 24 ) );
+			}
+			$message = get_transient( $this->slug . '_license_message' );
+		}
 		?>
 		<div class="wrap">
 		<h2>
-		<?php
-			printf(
-				esc_html__( '%s License Options', 'edd-sl-updater' ),
-				esc_attr( $this->name )
-			);
-		?>
+		<?php esc_attr_e( $this->name . '&nbsp;' . $this->strings['plugin-license'] ); ?>
 		</h2>
 		<form method="post" action="options.php">
 			<?php settings_fields( $this->slug . '_license' ); ?>
@@ -181,8 +187,11 @@ class Plugin_Updater_Admin {
 						</th>
 						<td>
 							<input id="<?php echo $this->slug; ?>_license_key" name="<?php echo $this->slug; ?>_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license, 'edd-sl-updater' ); ?>" />
-							<label class="description" for="<?php echo $this->slug; ?>_license_key"><?php _e( 'Enter your license key', 'edd-sl-updater' ); ?></label>
-						</td>
+							<label class="description" for="<?php echo $this->slug; ?>_license_key"></label>
+							<p class="description">
+									<?php echo $message; ?>
+							</p>
+					</td>
 					</tr>
 					<?php if ( $license ) { ?>
 						<tr valign="top">
@@ -194,13 +203,11 @@ class Plugin_Updater_Admin {
 								wp_nonce_field( $this->slug . '_nonce', $this->slug . '_nonce' );
 								if ( 'valid' === $status ) {
 									?>
-									<span style="color:green;"><?php _e( 'active', 'edd-sl-updater' ); ?></span>
-
-									<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_deactivate" value="<?php _e( 'Deactivate License', 'edd-sl-updater' ); ?>"/>
+								<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_deactivate" value="<?php esc_attr_e( $this->strings['deactivate-license'] ); ?>"/>
 									<?php
 								} else {
 									?>
-									<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_activate" value="<?php _e( 'Activate License', 'edd-sl-updater' ); ?>"/>
+								<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_activate" value="<?php esc_attr_e( $this->strings['activate-license'] ); ?>"/>
 									<?php
 								}
 								?>
@@ -285,13 +292,12 @@ class Plugin_Updater_Admin {
 						break;
 				}
 			}
-			// update_option( $this->slug . '_license_status', $license_data->license );
 		}
 
 		// $response->license will be either "active" or "inactive"
 		if ( $license_data && isset( $license_data->license ) ) {
 			update_option( $this->slug . '_license_status', $license_data->license );
-			// delete_transient( $this->theme_slug . '_license_message' );
+			delete_transient( $this->slug . '_license_message' );
 		}
 
 		if ( ! empty( $message ) ) {
@@ -395,6 +401,7 @@ class Plugin_Updater_Admin {
 
 			if ( 'deactivated' === $license_data->license ) {
 				delete_option( $this->slug . '_license_status' );
+				delete_transient( $this->slug . '_license_message' );
 			}
 			$this->redirect( $error_data );
 		}

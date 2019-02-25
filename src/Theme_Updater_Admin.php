@@ -156,7 +156,6 @@ class Theme_Updater_Admin {
 	 * since 1.0.0
 	 */
 	public function license_page() {
-		$strings = $this->strings;
 		$license = trim( get_option( $this->theme_slug . '_license_key' ) );
 		$status  = get_option( $this->theme_slug . '_license_key_status', false );
 
@@ -166,22 +165,19 @@ class Theme_Updater_Admin {
 		} else {
 			// delete_transient( $this->theme_slug . '_license_message' );
 			if ( ! get_transient( $this->theme_slug . '_license_message', false ) ) {
-				set_transient( $this->theme_slug . '_license_message', $this->check_license(), ( 60 * 60 * 24 ) );
+				set_transient( $this->theme_slug . '_license_message', $this->check_license( $this->theme_slug ), ( 60 * 60 * 24 ) );
 			}
 			$message = get_transient( $this->theme_slug . '_license_message' );
 		} ?>
 		<div class="wrap">
-			<h2><?php echo $strings['theme-license']; ?></h2>
+			<h2><?php echo $this->strings['theme-license']; ?></h2>
 			<form method="post" action="options.php">
-
 				<?php settings_fields( $this->theme_slug . '-license' ); ?>
-
 				<table class="form-table">
 					<tbody>
-
 						<tr valign="top">
 							<th scope="row" valign="top">
-								<?php echo $strings['license-key']; ?>
+								<?php echo $this->strings['license-key']; ?>
 							</th>
 							<td>
 								<input id="<?php echo $this->theme_slug; ?>_license_key" name="<?php echo $this->theme_slug; ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license ); ?>" />
@@ -190,24 +186,23 @@ class Theme_Updater_Admin {
 								</p>
 							</td>
 						</tr>
-
 						<?php
 						if ( $license ) {
 							?>
 						<tr valign="top">
 							<th scope="row" valign="top">
-								<?php echo $strings['license-action']; ?>
+								<?php echo $this->strings['license-action']; ?>
 							</th>
 							<td>
 								<?php
 								wp_nonce_field( $this->theme_slug . '_nonce', $this->theme_slug . '_nonce' );
 								if ( 'valid' === $status ) {
 									?>
-									<input type="submit" class="button-secondary" name="<?php echo $this->theme_slug; ?>_license_deactivate" value="<?php esc_attr_e( $strings['deactivate-license'] ); ?>"/>
+									<input type="submit" class="button-secondary" name="<?php echo $this->theme_slug; ?>_license_deactivate" value="<?php esc_attr_e( $this->strings['deactivate-license'] ); ?>"/>
 									<?php
 								} else {
 									?>
-									<input type="submit" class="button-secondary" name="<?php echo $this->theme_slug; ?>_license_activate" value="<?php esc_attr_e( $strings['activate-license'] ); ?>"/>
+									<input type="submit" class="button-secondary" name="<?php echo $this->theme_slug; ?>_license_activate" value="<?php esc_attr_e( $this->strings['activate-license'] ); ?>"/>
 									<?php
 								}
 								?>
@@ -216,7 +211,6 @@ class Theme_Updater_Admin {
 							<?php
 						}
 						?>
-
 					</tbody>
 				</table>
 				<?php submit_button(); ?>

@@ -100,6 +100,85 @@ trait API_Common {
 	}
 
 	/**
+	 * Checks if license is valid and gets expire date.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string $message License status message.
+	 */
+	public function check_license( $slug ) {
+		$license = trim( get_option( $slug . '_license_key' ) );
+
+		$api_params = [
+			'edd_action' => 'check_license',
+			'license'    => $license,
+			'item_name'  => rawurlencode( $this->item_name ),
+			'item_id'    => $this->item_id,
+			'url'        => home_url(),
+		];
+
+		$license_data = $this->get_api_response( $this->api_url, $api_params );
+
+		// If response doesn't include license data, return
+		if ( ! isset( $license_data->license ) ) {
+			$message = $this->strings['license-status-unknown'];
+
+			return $message;
+		}
+		// We need to update the license status at the same time the message isupdated
+		if ( $license_data && isset( $license_data->license ) ) {
+			update_option( $slug . '_license_key_status', $license_data->license );
+		}
+		// Get expire date
+		$expires = false;
+		if ( isset( $license_data->expires ) && 'lifetime' !== $license_data->expires ) {
+			$expires    = date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) );
+			$renew_link = '<a href="' . esc_url( $this->get_renewal_link() ) . '"target="_blank">' . $this->strings['renew'] . '</a>';
+		} elseif ( isset( $license_data->expires ) && 'lifetime' === $license_data->expires ) {
+			$expires = 'lifetime';
+		}
+		// Get site counts
+		$site_count    = property_exists( $license_data, 'site_count' ) ? $license_data->site_count : null;
+		$license_limit = property_exists( $license_data, 'license_limit' ) ? $license_data->license_limit : null;
+		// If unlimited
+		if ( 0 == $license_limit ) {
+			$license_limit = $this->strings['unlimited'];
+		}
+
+		switch ( $license_data->license ) {
+			case 'valid':
+				$message = $this->strings['license-key-is-active'] . ' ';
+				if ( isset( $expires ) ) {
+					$message = 'lifetime' === $expires ? $message .= $this->strings['expires-never'] : $message .= sprintf( $this->strings['expires%s'], $expires ) . ' ';
+				}
+				if ( $site_count && $license_limit ) {
+					$message .= sprintf( $this->strings['%1$s/%2$-sites'], $site_count, $license_limit );
+				}
+				break;
+			case 'expired':
+				$message  = $expires ? sprintf( $this->strings['license-key-expired-%s'], $expires ) : $this->strings['license-key-expired'];
+				$message .= $renew_link ? ' ' . $renew_link : null;
+				break;
+			case 'invalid':
+				$message = $this->strings['license-keys-do-not-match'];
+				break;
+			case 'inactive':
+				$message = $this->strings['license-is-inactive'];
+				break;
+			case 'disabled':
+				$message = $this->strings['license-key-is-disabled'];
+				break;
+			case 'site_inactive':
+				$message = $this->strings['site-is-inactive'];
+				break;
+			default:
+				$message = $this->strings['license-status-unknown'];
+		}
+
+		return sanitize_text_field( $message );
+	}
+
+	/**
 	 * Redirect to where we came from.
 	 *
 	 * @param array $error_data Data for error notice.

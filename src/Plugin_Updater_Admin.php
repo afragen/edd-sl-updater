@@ -418,49 +418,4 @@ class Plugin_Updater_Admin {
 			}
 		}
 	}
-
-	/************************************
-	 this illustrates how to check if
-	 a license key is still valid
-	 the updater does this for you,
-	 so this is only needed if you
-	 want to do something custom
-	 *************************************/
-
-	public function check_license() {
-		global $wp_version;
-
-		$api_params = array(
-			'edd_action' => 'check_license',
-			'license'    => $this->license,
-			'item_name'  => rawurlencode( $this->name ),
-			'url'        => home_url(),
-		);
-
-		// Call the custom API.
-		// $response = wp_remote_post(
-		// EDD_SAMPLE_STORE_URL,
-		// array(
-		// 'timeout'   => 15,
-		// 'sslverify' => false,
-		// 'body'      => $api_params,
-		// )
-		// );
-		//
-		// if ( is_wp_error( $response ) ) {
-		// return false;
-		// }
-		// $license_data = json_decode( wp_remote_retrieve_body( $response ) );
-		add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
-		$license_data = $this->get_api_response( $this->api_url, $api_params );
-
-		if ( 'valid' === $license_data->license ) {
-			echo 'valid';
-			exit; // this license is still valid
-		} else {
-			echo 'invalid';
-			exit; // this license is no longer valid
-		}
-	}
-
 }

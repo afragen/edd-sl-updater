@@ -20,9 +20,9 @@ class Plugin_Updater_Admin {
 	private $api_url     = null;
 	private $api_data    = [];
 	private $name        = null;
-	private $item_id     = null;
+	protected $item_name   = null;
 	private $file        = null;
-	private $slug        = null;
+	protected $download_id = null;
 	private $version     = null;
 	private $license     = null;
 	private $wp_override = false;
@@ -59,12 +59,13 @@ class Plugin_Updater_Admin {
 		// Set config arguments
 		$this->api_url     = $config['api_url'];
 		$this->name        = $config['item_name'];
+		$this->item_name   = $config['item_name'];
 		$this->item_id     = $config['item_id'];
+		$this->download_id = $config['item_id'];
 		$this->file        = plugin_basename( $config['file'] );
 		$this->slug        = dirname( $this->file );
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
-		$this->download_id = $config['item_id'];
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
 		$this->license     = trim( get_option( $this->slug . '_license_key' ) );

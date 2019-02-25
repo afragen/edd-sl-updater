@@ -18,7 +18,7 @@ namespace EDD\Software_Licensing\Updater;
 class Theme_Updater {
 	use API_Common;
 
-	private $remote_api_url;
+	private $api_url;
 	private $request_data;
 	private $response_key;
 	private $theme_slug;
@@ -35,7 +35,7 @@ class Theme_Updater {
 	 */
 	public function __construct( $args = [], $strings = [] ) {
 		$defaults = [
-			'remote_api_url' => 'http://easydigitaldownloads.com',
+			'api_url'      => 'http://easydigitaldownloads.com',
 			'request_data'   => [],
 			'theme_slug'     => get_template(), // use get_stylesheet() for child theme updates
 			'item_name'      => '',
@@ -53,7 +53,7 @@ class Theme_Updater {
 		$this->theme_slug     = sanitize_key( $args['theme_slug'] );
 		$this->author         = $args['author'];
 		$this->beta           = $args['beta'];
-		$this->remote_api_url = $args['remote_api_url'];
+		$this->api_url      = $args['api_url'];
 		$this->response_key   = $this->theme_slug . '-' . $this->beta . '-update-response';
 		$this->strings        = $strings;
 	}
@@ -162,7 +162,7 @@ class Theme_Updater {
 			];
 
 			// $response = wp_remote_post(
-			// $this->remote_api_url,
+			// $this->api_url,
 			// [
 			// 'timeout' => 15,
 			// 'body'    => $api_params,
@@ -173,7 +173,7 @@ class Theme_Updater {
 			// $failed = true;
 			// }
 			// $update_data = json_decode( wp_remote_retrieve_body( $response ) );
-			$update_data = $this->get_api_response( $this->remote_api_url, $api_params );
+			$update_data = $this->get_api_response( $this->api_url, $api_params );
 
 			if ( ! is_object( $update_data ) ) {
 				$failed = true;

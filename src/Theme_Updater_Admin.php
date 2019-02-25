@@ -29,7 +29,7 @@ class Theme_Updater_Admin {
 	 * @since 1.0.0
 	 * @type string
 	 */
-	protected $remote_api_url = null;
+	protected $api_url     = null;
 	protected $theme_slug     = null;
 	protected $version        = null;
 	protected $author         = null;
@@ -47,7 +47,7 @@ class Theme_Updater_Admin {
 		$config = wp_parse_args(
 			$config,
 			[
-				'remote_api_url' => 'http://easydigitaldownloads.com',
+				'api_url'     => 'http://easydigitaldownloads.com',
 				'theme_slug'     => get_template(),
 				'item_name'      => '',
 				'item_id'        => '',
@@ -70,7 +70,7 @@ class Theme_Updater_Admin {
 		do_action( 'post_edd_sl_theme_updater_setup', $config );
 
 		// Set config arguments
-		$this->remote_api_url = $config['remote_api_url'];
+		$this->api_url     = $config['api_url'];
 		$this->item_name      = $config['item_name'];
 		$this->item_id        = $config['item_id'];
 		$this->theme_slug     = sanitize_key( $config['theme_slug'] );
@@ -121,7 +121,7 @@ class Theme_Updater_Admin {
 
 		( new Theme_Updater(
 			[
-				'remote_api_url' => $this->remote_api_url,
+				'api_url'   => $this->api_url,
 				'version'        => $this->version,
 				'license'        => trim( get_option( $this->theme_slug . '_license_key' ) ),
 				'item_name'      => $this->item_name,
@@ -268,7 +268,7 @@ class Theme_Updater_Admin {
 			'url'        => home_url(),
 		];
 
-		$license_data = $this->get_api_response( $this->remote_api_url, $api_params );
+		$license_data = $this->get_api_response( $this->api_url, $api_params );
 
 		if ( $license_data->success && isset( $license_data->error ) ) {
 			switch ( $license_data->error ) {
@@ -336,7 +336,7 @@ class Theme_Updater_Admin {
 		];
 
 		add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
-		$license_data = $this->get_api_response( $this->remote_api_url, $api_params );
+		$license_data = $this->get_api_response( $this->api_url, $api_params );
 
 		if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
 			$message = __( 'An error occurred, please try again.', 'edd-sl-updater' );
@@ -371,14 +371,14 @@ class Theme_Updater_Admin {
 		// If download_id was passed in the config, a renewal link can be constructed
 		$license_key = trim( get_option( $this->theme_slug . '_license_key', false ) );
 		if ( ! empty( $this->download_id ) && $license_key ) {
-			$url  = esc_url( $this->remote_api_url );
+			$url  = esc_url( $this->api_url );
 			$url .= '/checkout/?edd_license_key=' . $license_key . '&download_id=' . $this->download_id;
 
 			return $url;
 		}
 
-		// Otherwise return the remote_api_url
-		return $this->remote_api_url;
+		// Otherwise return the api_url
+		return $this->api_url;
 	}
 
 	/**

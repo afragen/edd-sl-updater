@@ -91,6 +91,11 @@ class Plugin_Updater_Admin {
 		$this->strings = $this->get_strings();
 	}
 
+	/**
+	 * Load all our hooks.
+	 *
+	 * @return void
+	 */
 	public function load_hooks() {
 		add_action( 'init', [ $this, 'updater' ] );
 		add_action( 'admin_menu', [ $this, 'license_menu' ] );
@@ -141,6 +146,7 @@ class Plugin_Updater_Admin {
 			delete_option( $this->slug . '_license_status' );
 			delete_transient( $this->slug . '_license_message' );
 		}
+
 		return $new;
 	}
 
@@ -178,6 +184,11 @@ class Plugin_Updater_Admin {
 		) )->load_hooks();
 	}
 
+	/**
+	 * Outputs the markup used on the theme license page.
+	 *
+	 * since 1.0.0
+	 */
 	public function license_page() {
 		$license = $this->license;
 		$status  = get_option( $this->slug . '_license_status' );
@@ -191,8 +202,7 @@ class Plugin_Updater_Admin {
 				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), ( 60 * 60 * 24 ) );
 			}
 			$message = get_transient( $this->slug . '_license_message' );
-		}
-		?>
+		} ?>
 		<div class="wrap">
 		<h2>
 		<?php esc_attr_e( $this->strings['plugin-license'] . ' - ' . $this->name ); ?>
@@ -213,7 +223,9 @@ class Plugin_Updater_Admin {
 							</p>
 					</td>
 					</tr>
-					<?php if ( $license ) { ?>
+					<?php
+					if ( $license ) {
+						?>
 						<tr valign="top">
 							<th scope="row" valign="top">
 								<?php _e( 'Activate License', 'edd-sl-updater' ); ?>
@@ -233,7 +245,9 @@ class Plugin_Updater_Admin {
 								?>
 							</td>
 						</tr>
-					<?php } ?>
+						<?php
+					}
+					?>
 				</tbody>
 			</table>
 				<?php submit_button(); ?>
@@ -241,10 +255,11 @@ class Plugin_Updater_Admin {
 		<?php
 	}
 
-	/************************************
-	 this illustrates how to activate
-	 a license key
-	 *************************************/
+	/**
+	 * Activates the license.
+	 *
+	 * @since 1.0.0
+	 */
 	public function activate_license() {
 		// listen for our activate button to be clicked
 		if ( isset( $_POST[ $this->slug . '_license_activate' ] ) ) {
@@ -313,30 +328,27 @@ class Plugin_Updater_Admin {
 		$this->redirect( $error_data );
 	}
 
-
-
-	/***********************************************
-	 Illustrates how to deactivate a license key.
-	 This will decrease the site count
-	 ***********************************************/
+	/**
+	 * Deactivates the license.
+	 *
+	 * @since 1.0.0
+	 */
 	public function deactivate_license() {
-
 		// listen for our activate button to be clicked
 		if ( isset( $_POST[ $this->slug . '_license_deactivate' ] ) ) {
-
 			// run a quick security check
 			if ( ! check_admin_referer( $this->slug . '_nonce', $this->slug . '_nonce' ) ) {
 				return; // get out if we didn't click the Activate button
 			}
 
 			// data to send in our API request
-			$api_params = array(
+			$api_params = [
 				'edd_action' => 'deactivate_license',
 				'license'    => $this->license,
 				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD
 				'item_id'    => $this->item_id,
 				'url'        => home_url(),
-			);
+			];
 
 			// Call the custom API.
 			add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );

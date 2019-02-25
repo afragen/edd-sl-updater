@@ -37,12 +37,8 @@ class Plugin_Updater {
 	/**
 	 * Class constructor.
 	 *
-	 * @uses plugin_basename()
-	 * @uses hook()
-	 *
-	 * @param string $_api_url     The URL pointing to the custom API endpoint.
-	 * @param string $_plugin_file Path to the plugin file.
-	 * @param array  $_api_data    Optional data to send with API calls.
+	 * @param array $args    Configuration data.
+	 * @param array $strings Messaging strings.
 	 */
 	public function __construct( $args = [], $strings = [] ) {
 		global $edd_plugin_data;

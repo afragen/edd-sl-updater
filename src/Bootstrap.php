@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Bootstrap {
-
 	protected $file;
 	protected $dir;
 

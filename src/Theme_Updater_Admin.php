@@ -31,6 +31,7 @@ class Theme_Updater_Admin {
 	 */
 	protected $api_url     = null;
 	protected $theme_slug  = null;
+	protected $item_name   = null;
 	protected $version     = null;
 	protected $author      = null;
 	protected $download_id = null;
@@ -170,7 +171,8 @@ class Theme_Updater_Admin {
 			$message = get_transient( $this->theme_slug . '_license_message' );
 		} ?>
 		<div class="wrap">
-			<h2><?php echo $this->strings['theme-license']; ?></h2>
+			<h2><?php esc_attr_e( $this->strings['theme-license'] . ' - ' . $this->item_name ); ?>
+</h2>
 			<form method="post" action="options.php">
 				<?php settings_fields( $this->theme_slug . '-license' ); ?>
 				<table class="form-table">

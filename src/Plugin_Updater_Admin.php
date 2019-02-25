@@ -195,7 +195,7 @@ class Plugin_Updater_Admin {
 		?>
 		<div class="wrap">
 		<h2>
-		<?php esc_attr_e( $this->name . '&nbsp;' . $this->strings['plugin-license'] ); ?>
+		<?php esc_attr_e( $this->strings['plugin-license'] . ' - ' . $this->name ); ?>
 		</h2>
 		<form method="post" action="options.php">
 			<?php settings_fields( $this->slug . '_license' ); ?>

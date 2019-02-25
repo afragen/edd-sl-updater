@@ -33,9 +33,12 @@ trait API_Common {
 			'renew'                     => __( 'Renew?', 'edd-sl-updater' ),
 			'unlimited'                 => __( 'unlimited', 'edd-sl-updater' ),
 			'license-key-is-active'     => __( 'License key is active.', 'edd-sl-updater' ),
+			/* translators: %s: date */
 			'expires%s'                 => __( 'Expires %s.', 'edd-sl-updater' ),
 			'expires-never'             => __( 'Lifetime License.', 'edd-sl-updater' ),
+			/* translators: %1: number of sites activated, %2: total number of sites activated */
 			'%1$s/%2$-sites'            => __( 'You have %1$s / %2$s sites activated.', 'edd-sl-updater' ),
+			/* translators: %s: date */
 			'license-key-expired-%s'    => __( 'License key expired %s.', 'edd-sl-updater' ),
 			'license-key-expired'       => __( 'License key has expired.', 'edd-sl-updater' ),
 			'license-keys-do-not-match' => __( 'License keys do not match.', 'edd-sl-updater' ),
@@ -44,7 +47,8 @@ trait API_Common {
 			'site-is-inactive'          => __( 'Site is inactive.', 'edd-sl-updater' ),
 			'license-status-unknown'    => __( 'License status is unknown.', 'edd-sl-updater' ),
 			'update-notice'             => __( "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update.", 'edd-sl-updater' ),
-			'update-available'          => __( '<strong>%1$s %2$s</strong> is available. <a href="%3$s" class="thickbox" title="%4s">Check out what\'s new</a> or <a href="%5$s"%6$s>update now</a>.', 'edd-sl-updater' ),
+			/* translators: %1: , %2: , %3: URL, %4: link title, %5: URL, %6: opening tag */
+			'update-available'          => __( '<strong>%1$s %2$s</strong> is available. <a href="%3$s" class="thickbox" title="%4$s">Check out what\'s new</a> or <a href="%5$s"%6$s>update now</a>.', 'edd-sl-updater' ),
 		];
 
 		/**
@@ -237,6 +241,7 @@ trait API_Common {
 		}
 		echo '<div class="notice-error notice"><p>';
 		printf(
+			/* translators: %1: error code, %2: error message */
 			esc_html__( 'EDD SL - %1$s: %2$s' ),
 			$error_data['error_code'],
 			$error_data['error_message']

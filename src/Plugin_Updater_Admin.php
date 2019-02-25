@@ -292,6 +292,7 @@ class Plugin_Updater_Admin {
 				switch ( $license_data->error ) {
 					case 'expired':
 						$message = sprintf(
+							/* translators: %s: date of expiration */
 							__( 'Your license key expired on %s.' ),
 							date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
 						);
@@ -308,6 +309,7 @@ class Plugin_Updater_Admin {
 						$message = __( 'Your license is not active for this URL.' );
 						break;
 					case 'item_name_mismatch':
+						/* translators: %s: item name */
 						$message = sprintf( __( 'This appears to be an invalid license key for %s.' ), $this->item_name );
 						break;
 					case 'no_activations_left':

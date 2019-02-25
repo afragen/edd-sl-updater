@@ -14,15 +14,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Bootstrap.
+ */
 class Bootstrap {
 	protected $file;
 	protected $dir;
 
+	/**
+	 * Class constructor.
+	 *
+	 * @param string $file File path.
+	 */
 	public function __construct( $file ) {
 		$this->file = $file;
 		$this->dir  = dirname( $file );
 	}
 
+	/**
+	 * Let's get started.
+	 *
+	 * @return void
+	 */
 	public function run() {
 		require_once $this->dir . '/vendor/autoload.php';
 		// ( new Plugin_Updater_Admin(

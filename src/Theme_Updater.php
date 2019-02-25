@@ -10,10 +10,7 @@
 namespace EDD\Software_Licensing\Updater;
 
 /**
- * Theme updater class.
- *
- * @package EDD Sample Theme
- * @version 1.0.3
+ * Class Theme_Updater
  */
 class Theme_Updater {
 	use API_Common;
@@ -28,7 +25,7 @@ class Theme_Updater {
 	private $strings = null;
 
 	/**
-	 * Initiate the Theme updater
+	 * Class constructor.
 	 *
 	 * @param array $args    Array of arguments from the theme requesting an update check
 	 * @param array $strings Strings for the update process

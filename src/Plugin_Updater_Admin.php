@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Plugin_Updater_Admin
+ */
 class Plugin_Updater_Admin {
 	use API_Common;
 
@@ -31,6 +34,11 @@ class Plugin_Updater_Admin {
 	protected $cache_key   = null;
 	protected $strings     = null;
 
+	/**
+	 * Class constructor.
+	 *
+	 * @param array $config Configuration data.
+	 */
 	public function __construct( $config ) {
 		global $edd_plugin_data;
 		$config = wp_parse_args(

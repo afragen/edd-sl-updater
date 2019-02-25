@@ -15,11 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Theme updater admin page and functions.
- *
- * @package EDD Sample Theme
+ * Class Theme_Updater_Admin
  */
-
 class Theme_Updater_Admin {
 	use API_Common;
 
@@ -40,9 +37,7 @@ class Theme_Updater_Admin {
 	protected $strings     = null;
 
 	/**
-	 * Initialize the class.
-	 *
-	 * @since 1.0.0
+	 * Class constructor.
 	 */
 	public function __construct( $config = [] ) {
 		$config = wp_parse_args(

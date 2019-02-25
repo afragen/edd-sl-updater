@@ -23,15 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin_Updater {
 	use API_Common;
 
-	private $api_url     = null;
-	private $api_data    = [];
-	private $file        = null;
-	private $slug        = null;
-	private $version     = null;
-	private $wp_override = false;
-	private $cache_key   = null;
-	private $strings     = null;
-
+	private $api_url              = null;
+	private $api_data             = [];
+	private $file                 = null;
+	private $slug                 = null;
+	private $version              = null;
+	private $wp_override          = false;
+	private $cache_key            = null;
+	private $strings              = null;
 	private $health_check_timeout = 5;
 
 	/**

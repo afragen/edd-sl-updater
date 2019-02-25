@@ -125,10 +125,12 @@ trait API_Common {
 
 			return $message;
 		}
+
 		// We need to update the license status at the same time the message isupdated
 		if ( $license_data && isset( $license_data->license ) ) {
 			update_option( $slug . '_license_key_status', $license_data->license );
 		}
+
 		// Get expire date
 		$expires = false;
 		if ( isset( $license_data->expires ) && 'lifetime' !== $license_data->expires ) {
@@ -137,11 +139,13 @@ trait API_Common {
 		} elseif ( isset( $license_data->expires ) && 'lifetime' === $license_data->expires ) {
 			$expires = 'lifetime';
 		}
+
 		// Get site counts
 		$site_count    = property_exists( $license_data, 'site_count' ) ? $license_data->site_count : null;
 		$license_limit = property_exists( $license_data, 'license_limit' ) ? $license_data->license_limit : null;
+
 		// If unlimited
-		if ( 0 == $license_limit ) {
+		if ( 0 === $license_limit ) {
 			$license_limit = $this->strings['unlimited'];
 		}
 

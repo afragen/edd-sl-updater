@@ -208,10 +208,10 @@ trait API_Common {
 		// Save error message data to very short transient.
 		if ( ! $error_data['success'] ) {
 			if ( $this instanceof Plugin_Updater_Admin ) {
-				set_transient( 'plugin_sl_activation', $error_data, 10 );
+				set_transient( 'sl_plugin_activation', $error_data, 10 );
 			}
 			if ( $this instanceof Theme_Updater_Admin ) {
-				set_transient( 'theme_sl_activation', $error_data, 10 );
+				set_transient( 'sl_theme_activation', $error_data, 10 );
 			}
 		}
 
@@ -227,10 +227,10 @@ trait API_Common {
 	public function show_error() {
 		$error_data = false;
 		if ( $this instanceof Plugin_Updater_Admin ) {
-			$error_data = get_transient( 'plugin_sl_activation' );
+			$error_data = get_transient( 'sl_plugin_activation' );
 		}
 		if ( $this instanceof Theme_Updater_Admin ) {
-			$error_data = get_transient( 'theme_sl_activation' );
+			$error_data = get_transient( 'sl_theme_activation' );
 		}
 		if ( ! $error_data ) {
 			return;

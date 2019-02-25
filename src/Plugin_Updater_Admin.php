@@ -100,11 +100,11 @@ class Plugin_Updater_Admin {
 		add_action( 'update_option_' . $this->slug . '_license_key', [ $this, 'activate_license' ] );
 	}
 
-	/************************************
-	 the code below is just a standard
-	 options page. Substitute with
-	 your own.
-	 *************************************/
+	/**
+	 * Create menu.
+	 *
+	 * @return void
+	 */
 	public function license_menu() {
 		add_plugins_page(
 			$this->name . ' License',
@@ -115,6 +115,11 @@ class Plugin_Updater_Admin {
 		);
 	}
 
+	/**
+	 * Register options.
+	 *
+	 * @return void
+	 */
 	public function register_option() {
 		register_setting(
 			$this->slug . '_license',
@@ -123,6 +128,13 @@ class Plugin_Updater_Admin {
 		);
 	}
 
+	/**
+	 * Sanitize license.
+	 *
+	 * @param string $new License.
+	 *
+	 * @return string $new
+	 */
 	public function sanitize_license( $new ) {
 		$old = $this->license;
 		if ( $old && $old !== $new ) {
@@ -132,6 +144,11 @@ class Plugin_Updater_Admin {
 		return $new;
 	}
 
+	/**
+	 * Creates the updater class.
+	 *
+	 * @return void
+	 */
 	public function updater() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;

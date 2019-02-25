@@ -11,7 +11,7 @@ This is an example of how to implement one-click theme updates using Easy Digita
 
 ## Parameters
 
-These are the items that will need to be configured in "functions.php":
+These are the items that will need to be configured in "updater/theme-updater.php":
 
 ```PHP
 'remote_api_url'=> 'https://easydigitaldownloads.com', // Site where EDD is hosted

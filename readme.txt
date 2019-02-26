@@ -15,6 +15,8 @@ License: MIT
 
 A universal updater for EDD Software Licensing products.
 
+This plugin would be installed by all users of EDD Software Licensing Addons so they would be able to see updates from the store. This allows EDD Addon developers to simplify the code required to access the update system from EDD Software Licensing.
+
 PRs welcome at [EDD SL Updater](https://github.com/afragen/edd-sl-updater).
 
 ## Plugin Updater Example

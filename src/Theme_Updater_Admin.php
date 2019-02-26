@@ -29,10 +29,10 @@ class Theme_Updater_Admin {
 	protected $api_url     = null;
 	protected $theme_slug  = null;
 	protected $item_name   = null;
+	protected $item_id     = null;
 	protected $version     = null;
 	protected $author      = null;
 	protected $download_id = null;
-	protected $item_id     = null;
 	protected $renew_url   = null;
 	protected $strings     = null;
 

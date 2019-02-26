@@ -107,7 +107,6 @@ class Plugin_Updater {
 
 		if ( false === $version_info ) {
 			$version_info = $this->api_request(
-				'plugin_latest_version',
 				[
 					'slug' => $this->slug,
 					'beta' => $this->beta,
@@ -168,7 +167,6 @@ class Plugin_Updater {
 
 			if ( false === $version_info ) {
 				$version_info = $this->api_request(
-					'plugin_latest_version',
 					[
 						'slug' => $this->slug,
 						'beta' => $this->beta,
@@ -285,7 +283,7 @@ class Plugin_Updater {
 
 		// If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
 		if ( empty( $edd_api_request_transient ) ) {
-			$api_response = $this->api_request( 'plugin_information', $to_send );
+			$api_response = $this->api_request( $to_send );
 
 			// Expires in 3 hours
 			$this->set_version_info_cache( $api_response, $cache_key );
@@ -360,11 +358,10 @@ class Plugin_Updater {
 	/**
 	 * Calls the API and, if successfull, returns the object delivered by the API.
 	 *
-	 * @param  string $_action The requested action.
-	 * @param  array  $_data   Parameters for the API action.
+	 * @param  array $_data Parameters for the API action.
 	 * @return false|object
 	 */
-	private function api_request( $_action, $_data ) {
+	private function api_request( $_data ) {
 		global $wp_version, $edd_plugin_url_available;
 
 		$verify_ssl = $this->verify_ssl();

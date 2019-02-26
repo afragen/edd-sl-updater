@@ -64,9 +64,8 @@ trait API_Common {
 	/**
 	 * Makes a call to the API.
 	 *
-	 * @since 1.0.0
-	 *
-	 * @param  array $api_params to be used for wp_remote_get.
+	 * @param string $url URL for the API call.
+	 * @param  array  $api_params to be used for wp_remote_get.
 	 * @return array $response decoded JSON response.
 	 */
 	public function get_api_response( $url, $api_params ) {

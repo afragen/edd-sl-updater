@@ -102,8 +102,6 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Creates the updater class.
-	 *
-	 * since 1.0.0
 	 */
 	public function updater() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -131,8 +129,6 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Adds a menu item for the theme license under the appearance menu.
-	 *
-	 * since 1.0.0
 	 */
 	public function license_menu() {
 		$strings = $this->strings;
@@ -148,8 +144,6 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Registers the option used to store the license key in the options table.
-	 *
-	 * since 1.0.0
 	 */
 	public function register_option() {
 		register_setting(
@@ -161,8 +155,6 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Sanitizes the license key.
-	 *
-	 * since 1.0.0
 	 *
 	 * @param  string $new License key that was submitted.
 	 * @return string $new Sanitized license key.
@@ -181,8 +173,6 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Outputs the markup used on the theme license page.
-	 *
-	 * since 1.0.0
 	 */
 	public function license_page() {
 		$license = trim( get_option( $this->theme_slug . '_license_key' ) );
@@ -251,8 +241,6 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Activates the license key.
-	 *
-	 * @since 1.0.0
 	 */
 	public function activate_license() {
 		$license = trim( get_option( $this->theme_slug . '_license_key' ) );
@@ -319,8 +307,6 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Deactivates the license key.
-	 *
-	 * @since 1.0.0
 	 */
 	public function deactivate_license() {
 		// Retrieve the license from the database.

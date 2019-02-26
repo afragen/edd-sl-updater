@@ -15,14 +15,13 @@ namespace EDD\Software_Licensing\Updater;
 class Theme_Updater {
 	use API_Common;
 
-	private $api_url;
-	private $request_data;
-	private $response_key;
-	private $theme_slug;
-	private $license_key;
-	private $version;
-	private $author;
-	private $strings = null;
+	private $api_url      = null;
+	private $response_key = null;
+	private $theme_slug   = null;
+	private $license_key  = null;
+	private $version      = null;
+	private $author       = null;
+	private $strings      = null;
 
 	/**
 	 * Class constructor.
@@ -32,14 +31,13 @@ class Theme_Updater {
 	 */
 	public function __construct( $args = [], $strings = [] ) {
 		$defaults = [
-			'api_url'      => 'http://easydigitaldownloads.com',
-			'request_data' => [],
-			'theme_slug'   => get_template(), // use get_stylesheet() for child theme updates
-			'item_name'    => '',
-			'license'      => '',
-			'version'      => '',
-			'author'       => '',
-			'beta'         => false,
+			'api_url'    => 'http://easydigitaldownloads.com',
+			'theme_slug' => get_template(), // use get_stylesheet() for child theme updates
+			'item_name'  => '',
+			'license'    => '',
+			'version'    => '',
+			'author'     => '',
+			'beta'       => false,
 		];
 
 		$args = wp_parse_args( $args, $defaults );
@@ -55,6 +53,11 @@ class Theme_Updater {
 		$this->strings      = $strings;
 	}
 
+	/**
+	 * Load hooks.
+	 *
+	 * @return void
+	 */
 	public function load_hooks() {
 		add_filter( 'site_transient_update_themes', [ $this, 'theme_update_transient' ] );
 		add_filter( 'delete_site_transient_update_themes', [ $this, 'delete_theme_update_transient' ] );
@@ -64,7 +67,7 @@ class Theme_Updater {
 	}
 
 	/**
-	 * Show the update notification when neecessary
+	 * Show the update notification when neecessary.
 	 *
 	 * @return void
 	 */
@@ -74,7 +77,7 @@ class Theme_Updater {
 	}
 
 	/**
-	 * Display the update notifications
+	 * Display the update notifications.
 	 *
 	 * @return void
 	 */
@@ -109,11 +112,10 @@ class Theme_Updater {
 	}
 
 	/**
-	 * Update the theme update transient with the response from the version check
+	 * Update the theme update transient with the response from the version check.
 	 *
 	 * @param  array $value The default update values.
-	 * @return array|boolean If an update is available, returns the update parameters, if no update is needed returns false, if
-	 *                             the request fails returns false.
+	 * @return array|boolean If an update is available, returns the update parameters, if no update is needed returns false, if the request fails returns false.
 	 */
 	public function theme_update_transient( $value ) {
 		$update_data = $this->check_for_update();
@@ -128,7 +130,7 @@ class Theme_Updater {
 	}
 
 	/**
-	 * Remove the update data for the theme
+	 * Remove the update data for the theme.
 	 *
 	 * @return void
 	 */
@@ -137,10 +139,9 @@ class Theme_Updater {
 	}
 
 	/**
-	 * Call the EDD SL API (using the URL in the construct) to get the latest version information
+	 * Call the EDD SL API (using the URL in the construct) to get the latest version information.
 	 *
-	 * @return array|boolean If an update is available, returns the update parameters, if no update is needed returns false, if
-	 *                       the request fails returns false.
+	 * @return array|boolean If an update is available, returns the update parameters, if no update is needed returns false, if the request fails returns false.
 	 */
 	public function check_for_update() {
 		$update_data = get_transient( $this->response_key );
@@ -158,18 +159,6 @@ class Theme_Updater {
 				'beta'       => $this->beta,
 			];
 
-			// $response = wp_remote_post(
-			// $this->api_url,
-			// [
-			// 'timeout' => 15,
-			// 'body'    => $api_params,
-			// ]
-			// );
-			// Make sure the response was successful
-			// if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-			// $failed = true;
-			// }
-			// $update_data = json_decode( wp_remote_retrieve_body( $response ) );
 			$update_data = $this->get_api_response( $this->api_url, $api_params );
 
 			if ( ! is_object( $update_data ) ) {

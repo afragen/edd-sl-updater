@@ -15,10 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Allows plugins to use their own update API.
+ * Class Plugin_Updater
  *
- * @author Easy Digital Downloads
- * @version 1.6.18
+ * Allows plugins to use their own update API.
  */
 class Plugin_Updater {
 	use API_Common;
@@ -65,8 +64,6 @@ class Plugin_Updater {
 
 	/**
 	 * Set up WordPress filters to hook into WP's update process.
-	 *
-	 * @uses add_filter()
 	 *
 	 * @return void
 	 */
@@ -136,7 +133,8 @@ class Plugin_Updater {
 	}
 
 	/**
-	 * show update notification row -- needed for multisite subsites, because WP won't tell you otherwise!
+	 * Show update notification row
+	 * eeded for multisite subsites, because WP won't tell you otherwise!
 	 *
 	 * @param string $file
 	 * @param array  $plugin
@@ -323,8 +321,9 @@ class Plugin_Updater {
 	/**
 	 * Convert some objects to arrays when injecting data into the update API
 	 *
-	 * Some data like sections, banners, and icons are expected to be an associative array, however due to the JSON
-	 * decoding, they are objects. This method allows us to pass in the object and return an associative array.
+	 * Some data like sections, banners, and icons are expected to be an associative array,
+	 * however due to the JSON decoding, they are objects. This method allows us to pass
+	 * in the object and return an associative array.
 	 *
 	 * @since 3.6.5
 	 *
@@ -359,10 +358,6 @@ class Plugin_Updater {
 
 	/**
 	 * Calls the API and, if successfull, returns the object delivered by the API.
-	 *
-	 * @uses get_bloginfo()
-	 * @uses wp_remote_post()
-	 * @uses is_wp_error()
 	 *
 	 * @param  string $_action The requested action.
 	 * @param  array  $_data   Parameters for the API action.
@@ -407,6 +402,13 @@ class Plugin_Updater {
 			return;
 		}
 
+		/**
+		 * Plugins are not able to update from the store.
+		 * This would cause the store to go into maintence mode as the plugin
+		 * tries to update, likely resulting in a non-responsive site.
+		 *
+		 * @link https://github.com/easydigitaldownloads/easy-digital-downloads/issues/7168
+		 */
 		if ( trailingslashit( home_url() ) === $this->api_url ) {
 			return false; // Don't allow a plugin to ping itself
 		}
@@ -448,6 +450,11 @@ class Plugin_Updater {
 		return $request;
 	}
 
+	/**
+	 * Show the changelog.
+	 *
+	 * @return void
+	 */
 	public function show_changelog() {
 		global $edd_plugin_data;
 
@@ -478,13 +485,12 @@ class Plugin_Updater {
 				'edd_action' => 'get_version',
 				'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
 				'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
-				'slug'       => $_REQUEST['slug'],
+				'slug'       => esc_attr( $_REQUEST['slug'] ),
 				'author'     => $data['author'],
 				'url'        => home_url(),
 				'beta'       => ! empty( $data['beta'] ),
 			];
 
-			// $verify_ssl   = $this->verify_ssl();
 			$version_info = $this->get_api_response( $this->api_url, $api_params );
 
 			if ( ! empty( $version_info ) && isset( $version_info->sections ) ) {
@@ -509,6 +515,13 @@ class Plugin_Updater {
 		exit;
 	}
 
+	/**
+	 * Get cached version info.
+	 *
+	 * @param string $cache_key
+	 *
+	 * @return string $cache['value']
+	 */
 	public function get_cached_version_info( $cache_key = '' ) {
 		if ( empty( $cache_key ) ) {
 			$cache_key = $this->cache_key;
@@ -529,6 +542,14 @@ class Plugin_Updater {
 		return $cache['value'];
 	}
 
+	/**
+	 * Set version info cache.
+	 *
+	 * @param string $value
+	 * @param string $cache_key
+	 *
+	 * @return void
+	 */
 	public function set_version_info_cache( $value = '', $cache_key = '' ) {
 		if ( empty( $cache_key ) ) {
 			$cache_key = $this->cache_key;

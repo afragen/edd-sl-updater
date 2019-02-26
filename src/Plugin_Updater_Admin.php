@@ -193,9 +193,7 @@ class Plugin_Updater_Admin {
 	}
 
 	/**
-	 * Outputs the markup used on the theme license page.
-	 *
-	 * since 1.0.0
+	 * Outputs the markup used on the plugin license page.
 	 */
 	public function license_page() {
 		$license = $this->license;

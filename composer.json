@@ -1,47 +1,50 @@
 {
-    "name": "afragen/edd-sl-updater",
-    "description": "A universal updater for EDD Software Licensing.",
-    "type": "wordpress-plugin",
-    "keywords": [
-      "easydigitaldownloads",
-      "software licensing"
-    ],
-    "license": "MIT",
-    "authors": [
-      {
-        "name": "Andy Fragen",
-        "email": "andy@thefragens.com",
-        "homepage": "https://thefragens.com",
-        "role": "Developer"
-      },
-      {
-        "name": "Easy Digital Downloads",
-        "homepage": "https://easydigitaldownloads.com",
-        "role": "Developer"
-      }
-    ],
-    "repositories": [
-      {
-        "type": "vcs",
-        "url": "https://github.com/afragen/edd-sl-updater"
-      }
-       ],
-    "support": {
-      "issues": "https://github.com/afragen/edd-sl-updater/issues",
-      "source": "https://github.com/afragen/edd-sl-updater"
+  "name": "afragen/edd-sl-updater",
+  "description": "A universal updater for EDD Software Licensing.",
+  "type": "wordpress-plugin",
+  "keywords": [
+    "easydigitaldownloads",
+    "software licensing",
+    "updater"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andy Fragen",
+      "email": "andy@thefragens.com",
+      "homepage": "https://thefragens.com",
+      "role": "Developer"
     },
-    "prefer-stable": true,
-    "require": {
-      "php": ">=5.4"
-    },
-    "autoload": {
-      "psr-4": {
-        "EDD\\Software_Licensing\\Updater\\": "src/"
-      }
-    },
-    "scripts": {
-      "post-update-cmd": [
-        "wp i18n make-pot . languages/edd-sl-updater.pot"
-      ]
+    {
+      "name": "Easy Digital Downloads",
+      "homepage": "https://easydigitaldownloads.com",
+      "role": "Developer"
     }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/afragen/edd-sl-updater"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/afragen/edd-sl-updater/issues",
+    "source": "https://github.com/afragen/edd-sl-updater"
+  },
+  "prefer-stable": true,
+  "require": {
+    "php": ">=5.4",
+    "composer/installers": "~1.0",
+    "afragen/translations-updater": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "EDD\\Software_Licensing\\Updater\\": "src/"
+    }
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "wp i18n make-pot . languages/edd-sl-updater.pot"
+    ]
   }
+}

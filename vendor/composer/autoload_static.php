@@ -7,16 +7,32 @@ namespace Composer\Autoload;
 class ComposerStaticInit047415cf42b6d7dd064038c532564bfd
 {
     public static $prefixLengthsPsr4 = array (
+        'F' => 
+        array (
+            'Fragen\\Translations_Updater\\' => 28,
+        ),
         'E' => 
         array (
             'EDD\\Software_Licensing\\Updater\\' => 31,
         ),
+        'C' => 
+        array (
+            'Composer\\Installers\\' => 20,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Fragen\\Translations_Updater\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/afragen/translations-updater/src/Translations_Updater',
+        ),
         'EDD\\Software_Licensing\\Updater\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Composer\\Installers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
     );
 

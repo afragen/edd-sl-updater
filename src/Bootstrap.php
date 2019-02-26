@@ -38,6 +38,13 @@ class Bootstrap {
 	 */
 	public function run() {
 		require_once $this->dir . '/vendor/autoload.php';
+		add_action(
+			'init',
+			function() {
+				load_plugin_textdomain( 'edd-sl-updater' );
+			}
+		);
+
 		// ( new Plugin_Updater_Admin(
 		// array(
 		// 'file'      => $this->file,

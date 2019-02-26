@@ -8,16 +8,18 @@ License: MIT
 */
 
 function edd_test_plugin_updater() {
-	( new EDD\Software_Licensing\Updater\Plugin_Updater_Admin(
-		array(
-			'file'      => __FILE__,
-			'api_url'   => 'http://eddstore.test',
-			'item_name' => 'EDD Test Plugin',
-			'item_id'   => 11, // ID of the product.
-			'version'   => '1.0', // current version number.
-			'author'    => 'Andy Fragen', // author of this plugin.
-			'beta'      => false,
-		)
-	) )->load_hooks();
+	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
+		( new EDD\Software_Licensing\Updater\Plugin_Updater_Admin(
+			[
+				'file'      => __FILE__,
+				'api_url'   => 'http://eddstore.test',
+				'item_name' => 'EDD Test Plugin',
+				'item_id'   => 11, // ID of the product.
+				'version'   => '1.0', // current version number.
+				'author'    => 'Andy Fragen', // author of this plugin.
+				'beta'      => false,
+			]
+		) )->load_hooks();
+	}
 }
 add_action( 'plugins_loaded', 'edd_test_plugin_updater' );

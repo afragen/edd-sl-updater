@@ -82,7 +82,6 @@ class Theme_Updater {
 	 * @return void
 	 */
 	public function update_nag() {
-		$strings      = $this->strings;
 		$theme        = wp_get_theme( $this->theme_slug );
 		$api_response = get_transient( $this->response_key );
 
@@ -91,12 +90,12 @@ class Theme_Updater {
 		}
 
 		$update_url     = wp_nonce_url( 'update.php?action=upgrade-theme&amp;theme=' . rawurlencode( $this->theme_slug ), 'upgrade-theme_' . $this->theme_slug );
-		$update_onclick = ' onclick="if ( confirm(\'' . esc_js( $strings['update-notice'] ) . '\') ) {return true;}return false;"';
+		$update_onclick = ' onclick="if ( confirm(\'' . esc_js( $this->strings['update-notice'] ) . '\') ) {return true;}return false;"';
 
 		if ( version_compare( $this->version, $api_response->new_version, '<' ) ) {
 			echo '<div id="update-nag">';
 			printf(
-				$strings['update-available'],
+				$this->strings['update-available'],
 				$theme->get( 'Name' ),
 				$api_response->new_version,
 				'#TB_inline?width=640&amp;inlineId=' . $this->theme_slug . '_changelog',

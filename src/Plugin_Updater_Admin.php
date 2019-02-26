@@ -234,7 +234,7 @@ class Plugin_Updater_Admin {
 						?>
 						<tr valign="top">
 							<th scope="row" valign="top">
-								<?php _e( 'Activate License', 'edd-sl-updater' ); ?>
+								<?php echo $this->strings['activate-license']; ?>
 							</th>
 							<td>
 								<?php
@@ -290,31 +290,29 @@ class Plugin_Updater_Admin {
 				switch ( $license_data->error ) {
 					case 'expired':
 						$message = sprintf(
-							/* translators: %s: date of expiration */
-							__( 'Your license key expired on %s.' ),
+							$this->strings['license-key-expired-%s'],
 							date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
 						);
 						break;
 					case 'disabled':
 					case 'revoked':
-						$message = __( 'Your license key has been disabled.' );
+						$message = $this->strings['license-key-is-disabled'];
 						break;
 					case 'missing':
-						$message = __( 'Invalid license.' );
+						$message = $this->strings['status-invalid'];
 						break;
 					case 'invalid':
 					case 'site_inactive':
-						$message = __( 'Your license is not active for this URL.' );
+						$this->strings['license-inactive-url'];
 						break;
 					case 'item_name_mismatch':
-						/* translators: %s: item name */
-						$message = sprintf( __( 'This appears to be an invalid license key for %s.' ), $this->item_name );
+						$message = sprintf( $this->strings['item-name-mismatch-%s'], $this->item_name );
 						break;
 					case 'no_activations_left':
-						$message = __( 'Your license key has reached its activation limit.' );
+						$message = $this->strings['license-activation-limit'];
 						break;
 					default:
-						$message = __( 'An error occurred, please try again.' );
+						$message = $this->strings['error'];
 						break;
 				}
 			}
@@ -328,7 +326,7 @@ class Plugin_Updater_Admin {
 
 		if ( ! empty( $message ) ) {
 			$error_data['success']       = false;
-			$error_data['error_code']    = __( 'activate_plugin_license' );
+			$error_data['error_code']    = __( 'activate_plugin_license', 'edd-sl-updater' );
 			$error_data['error_message'] = $message;
 		} else {
 			$error_data = null;
@@ -364,11 +362,12 @@ class Plugin_Updater_Admin {
 
 			// $license_data->license will be either "deactivated" or "failed"
 			if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
-				$message = __( 'An error occurred, please try again.', 'edd-sl-updater' );
+				// $message = __( 'An error occurred, please try again.', 'edd-sl-updater' );
+				$message = $this->strings['error'];
 			}
 			if ( ! empty( $message ) ) {
 				$error_data['success']       = false;
-				$error_data['error_code']    = __( 'deactivate_plugin_license' );
+				$error_data['error_code']    = __( 'deactivate_plugin_license', 'edd-sl-updater' );
 				$error_data['error_message'] = $message;
 			} else {
 				$error_data['success'] = true;

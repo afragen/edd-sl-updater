@@ -223,7 +223,7 @@ class Plugin_Updater {
 			if ( empty( $version_info->download_link ) ) {
 				printf(
 					/* translators: %1: item name, %2: open tag, %3: close tag, %4: version number */
-					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', 'easy-digital-downloads' ),
+					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', 'edd-sl-updater' ),
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),
@@ -232,7 +232,7 @@ class Plugin_Updater {
 			} else {
 				printf(
 					/* translators: %1: item name, %2: open tag, %3: version number, %4: close tag, %5: open tag, %6: close tag */
-					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', 'easy-digital-downloads' ),
+					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', 'edd-sl-updater' ),
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),

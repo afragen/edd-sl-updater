@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Trait API_Common
+ */
 trait API_Common {
 	/**
 	 * Get default strings.
@@ -30,25 +33,31 @@ trait API_Common {
 			'deactivate-license'        => __( 'Deactivate License', 'edd-sl-updater' ),
 			'activate-license'          => __( 'Activate License', 'edd-sl-updater' ),
 			'status-unknown'            => __( 'License status is unknown.', 'edd-sl-updater' ),
+			'status-invalid'            => __( 'Invalid License.', 'edd-sl-updater' ),
+			/* translators: %s: item name */
+			'item-name-mismatch-%s'     => __( 'This appears to be an invalid license key for %s.', 'edd-sl-updater' ),
 			'renew'                     => __( 'Renew?', 'edd-sl-updater' ),
 			'unlimited'                 => __( 'unlimited', 'edd-sl-updater' ),
 			'license-key-is-active'     => __( 'License key is active.', 'edd-sl-updater' ),
-			/* translators: %s: date */
+			/* translators: %s: expiration date */
 			'expires%s'                 => __( 'Expires %s.', 'edd-sl-updater' ),
 			'expires-never'             => __( 'Lifetime License.', 'edd-sl-updater' ),
 			/* translators: %1: number of sites activated, %2: total number of sites activated */
 			'%1$s/%2$-sites'            => __( 'You have %1$s / %2$s sites activated.', 'edd-sl-updater' ),
-			/* translators: %s: date */
-			'license-key-expired-%s'    => __( 'License key expired %s.', 'edd-sl-updater' ),
+			/* translators: %s: expiration date */
+			'license-key-expired-%s'    => __( 'License key expired on %s.', 'edd-sl-updater' ),
 			'license-key-expired'       => __( 'License key has expired.', 'edd-sl-updater' ),
 			'license-keys-do-not-match' => __( 'License keys do not match.', 'edd-sl-updater' ),
 			'license-is-inactive'       => __( 'License is inactive.', 'edd-sl-updater' ),
 			'license-key-is-disabled'   => __( 'License key is disabled.', 'edd-sl-updater' ),
+			'license-inactive-url'      => __( 'Your license is not active for this URL.', 'edd-sl-updater' ),
 			'site-is-inactive'          => __( 'Site is inactive.', 'edd-sl-updater' ),
 			'license-status-unknown'    => __( 'License status is unknown.', 'edd-sl-updater' ),
+			'license-activation-limit'  => __( 'Your license key has reached its activation limit.', 'edd-sl-updater' ),
 			'update-notice'             => __( "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update.", 'edd-sl-updater' ),
-			/* translators: %1: , %2: , %3: URL, %4: link title, %5: URL, %6: opening tag */
+			/* translators: %1: Name, %2: new version, %3: URL, %4: link title, %5: URL, %6: opening tag */
 			'update-available'          => __( '<strong>%1$s %2$s</strong> is available. <a href="%3$s" class="thickbox" title="%4$s">Check out what\'s new</a> or <a href="%5$s"%6$s>update now</a>.', 'edd-sl-updater' ),
+			'error'                     => __( 'An error occurred, please try again.', 'edd-sl-updater' ),
 		];
 
 		/**

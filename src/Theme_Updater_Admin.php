@@ -344,7 +344,7 @@ class Theme_Updater_Admin {
 	}
 
 	/**
-	 * Constructs a renewal link
+	 * Constructs a renewal link.
 	 *
 	 * @since 1.0.0
 	 */

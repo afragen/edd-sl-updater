@@ -133,8 +133,9 @@ class Plugin_Updater {
 	}
 
 	/**
-	 * Show update notification row
-	 * eeded for multisite subsites, because WP won't tell you otherwise!
+	 * Show update notification row.
+	 *
+	 * Needed for multisite subsites, because WP won't tell you otherwise!
 	 *
 	 * @param string $file
 	 * @param array  $plugin
@@ -156,7 +157,7 @@ class Plugin_Updater {
 			return;
 		}
 
-		// Remove our filter on the site transient
+		// Remove our filter on the site transient.
 		remove_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ], 10 );
 
 		$update_cache = get_site_transient( 'update_plugins' );
@@ -206,7 +207,7 @@ class Plugin_Updater {
 			$version_info = $update_cache->response[ $this->file ];
 		}
 
-		// Restore our filter
+		// Restore our filter.
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
 		if ( ! empty( $update_cache->response[ $this->file ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
@@ -279,7 +280,7 @@ class Plugin_Updater {
 		$cache_key = 'edd_api_request_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
 		$cache_key = $this->cache_key;
 
-		// Get the transient where we store the api request for this plugin for 24 hours
+		// Get the transient where we store the api request for this plugin for 24 hours.
 		$edd_api_request_transient = $this->get_cached_version_info( $cache_key );
 
 		// If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
@@ -319,7 +320,7 @@ class Plugin_Updater {
 	}
 
 	/**
-	 * Convert some objects to arrays when injecting data into the update API
+	 * Convert some objects to arrays when injecting data into the update API.
 	 *
 	 * Some data like sections, banners, and icons are expected to be an associative array,
 	 * however due to the JSON decoding, they are objects. This method allows us to pass
@@ -341,7 +342,7 @@ class Plugin_Updater {
 	}
 
 	/**
-	 * Disable SSL verification in order to prevent download update failures
+	 * Disable SSL verification in order to prevent download update failures.
 	 *
 	 * @param  array  $args
 	 * @param  string $url

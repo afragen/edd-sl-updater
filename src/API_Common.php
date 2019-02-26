@@ -61,13 +61,13 @@ trait API_Common {
 		];
 
 		/**
-		 * Filter the default theme strings.
+		 * Filter the default strings.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param array $default_strings Array of default strings for theme updater.
 		 */
-		return apply_filters( 'edd_sl_strings', $default_strings );
+		return apply_filters( 'edd_sl_updater_strings', $default_strings );
 	}
 
 	/**

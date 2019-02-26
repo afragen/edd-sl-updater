@@ -27,7 +27,7 @@ trait API_Common {
 		$default_strings = [
 			'theme-license'             => __( 'Theme License', 'edd-sl-updater' ),
 			'plugin-license'            => __( 'Plugin License', 'edd-sl-updater' ),
-			'enter-key'                 => __( 'Enter your theme license key.', 'edd-sl-updater' ),
+			'enter-key'                 => __( 'Enter your license key.', 'edd-sl-updater' ),
 			'license-key'               => __( 'License Key', 'edd-sl-updater' ),
 			'license-action'            => __( 'License Action', 'edd-sl-updater' ),
 			'deactivate-license'        => __( 'Deactivate License', 'edd-sl-updater' ),

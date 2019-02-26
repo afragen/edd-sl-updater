@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-02-25T21:03:11+00:00\n"
+"POT-Creation-Date: 2019-02-26T02:45:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: edd-sl-updater\n"
@@ -30,19 +30,27 @@ msgstr ""
 msgid "Andy Fragen"
 msgstr ""
 
-#: src/Theme_Updater_Admin.php:342
-#: src/Plugin_Updater_Admin.php:369
+#: src/Theme_Updater_Admin.php:328
+#: src/Plugin_Updater_Admin.php:367
 msgid "An error occurred, please try again."
 msgstr ""
 
-#: src/Plugin_Updater_Admin.php:224
+#: src/Plugin_Updater_Admin.php:222
 #: src/API_Common.php:28
 msgid "License Key"
 msgstr ""
 
-#: src/Plugin_Updater_Admin.php:239
+#: src/Plugin_Updater_Admin.php:237
 #: src/API_Common.php:31
 msgid "Activate License"
+msgstr ""
+
+#: src/Plugin_Updater.php:474
+msgid "You do not have permission to install plugin updates"
+msgstr ""
+
+#: src/Plugin_Updater.php:474
+msgid "Error"
 msgstr ""
 
 #: src/API_Common.php:25

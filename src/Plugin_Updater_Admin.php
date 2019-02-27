@@ -362,7 +362,6 @@ class Plugin_Updater_Admin {
 
 			// $license_data->license will be either "deactivated" or "failed"
 			if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
-				// $message = __( 'An error occurred, please try again.', 'edd-sl-updater' );
 				$message = $this->strings['error'];
 			}
 			if ( ! empty( $message ) ) {

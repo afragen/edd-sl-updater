@@ -57,18 +57,6 @@ class Plugin_Updater_Admin {
 			]
 		);
 
-		/**
-		 * Fires after the $edd_plugin_data is setup.
-		 *
-		 * @since x.x.x
-		 *
-		 * @param array $edd_plugin_data Array of EDD SL plugin data.
-		 */
-		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
-
-		// Run for decoupled language pack updating.
-		( new \Fragen\Translations_Updater\Init() )->edd_run();
-
 		// Set config arguments
 		$this->api_url     = $config['api_url'];
 		$this->name        = $config['item_name'];
@@ -99,7 +87,19 @@ class Plugin_Updater_Admin {
 			$this->version = $plugin['Version'];
 		}
 
-		$this->strings = $this->get_strings();
+		$config['slug'] = $this->slug;
+		$config['file'] = $this->file;
+		$this->strings  = $this->get_strings();
+
+		/**
+		 * Fires after the $config is setup.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $config Array of EDD SL plugin data.
+		 */
+		// TODO: update translations-updater for this data.
+		do_action( 'post_edd_sl_plugin_updater_setup', $config );
 	}
 
 	/**

@@ -56,18 +56,6 @@ class Theme_Updater_Admin {
 			]
 		);
 
-		/**
-		 * Fires after the theme $config is setup.
-		 *
-		 * @since x.x.x
-		 *
-		 * @param array $config Array of EDD SL theme data.
-		 */
-		do_action( 'post_edd_sl_theme_updater_setup', $config );
-
-		// Run for decoupled language pack updating.
-		( new \Fragen\Translations_Updater\Init() )->edd_run();
-
 		// Set config arguments
 		$this->api_url     = $config['api_url'];
 		$this->item_name   = $config['item_name'];
@@ -86,6 +74,15 @@ class Theme_Updater_Admin {
 		}
 
 		$this->strings = $this->get_strings();
+
+		/**
+		 * Fires after the theme $config is setup.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $config Array of EDD SL theme data.
+		 */
+		do_action( 'post_edd_sl_theme_updater_setup', $config );
 	}
 
 	/**

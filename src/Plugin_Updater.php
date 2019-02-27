@@ -55,10 +55,11 @@ class Plugin_Updater {
 		/**
 		 * Fires after the $edd_plugin_data is setup.
 		 *
-		 * @since x.x.x
+		 * @since 1.0.0
 		 *
 		 * @param array $edd_plugin_data Array of EDD SL plugin data.
 		 */
+		// TODO: remove hook from this location and update translations-updater.
 		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
 	}
 

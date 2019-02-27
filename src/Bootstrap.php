@@ -45,6 +45,9 @@ class Bootstrap {
 			}
 		);
 
+		// Run for decoupled language pack updating.
+		( new \Fragen\Translations_Updater\Init() )->edd_run();
+
 		// ( new Plugin_Updater_Admin(
 		// array(
 		// 'file'      => $this->file,

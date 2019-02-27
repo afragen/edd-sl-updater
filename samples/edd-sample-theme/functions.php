@@ -11,7 +11,7 @@
  * Action is used so that child themes can easily disable.
  */
 
-function prefix_theme_updater() {
+function edd_test_theme_updater() {
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Theme_Updater_Admin(
 			[
@@ -28,4 +28,4 @@ function prefix_theme_updater() {
 		) )->load_hooks();
 	}
 }
-add_action( 'after_theme_setup', 'prefix_theme_updater' );
+add_action( 'after_setup_theme', 'edd_test_theme_updater' );

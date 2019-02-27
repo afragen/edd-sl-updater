@@ -66,6 +66,9 @@ class Plugin_Updater_Admin {
 		 */
 		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
 
+		// Run for decoupled language pack updating.
+		( new \Fragen\Translations_Updater\Init() )->edd_run();
+
 		// Set config arguments
 		$this->api_url     = $config['api_url'];
 		$this->name        = $config['item_name'];

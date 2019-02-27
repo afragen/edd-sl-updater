@@ -32,7 +32,7 @@ class Theme_Updater {
 	public function __construct( $args = [], $strings = [] ) {
 		$defaults = [
 			'api_url'    => 'http://easydigitaldownloads.com',
-			'theme_slug' => get_template(), // use get_stylesheet() for child theme updates
+			'theme_slug' => get_stylesheet(),
 			'item_name'  => '',
 			'license'    => '',
 			'version'    => '',

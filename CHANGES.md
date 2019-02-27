@@ -3,7 +3,6 @@
 * update samples
 * consolidate strings
 * added `afragen/translations-updater` for decoupled language pack updating
-* added initialization for `afragen/translations-updater`
+* added initialization and integration for `afragen/translations-updater`
 * added `composer/installers` in case someone wants to install via composer
 * update samples to include test for class to prevent fatal when updating Updater
-* make sure `afragen/translations-updater` is hooked up properly, will need to better adjust for this plugin later.

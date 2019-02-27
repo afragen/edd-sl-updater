@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6fb2b1e237832195bf3bfb6a4ec325d",
+    "content-hash": "d51ce494e84348ae9ebb6f82cc717025",
     "packages": [
         {
             "name": "afragen/translations-updater",
-            "version": "dev-master",
+            "version": "dev-edd-sl",
             "source": {
                 "type": "git",
                 "url": "https://github.com/afragen/translations-updater.git",
-                "reference": "6c20ed09aa46e8eedbac990f294990c734b2898a"
+                "reference": "e983c3f5e1c4369e0153eabe951e98576025221f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/afragen/translations-updater/zipball/6c20ed09aa46e8eedbac990f294990c734b2898a",
-                "reference": "6c20ed09aa46e8eedbac990f294990c734b2898a",
+                "url": "https://api.github.com/repos/afragen/translations-updater/zipball/e983c3f5e1c4369e0153eabe951e98576025221f",
+                "reference": "e983c3f5e1c4369e0153eabe951e98576025221f",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 "updater",
                 "wordpress"
             ],
-            "time": "2018-10-11T22:19:24+00:00"
+            "time": "2019-02-27T15:51:58+00:00"
         },
         {
             "name": "composer/installers",

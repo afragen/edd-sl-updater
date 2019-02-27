@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the EDD Software Licensing Updater plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: EDD Software Licensing Updater 0.3\n"
+"Project-Id-Version: EDD Software Licensing Updater 0.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/edd-sl-updater\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-02-26T19:52:27+00:00\n"
+"POT-Creation-Date: 2019-02-27T15:54:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: edd-sl-updater\n"
@@ -38,34 +38,34 @@ msgstr ""
 msgid "deactivate_theme_license"
 msgstr ""
 
-#: src/Plugin_Updater_Admin.php:222
+#: src/Plugin_Updater_Admin.php:224
 #: src/API_Common.php:31
 msgid "License Key"
 msgstr ""
 
-#: src/Plugin_Updater_Admin.php:329
+#: src/Plugin_Updater_Admin.php:331
 msgid "activate_plugin_license"
 msgstr ""
 
-#: src/Plugin_Updater_Admin.php:370
+#: src/Plugin_Updater_Admin.php:371
 msgid "deactivate_plugin_license"
 msgstr ""
 
 #. translators: %1: item name, %2: open tag, %3: close tag, %4: version number
-#: src/Plugin_Updater.php:224
+#: src/Plugin_Updater.php:215
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
 #. translators: %1: item name, %2: open tag, %3: version number, %4: close tag, %5: open tag, %6: close tag
-#: src/Plugin_Updater.php:233
+#: src/Plugin_Updater.php:224
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s."
 msgstr ""
 
-#: src/Plugin_Updater.php:472
+#: src/Plugin_Updater.php:463
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: src/Plugin_Updater.php:472
+#: src/Plugin_Updater.php:463
 msgid "Error"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgid "Plugin License"
 msgstr ""
 
 #: src/API_Common.php:30
-msgid "Enter your theme license key."
+msgid "Enter your license key."
 msgstr ""
 
 #: src/API_Common.php:32

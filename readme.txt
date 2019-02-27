@@ -50,7 +50,7 @@ The following is an example of how it instantiate the updater from a theme.
     function prefix_theme_updater() {
     	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 			( new EDD\Software_Licensing\Updater\Theme_Updater_Admin(
-					[
+				[
 					'api_url'     => 'http://eddstore.test', // Site where EDD is hosted.
 					'item_name'   => 'EDD Test Theme', // Name of theme.
 					'item_id'     => 27, // ID of the product.

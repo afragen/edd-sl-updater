@@ -51,16 +51,6 @@ class Plugin_Updater {
 		$this->cache_key                = $args['cache_key'];
 		$this->strings                  = $strings;
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
-
-		/**
-		 * Fires after the $edd_plugin_data is setup.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param array $edd_plugin_data Array of EDD SL plugin data.
-		 */
-		// TODO: remove hook from this location and update translations-updater.
-		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
 	}
 
 	/**

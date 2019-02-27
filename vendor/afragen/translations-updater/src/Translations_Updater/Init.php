@@ -72,15 +72,9 @@ class Init {
 	public function edd_run() {
 		add_action(
 			'post_edd_sl_plugin_updater_setup',
-			function ( $edd_config ) {
-				foreach ( $edd_config as $slug => $config ) {
-					if ( ! is_array( $config ) ) {
-						return false;
-					}
-					$config['type'] = 'plugin';
-					$config['slug'] = $slug;
-					$this->run( $config );
-				}
+			function ( $config ) {
+				$config['type'] = 'plugin';
+				$this->run( $config );
 			},
 			15,
 			1

@@ -98,7 +98,6 @@ class Plugin_Updater_Admin {
 		 *
 		 * @param array $config Array of EDD SL plugin data.
 		 */
-		// TODO: update translations-updater for this data.
 		do_action( 'post_edd_sl_plugin_updater_setup', $config );
 	}
 

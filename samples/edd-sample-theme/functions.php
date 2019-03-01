@@ -11,6 +11,10 @@
  * Action is used so that child themes can easily disable.
  */
 
+// Automatically install EDD SL Updater.
+require_once __DIR__ . '/vendor/autoload.php';
+\WP_Dependency_Installer::instance()->run( __DIR__ );
+
 function edd_test_theme_updater() {
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Theme_Updater_Admin(

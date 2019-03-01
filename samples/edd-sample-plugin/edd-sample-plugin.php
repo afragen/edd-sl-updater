@@ -7,6 +7,10 @@ Version: 1.0
 License: MIT
 */
 
+// Automatically install EDD SL Updater.
+require_once __DIR__ . '/vendor/autoload.php';
+\WP_Dependency_Installer::instance()->run( __DIR__ );
+
 function edd_test_plugin_updater() {
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Plugin_Updater_Admin(

@@ -8,5 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     'Fragen\\Translations_Updater\\' => array($vendorDir . '/afragen/translations-updater/src/Translations_Updater'),
     'EDD\\Software_Licensing\\Updater\\' => array($baseDir . '/src'),
-    'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
 );

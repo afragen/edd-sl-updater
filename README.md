@@ -19,11 +19,27 @@ This plugin would be installed by all users of EDD Software Licensing Addons so 
 
 PRs welcome at [EDD SL Updater](https://github.com/afragen/edd-sl-updater).
 
-## Plugin Updater Example
+## Installation for EDD SL Add-ons
+
+The following code examples show how to instantiate and install the EDD SL Updater plugin for EDD SL Add-on plugins and themes.
+
+In the samples, the `wp-dependency.json` file **must** be included with all EDD SL Add-ons. To add the appropriate elements to your `composer.json` run the following command.
+
+`composer require afragen/wp-dependency-installer`
+
+The above will automatically install and activate the EDD SL Updater plugin as a required dependency for any EDD SL Add-on.
+
+Additionally, you may need then need to run `composer update` prior to plugin distribution.
+
+### Plugin Updater Example
 
 The following is an example of how it instantiate the updater from a plugin.
 
 ```php
+// Automatically install EDD SL Updater.
+require_once __DIR__ . '/vendor/autoload.php';
+\WP_Dependency_Installer::instance()->run( __DIR__ );
+
 // Loads the updater classes
 function prefix_plugin_updater() {
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
@@ -43,11 +59,15 @@ function prefix_plugin_updater() {
 add_action( 'plugins_loaded', 'prefix_plugin_updater' );
 ```
 
-## Theme Updater Example
+### Theme Updater Example
 
 The following is an example of how it instantiate the updater from a theme.
 
 ```php
+// Automatically install EDD SL Updater.
+require_once __DIR__ . '/vendor/autoload.php';
+\WP_Dependency_Installer::instance()->run( __DIR__ );
+
 // Loads the updater classes
 function prefix_theme_updater() {
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {

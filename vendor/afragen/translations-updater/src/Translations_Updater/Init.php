@@ -73,7 +73,6 @@ class Init {
 		add_action(
 			'post_edd_sl_plugin_updater_setup',
 			function ( $config ) {
-				$config['type'] = 'plugin';
 				$this->run( $config );
 			},
 			15,
@@ -82,7 +81,6 @@ class Init {
 		add_action(
 			'post_edd_sl_theme_updater_setup',
 			function ( $config ) {
-				$config['type'] = 'theme';
 				$config['slug'] = $config['theme_slug'];
 				$this->run( $config );
 			},

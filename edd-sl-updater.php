@@ -11,7 +11,7 @@
  * Plugin Name:       EDD Software Licensing Updater
  * Plugin URI:        https://github.com/afragen/edd-sl-updater
  * Description:       A universal updater for EDD Software Licensing products.
- * Version:           0.7
+ * Version:           0.8
  * Author:            Andy Fragen
  * License:           MIT
  * Network:           true

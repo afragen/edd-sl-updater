@@ -6,18 +6,18 @@
         "source": {
             "type": "git",
             "url": "https://github.com/afragen/translations-updater.git",
-            "reference": "e983c3f5e1c4369e0153eabe951e98576025221f"
+            "reference": "5911e14557718b57ad8d9ffe300231ee7155120a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/afragen/translations-updater/zipball/e983c3f5e1c4369e0153eabe951e98576025221f",
-            "reference": "e983c3f5e1c4369e0153eabe951e98576025221f",
+            "url": "https://api.github.com/repos/afragen/translations-updater/zipball/5911e14557718b57ad8d9ffe300231ee7155120a",
+            "reference": "5911e14557718b57ad8d9ffe300231ee7155120a",
             "shasum": ""
         },
         "require": {
             "php": ">=5.4"
         },
-        "time": "2019-02-27T15:51:58+00:00",
+        "time": "2019-03-02T01:31:53+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

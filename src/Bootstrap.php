@@ -48,16 +48,16 @@ class Bootstrap {
 		// Run for decoupled language pack updating.
 		( new \Fragen\Translations_Updater\Init() )->edd_run();
 
-		// ( new Plugin_Updater_Admin(
-		// array(
-		// 'file'      => $this->file,
-		// 'api_url'   => 'http://easydigitaldownloads.com',
-		// 'item_name' => 'EDD SL Updater',
-		// 'item_id'   => 123,
-		// 'version'   => '1.0',
-		// 'author'    => 'Easy Digital Downloads',
-		// 'beta'      => false,
-		// )
-		// ) )->load_hooks();
+		$updater_config = [
+			'type'      => 'plugin',
+			'file'      => $this->file,
+			'api_url'   => 'http://easydigitaldownloads.com',
+			'item_name' => 'EDD SL Updater',
+			'item_id'   => 123,
+			'version'   => '1.0',
+			'author'    => 'Easy Digital Downloads',
+			'beta'      => false,
+		];
+		// ( new Init() )->run( $updater_config );
 	}
 }

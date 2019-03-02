@@ -23,69 +23,71 @@ PRs welcome at [EDD SL Updater](https://github.com/afragen/edd-sl-updater).
 
 The following code examples show how to instantiate and install the EDD SL Updater plugin for EDD SL Add-on plugins and themes.
 
-In the samples, the `wp-dependency.json` file **must** be included with all EDD SL Add-ons. To add the appropriate elements to your `composer.json` run the following command.
+In the samples, the `wp-dependency.json` file **must** be included with all EDD SL Add-ons. To add the appropriate elements to your `composer.json` run the following command from your plugin/theme folder.
 
-		composer require afragen/wp-dependency-installer
+	composer require afragen/wp-dependency-installer
 
-
-The above will automatically install and activate the EDD SL Updater plugin as a required dependency for any EDD SL Add-on.
+The code installed via composer will automatically install and activate the EDD SL Updater plugin as a required dependency for any EDD SL Add-on.
 
 Additionally, you may need then need to run `composer update` prior to plugin distribution.
 
+The EDD SL Updater now uses a universal instantiation function that will correctly instantiate your plugin or theme based upon the configuration array passed to the function.
+
 ### Plugin Updater Example
 
-The following is an example of how it instantiate the updater from a plugin.
+The following is an example of how to instantiate the updater from a plugin. It is run from the main plugin file.
 
-		// Automatically install EDD SL Updater.
-		require_once __DIR__ . '/vendor/autoload.php';
-		\WP_Dependency_Installer::instance()->run( __DIR__ );
+	// Automatically install EDD SL Updater.
+	require_once __DIR__ . '/vendor/autoload.php';
+	\WP_Dependency_Installer::instance()->run( __DIR__ );
 
     // Loads the updater classes
     function prefix_plugin_updater() {
-			if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
-				( new EDD\Software_Licensing\Updater\Plugin_Updater_Admin(
-					[
-						'file'      => __FILE__,
-						'api_url'   => 'http://eddstore.test',
-						'item_name' => 'EDD Test Plugin',
-						'item_id'   => 11, // ID of the product.
-						'version'   => '1.0', // current version number.
-						'author'    => 'Andy Fragen', // author of this plugin.
-						'beta'      => false,
-					]
-				) )->load_hooks();
-			}
-  	}
+		$config = [
+			'type'      => 'plugin', // Declare the type.
+			'file'      => __FILE__,
+			'api_url'   => 'http://eddstore.test', // Site where EDD SL store is located.
+			'item_name' => 'EDD Test Plugin', // Name of plugin.
+			'item_id'   => 11, // ID of the product.
+			'version'   => '1.0', // Current version number.
+			'author'    => 'Andy Fragen', // Author of this plugin.
+			'beta'      => false,
+		];
+		if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
+			( new EDD\Software_Licensing\Updater\Init() )->run( $config );
+		}
+	}
   	add_action( 'plugins_loaded', 'prefix_plugin_updater' );
 
 
 ### Theme Updater Example
 
-The following is an example of how it instantiate the updater from a theme.
+The following is an example of how it instantiate the updater from a theme. It is run from the theme's `functions.php` file.
 
-		// Automatically install EDD SL Updater.
-		require_once __DIR__ . '/vendor/autoload.php';
-		\WP_Dependency_Installer::instance()->run( __DIR__ );
+	// Automatically install EDD SL Updater.
+	require_once __DIR__ . '/vendor/autoload.php';
+	\WP_Dependency_Installer::instance()->run( __DIR__ );
 
     // Loads the updater classes
-    function prefix_theme_updater() {
-    	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
-				( new EDD\Software_Licensing\Updater\Theme_Updater_Admin(
-					[
-						'api_url'     => 'http://eddstore.test', // Site where EDD is hosted.
-						'item_name'   => 'EDD Test Theme', // Name of theme.
-						'item_id'     => 27, // ID of the product.
-						'theme_slug'  => 'edd-test-theme', // Theme slug.
-						'version'     => '1.0', // The current version of this theme.
-						'author'      => 'Andy Fragen', // The author of this theme
-						'download_id' => '', // Optional, used for generating a license renewal link.
-						'renew_url'   => '', // Optional, allows for a custom license renewal link.
-						'beta'        => false, // Optional, set to true to opt into beta versions.
-					]
-				) )->load_hooks();
-			}
-  	}
+	function prefix_theme_updater() {
+		$config = [
+			'type'        => 'theme', // Declare the type.
+			'api_url'     => 'http://eddstore.test', // Site where EDD SL store is located.
+			'item_name'   => 'EDD Test Theme', // Name of theme.
+			'item_id'     => 27, // ID of the product.
+			'theme_slug'  => 'edd-test-theme', // Theme slug.
+			'version'     => '1.0', // Current version of this theme.
+			'author'      => 'Andy Fragen', // Author of this theme
+			'download_id' => '', // Optional, used for generating a license renewal link.
+			'renew_url'   => '', // Optional, allows for a custom license renewal link.
+			'beta'        => false, // Optional, set to true to opt into beta versions.
+		];
+		if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
+			( new EDD\Software_Licensing\Updater\Init() )->run( $config );
+		}
+	}
   	add_action( 'after_setup_theme', 'prefix_theme_updater' );
+
 
 ## Changelog
 [Changelog](./CHANGES.md)

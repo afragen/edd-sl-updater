@@ -390,6 +390,11 @@ class Theme_Updater_Admin {
 	 * Disable requests to wp.org repository for this theme.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param array  $r
+	 * @param string $url
+	 *
+	 * @return array $r
 	 */
 	public function disable_wporg_request( $r, $url ) {
 		// If it's not a theme update request, bail.

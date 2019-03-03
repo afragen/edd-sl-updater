@@ -9,7 +9,7 @@
 
 namespace EDD\Software_Licensing\Updater;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

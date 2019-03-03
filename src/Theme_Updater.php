@@ -15,6 +15,11 @@ namespace EDD\Software_Licensing\Updater;
 class Theme_Updater {
 	use API_Common;
 
+	/**
+	 * Variables.
+	 *
+	 * @var string
+	 */
 	private $api_url      = null;
 	private $response_key = null;
 	private $theme_slug   = null;
@@ -26,8 +31,8 @@ class Theme_Updater {
 	/**
 	 * Class constructor.
 	 *
-	 * @param array $args    Array of arguments from the theme requesting an update check
-	 * @param array $strings Strings for the update process
+	 * @param array $args    Array of arguments from the theme requesting an update check.
+	 * @param array $strings Strings for the update process.
 	 */
 	public function __construct( $args = [], $strings = [] ) {
 		$defaults = [
@@ -119,7 +124,8 @@ class Theme_Updater {
 	public function theme_update_transient( $value ) {
 		$update_data = $this->check_for_update();
 		if ( $update_data ) {
-			// Make sure the theme property is set. See issue 1463 on Github in the Software Licensing Repo.
+			// Make sure the theme property is set.
+			// See issue 1463 on Github in the Software Licensing Repo.
 			$update_data['theme'] = $this->theme_slug;
 
 			$value->response[ $this->theme_slug ] = $update_data;
@@ -164,7 +170,7 @@ class Theme_Updater {
 				$failed = true;
 			}
 
-			// If the response failed, try again in 30 minutes
+			// If the response failed, try again in 30 minutes.
 			if ( $failed ) {
 				$data              = new stdClass();
 				$data->new_version = $this->version;
@@ -173,7 +179,7 @@ class Theme_Updater {
 				return false;
 			}
 
-			// If the status is 'ok', return the update arguments
+			// If the status is 'ok', return the update arguments.
 			if ( ! $failed ) {
 				$update_data->sections = maybe_unserialize( $update_data->sections );
 				set_transient( $this->response_key, $update_data, strtotime( '+12 hours', time() ) );

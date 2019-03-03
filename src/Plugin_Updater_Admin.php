@@ -9,7 +9,7 @@
 
 namespace EDD\Software_Licensing\Updater;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -20,6 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin_Updater_Admin {
 	use API_Common;
 
+	/**
+	 * Variables.
+	 *
+	 * @var string|array
+	 */
 	protected $api_url     = null;
 	protected $api_data    = [];
 	protected $name        = null;
@@ -57,7 +62,7 @@ class Plugin_Updater_Admin {
 			]
 		);
 
-		// Set config arguments
+		// Set config arguments.
 		$this->api_url     = $config['api_url'];
 		$this->name        = $config['item_name'];
 		$this->item_name   = $config['item_name'];
@@ -78,7 +83,7 @@ class Plugin_Updater_Admin {
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
-		// Populate version fallback
+		// Populate version fallback.
 		if ( empty( $config['version'] ) ) {
 			if ( ! function_exists( 'get_plugin_data' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -170,7 +175,7 @@ class Plugin_Updater_Admin {
 			return;
 		}
 
-		/* If there is no valid license key status, don't allow updates. */
+		// If there is no valid license key status, don't allow updates.
 		if ( 'valid' !== get_option( $this->slug . '_license_status', false ) ) {
 			return;
 		}
@@ -201,7 +206,7 @@ class Plugin_Updater_Admin {
 		$license = $this->license;
 		$status  = get_option( $this->slug . '_license_status' );
 
-		// Checks license status to display under license key
+		// Checks license status to display under license key.
 		if ( ! $license ) {
 			$message = $this->strings['enter-key'];
 		} else {
@@ -213,7 +218,7 @@ class Plugin_Updater_Admin {
 		} ?>
 		<div class="wrap">
 		<h2>
-		<?php esc_attr_e( $this->strings['plugin-license'] . ' - ' . $this->name ); ?>
+		<?php echo esc_attr( $this->strings['plugin-license'] . ' - ' . $this->name ); ?>
 		</h2>
 		<form method="post" action="options.php">
 			<?php settings_fields( $this->slug . '_license' ); ?>
@@ -221,13 +226,13 @@ class Plugin_Updater_Admin {
 				<tbody>
 					<tr valign="top">
 						<th scope="row" valign="top">
-							<?php _e( 'License Key', 'edd-sl-updater' ); ?>
+							<?php esc_html_e( 'License Key', 'edd-sl-updater' ); ?>
 						</th>
 						<td>
-							<input id="<?php echo $this->slug; ?>_license_key" name="<?php echo $this->slug; ?>_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license, 'edd-sl-updater' ); ?>" />
-							<label class="description" for="<?php echo $this->slug; ?>_license_key"></label>
+							<input id="<?php echo esc_attr( $this->slug ); ?>_license_key" name="<?php echo esc_attr( $this->slug ); ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license, 'edd-sl-updater' ); ?>" />
+							<label class="description" for="<?php echo esc_attr( $this->slug ); ?>_license_key"></label>
 							<p class="description">
-								<?php echo $message; ?>
+								<?php echo esc_html( $message ); ?>
 							</p>
 					</td>
 					</tr>
@@ -243,11 +248,11 @@ class Plugin_Updater_Admin {
 								wp_nonce_field( $this->slug . '_nonce', $this->slug . '_nonce' );
 								if ( 'valid' === $status ) {
 									?>
-								<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_deactivate" value="<?php esc_attr_e( $this->strings['deactivate-license'] ); ?>"/>
+								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_deactivate" value="<?php echo $this->strings['deactivate-license']; ?>"/>
 									<?php
 								} else {
 									?>
-								<input type="submit" class="button-secondary" name="<?php echo $this->slug; ?>_license_activate" value="<?php esc_attr_e( $this->strings['activate-license'] ); ?>"/>
+								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_activate" value="<?php echo $this->strings['activate-license']; ?>"/>
 									<?php
 								}
 								?>
@@ -269,18 +274,18 @@ class Plugin_Updater_Admin {
 	 * @since 1.0.0
 	 */
 	public function activate_license() {
-		// listen for our activate button to be clicked
+		// Listen for our activate button to be clicked.
 		if ( isset( $_POST[ $this->slug . '_license_activate' ] ) ) {
-			// run a quick security check
+			// run a quick security check.
 			if ( ! check_admin_referer( $this->slug . '_nonce', $this->slug . '_nonce' ) ) {
-				return; // get out if we didn't click the Activate button
+				return; // Get out if we didn't click the Activate button.
 			}
 
-			// data to send in our API request
+			// Data to send in our API request.
 			$api_params = [
 				'edd_action' => 'activate_license',
 				'license'    => $this->license,
-				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD
+				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD.
 				'item_id'    => $this->item_id,
 				'url'        => home_url(),
 			];
@@ -320,7 +325,7 @@ class Plugin_Updater_Admin {
 			}
 		}
 
-		// $response->license will be either "active" or "inactive"
+		// $response->license will be either "active" or "inactive".
 		if ( $license_data && isset( $license_data->license ) ) {
 			update_option( $this->slug . '_license_status', $license_data->license );
 			delete_transient( $this->slug . '_license_message' );
@@ -328,7 +333,7 @@ class Plugin_Updater_Admin {
 
 		if ( ! empty( $message ) ) {
 			$error_data['success']       = false;
-			$error_data['error_code']    = __( 'activate_plugin_license', 'edd-sl-updater' );
+			$error_data['error_code']    = esc_attr__( 'activate_plugin_license', 'edd-sl-updater' );
 			$error_data['error_message'] = $message;
 		} else {
 			$error_data = null;
@@ -342,18 +347,18 @@ class Plugin_Updater_Admin {
 	 * @since 1.0.0
 	 */
 	public function deactivate_license() {
-		// listen for our activate button to be clicked
+		// Listen for our activate button to be clicked.
 		if ( isset( $_POST[ $this->slug . '_license_deactivate' ] ) ) {
-			// run a quick security check
+			// Run a quick security check.
 			if ( ! check_admin_referer( $this->slug . '_nonce', $this->slug . '_nonce' ) ) {
-				return; // get out if we didn't click the Activate button
+				return; // get out if we didn't click the Activate button.
 			}
 
-			// data to send in our API request
+			// data to send in our API request.
 			$api_params = [
 				'edd_action' => 'deactivate_license',
 				'license'    => $this->license,
-				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD
+				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD.
 				'item_id'    => $this->item_id,
 				'url'        => home_url(),
 			];
@@ -362,7 +367,7 @@ class Plugin_Updater_Admin {
 			add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
 			$license_data = $this->get_api_response( $this->api_url, $api_params );
 
-			// $license_data->license will be either "deactivated" or "failed"
+			// $license_data->license will be either "deactivated" or "failed".
 			if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
 				$message = $this->strings['error'];
 			}

@@ -9,7 +9,7 @@
 
 namespace EDD\Software_Licensing\Updater;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -22,6 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin_Updater {
 	use API_Common;
 
+	/**
+	 * Variables.
+	 *
+	 * @var string|array
+	 */
 	private $api_url              = null;
 	private $api_data             = [];
 	private $file                 = null;
@@ -111,7 +116,8 @@ class Plugin_Updater {
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 				$_transient_data->response[ $this->file ] = $version_info;
 
-				// Make sure the plugin property is set to the plugin's file/location. See issue 1463 on Software Licensing's GitHub repo.
+				// Make sure the plugin property is set to the plugin's file/location.
+				// See issue 1463 on Software Licensing's GitHub repo.
 				$_transient_data->response[ $this->file ]->plugin = $this->file;
 			}
 
@@ -164,7 +170,7 @@ class Plugin_Updater {
 					]
 				);
 
-				// Since we disabled our filter for the transient, we aren't running our object conversion on banners, sections, or icons. Do this now:
+				// Since we disabled our filter for the transient, we aren't running our object conversion on banners, sections, or icons. Do this now.
 				if ( isset( $version_info->banners ) && ! is_array( $version_info->banners ) ) {
 					$version_info->banners = $this->convert_object_to_array( $version_info->banners );
 				}
@@ -200,7 +206,7 @@ class Plugin_Updater {
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
 
 		if ( ! empty( $update_cache->response[ $this->file ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
-			// build a plugin list row, with update notification
+			// build a plugin list row, with update notification.
 			$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 			// <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
 			echo '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">';
@@ -276,7 +282,7 @@ class Plugin_Updater {
 		if ( empty( $edd_api_request_transient ) ) {
 			$api_response = $this->api_request( $to_send );
 
-			// Expires in 3 hours
+			// Expires in 3 hours.
 			$this->set_version_info_cache( $api_response, $cache_key );
 
 			if ( false !== $api_response ) {
@@ -519,7 +525,7 @@ class Plugin_Updater {
 		$cache = get_option( $cache_key );
 
 		if ( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
-			return false; // Cache is expired
+			return false; // Cache is expired.
 		}
 
 		// We need to turn the icons into an array, thanks to WP Core forcing these into an object at some point.

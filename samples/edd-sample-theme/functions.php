@@ -18,15 +18,15 @@ require_once __DIR__ . '/vendor/autoload.php';
 function edd_test_theme_updater() {
 	$config = [
 		'type'        => 'theme', // Declare the type.
-		'api_url'     => 'http://eddstore.test', // Site where EDD is hosted
-		'item_name'   => 'EDD Test Theme', // Name of theme
+		'api_url'     => 'http://eddstore.test', // Site where EDD is hosted.
+		'item_name'   => 'EDD Test Theme', // Name of theme.
 		'item_id'     => 27, // Item ID from Downloads page.
-		'theme_slug'  => 'edd-test-theme', // Theme slug
-		'version'     => '1.0', // The current version of this theme
-		'author'      => 'Andy Fragen', // The author of this theme
-		'download_id' => '', // Optional, used for generating a license renewal link
-		'renew_url'   => '', // Optional, allows for a custom license renewal link
-		'beta'        => false, // Optional, set to true to opt into beta versions
+		'theme_slug'  => 'edd-test-theme', // Theme slug.
+		'version'     => '1.0', // The current version of this theme.
+		'author'      => 'Andy Fragen', // The author of this theme.
+		'download_id' => '', // Optional, used for generating a license renewal link.
+		'renew_url'   => '', // Optional, allows for a custom license renewal link.
+		'beta'        => false, // Optional, set to true to opt into beta versions.
 	];
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Init() )->run( $config );

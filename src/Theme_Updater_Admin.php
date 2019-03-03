@@ -9,7 +9,7 @@
 
 namespace EDD\Software_Licensing\Updater;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -24,7 +24,7 @@ class Theme_Updater_Admin {
 	 * Variables required for the theme updater
 	 *
 	 * @since 1.0.0
-	 * @type string
+	 * @var string
 	 */
 	protected $api_url     = null;
 	protected $theme_slug  = null;
@@ -38,6 +38,8 @@ class Theme_Updater_Admin {
 
 	/**
 	 * Class constructor.
+	 *
+	 * @param array $config Configuration parameters.
 	 */
 	public function __construct( $config = [] ) {
 		$config = wp_parse_args(
@@ -56,7 +58,7 @@ class Theme_Updater_Admin {
 			]
 		);
 
-		// Set config arguments
+		// Set config arguments.
 		$this->api_url     = $config['api_url'];
 		$this->item_name   = $config['item_name'];
 		$this->item_id     = $config['item_id'];
@@ -67,7 +69,7 @@ class Theme_Updater_Admin {
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
 
-		// Populate version fallback
+		// Populate version fallback.
 		if ( empty( $config['version'] ) ) {
 			$theme         = wp_get_theme( $this->theme_slug );
 			$this->version = $theme->get( 'Version' );
@@ -108,7 +110,7 @@ class Theme_Updater_Admin {
 			return;
 		}
 
-		/* If there is no valid license key status, don't allow updates. */
+		// If there is no valid license key status, don't allow updates.
 		if ( 'valid' !== get_option( $this->theme_slug . '_license_key_status', false ) ) {
 			return;
 		}
@@ -178,7 +180,7 @@ class Theme_Updater_Admin {
 		$license = trim( get_option( $this->theme_slug . '_license_key' ) );
 		$status  = get_option( $this->theme_slug . '_license_key_status', false );
 
-		// Checks license status to display under license key
+		// Checks license status to display under license key.
 		if ( ! $license ) {
 			$message = $strings['enter-key'];
 		} else {
@@ -190,7 +192,7 @@ class Theme_Updater_Admin {
 		} ?>
 		<div class="wrap">
 			<h2>
-			<?php esc_attr_e( $this->strings['theme-license'] . ' - ' . $this->item_name ); ?>
+			<?php echo esc_attr( $this->strings['theme-license'] . ' - ' . $this->item_name ); ?>
 			</h2>
 			<form method="post" action="options.php">
 				<?php settings_fields( $this->theme_slug . '-license' ); ?>
@@ -198,12 +200,12 @@ class Theme_Updater_Admin {
 					<tbody>
 						<tr valign="top">
 							<th scope="row" valign="top">
-								<?php echo $this->strings['license-key']; ?>
+								<?php echo esc_attr( $this->strings['license-key'] ); ?>
 							</th>
 							<td>
-								<input id="<?php echo $this->theme_slug; ?>_license_key" name="<?php echo $this->theme_slug; ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license ); ?>" />
+								<input id="<?php echo esc_attr( $this->theme_slug ); ?>_license_key" name="<?php echo esc_attr( $this->theme_slug ); ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license ); ?>" />
 								<p class="description">
-									<?php echo $message; ?>
+									<?php echo esc_html( $message ); ?>
 								</p>
 							</td>
 						</tr>
@@ -212,18 +214,18 @@ class Theme_Updater_Admin {
 							?>
 						<tr valign="top">
 							<th scope="row" valign="top">
-								<?php echo $this->strings['license-action']; ?>
+								<?php echo esc_attr( $this->strings['license-action'] ); ?>
 							</th>
 							<td>
 								<?php
 								wp_nonce_field( $this->theme_slug . '_nonce', $this->theme_slug . '_nonce' );
 								if ( 'valid' === $status ) {
 									?>
-									<input type="submit" class="button-secondary" name="<?php echo $this->theme_slug; ?>_license_deactivate" value="<?php esc_attr_e( $this->strings['deactivate-license'] ); ?>"/>
+									<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->theme_slug ); ?>_license_deactivate" value="<?php echo esc_attr( $this->strings['deactivate-license'] ); ?>"/>
 									<?php
 								} else {
 									?>
-									<input type="submit" class="button-secondary" name="<?php echo $this->theme_slug; ?>_license_activate" value="<?php esc_attr_e( $this->strings['activate-license'] ); ?>"/>
+									<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->theme_slug ); ?>_license_activate" value="<?php echo esc_attr( $this->strings['activate-license'] ); ?>"/>
 									<?php
 								}
 								?>
@@ -287,7 +289,7 @@ class Theme_Updater_Admin {
 			}
 		}
 
-		// $response->license will be either "active" or "inactive"
+		// $response->license will be either "active" or "inactive".
 		if ( $license_data && isset( $license_data->license ) ) {
 			update_option( $this->theme_slug . '_license_key_status', $license_data->license );
 			delete_transient( $this->theme_slug . '_license_message' );
@@ -327,13 +329,13 @@ class Theme_Updater_Admin {
 		}
 		if ( ! empty( $message ) ) {
 			$error_data['success']       = false;
-			$error_data['error_code']    = __( 'deactivate_theme_license', 'edd-sl-updater' );
+			$error_data['error_code']    = esc_attr__( 'deactivate_theme_license', 'edd-sl-updater' );
 			$error_data['error_message'] = $message;
 		} else {
 			$error_data['success'] = true;
 		}
 
-		// $license_data->license will be either "deactivated" or "failed"
+		// $license_data->license will be either "deactivated" or "failed".
 		if ( $license_data && ( 'deactivated' === $license_data->license ) ) {
 			delete_option( $this->theme_slug . '_license_key_status' );
 			delete_transient( $this->theme_slug . '_license_message' );
@@ -347,12 +349,12 @@ class Theme_Updater_Admin {
 	 * @since 1.0.0
 	 */
 	public function get_renewal_link() {
-		// If a renewal link was passed in the config, use that
+		// If a renewal link was passed in the config, use that.
 		if ( ! empty( $this->renew_url ) ) {
 			return $this->renew_url;
 		}
 
-		// If download_id was passed in the config, a renewal link can be constructed
+		// If download_id was passed in the config, a renewal link can be constructed.
 		$license_key = trim( get_option( $this->theme_slug . '_license_key', false ) );
 		if ( ! empty( $this->download_id ) && $license_key ) {
 			$url  = esc_url( $this->api_url );
@@ -361,7 +363,7 @@ class Theme_Updater_Admin {
 			return $url;
 		}
 
-		// Otherwise return the api_url
+		// Otherwise return the api_url.
 		return $this->api_url;
 	}
 
@@ -395,15 +397,15 @@ class Theme_Updater_Admin {
 			return $r;
 		}
 
-		// Decode the JSON response
+		// Decode the JSON response.
 		$themes = json_decode( $r['body']['themes'] );
 
-		// Remove the active parent and child themes from the check
+		// Remove the active parent and child themes from the check.
 		$parent = get_option( 'template' );
 		$child  = get_option( 'stylesheet' );
 		unset( $themes->themes->$parent, $themes->themes->$child );
 
-		// Encode the updated JSON response
+		// Encode the updated JSON response.
 		$r['body']['themes'] = json_encode( $themes );
 
 		return $r;

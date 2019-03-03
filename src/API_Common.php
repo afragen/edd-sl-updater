@@ -9,7 +9,7 @@
 
 namespace EDD\Software_Licensing\Updater;
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -116,6 +116,7 @@ trait API_Common {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param string $slug    Plugin/theme slug.
 	 * @return string $message License status message.
 	 */
 	public function check_license( $slug ) {
@@ -131,19 +132,19 @@ trait API_Common {
 
 		$license_data = $this->get_api_response( $this->api_url, $api_params );
 
-		// If response doesn't include license data, return
+		// If response doesn't include license data, return.
 		if ( ! isset( $license_data->license ) ) {
 			$message = $this->strings['license-status-unknown'];
 
 			return $message;
 		}
 
-		// We need to update the license status at the same time the message isupdated
+		// We need to update the license status at the same time the message isupdated.
 		if ( $license_data && isset( $license_data->license ) ) {
 			update_option( $slug . '_license_key_status', $license_data->license );
 		}
 
-		// Get expire date
+		// Get expire date.
 		$expires = false;
 		if ( isset( $license_data->expires ) && 'lifetime' !== $license_data->expires ) {
 			$expires    = date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) );
@@ -152,11 +153,11 @@ trait API_Common {
 			$expires = 'lifetime';
 		}
 
-		// Get site counts
+		// Get site counts.
 		$site_count    = property_exists( $license_data, 'site_count' ) ? $license_data->site_count : null;
 		$license_limit = property_exists( $license_data, 'license_limit' ) ? $license_data->license_limit : null;
 
-		// If unlimited
+		// If unlimited.
 		if ( 0 === $license_limit ) {
 			$license_limit = $this->strings['unlimited'];
 		}
@@ -251,8 +252,8 @@ trait API_Common {
 		printf(
 			/* translators: %1: error code, %2: error message */
 			esc_html__( 'EDD SL - %1$s: %2$s' ),
-			$error_data['error_code'],
-			$error_data['error_message']
+			esc_attr( $error_data['error_code'] ),
+			esc_html( $error_data['error_message'] )
 		);
 		echo '</p></div>';
 	}

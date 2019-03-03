@@ -1,11 +1,11 @@
 <?php
-/*
-Plugin Name: EDD Sample Plugin
-Description: Illustrates how to include an updater in your plugin for EDD Software Licensing
-Author: Andy Fragen
-Version: 1.0
-License: MIT
-*/
+/**
+ * Plugin Name: EDD Sample Plugin
+ * Description: Illustrates how to include an updater in your plugin for EDD Software Licensing
+ * Author: Andy Fragen
+ * Version: 1.0
+ * License: MIT
+ */
 
 // Automatically install EDD SL Updater.
 require_once __DIR__ . '/vendor/autoload.php';

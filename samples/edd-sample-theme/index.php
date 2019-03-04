@@ -7,6 +7,7 @@
  * @package WordPress
  * @subpackage EDD Sample Theme
  */
+
 ?>
 <html <?php language_attributes(); ?>>
 <head>

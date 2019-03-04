@@ -297,8 +297,8 @@ class Theme_Updater_Admin {
 
 		if ( ! empty( $message ) ) {
 			$error_data['success']       = false;
-			$error_data['error_code']    = __( 'activate_theme_license', 'edd-sl-updater' );
-			$error_data['error_message'] = $message;
+			$error_data['error_code']    = esc_attr__( 'activate_theme_license', 'edd-sl-updater' );
+			$error_data['error_message'] = esc_html( $message );
 		} else {
 			$error_data = null;
 		}
@@ -330,7 +330,7 @@ class Theme_Updater_Admin {
 		if ( ! empty( $message ) ) {
 			$error_data['success']       = false;
 			$error_data['error_code']    = esc_attr__( 'deactivate_theme_license', 'edd-sl-updater' );
-			$error_data['error_message'] = $message;
+			$error_data['error_message'] = esc_html( $message );
 		} else {
 			$error_data['success'] = true;
 		}

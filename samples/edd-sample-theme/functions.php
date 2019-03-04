@@ -15,6 +15,11 @@
 require_once __DIR__ . '/vendor/autoload.php';
 \WP_Dependency_Installer::instance()->run( __DIR__ );
 
+/**
+ * Test theme updater instantiate.
+ *
+ * @return void
+ */
 function edd_test_theme_updater() {
 	$config = [
 		'type'        => 'theme', // Declare the type.

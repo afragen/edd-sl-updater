@@ -241,18 +241,18 @@ class Plugin_Updater_Admin {
 						?>
 						<tr valign="top">
 							<th scope="row" valign="top">
-								<?php echo $this->strings['activate-license']; ?>
+								<?php echo esc_attr( $this->strings['activate-license'] ); ?>
 							</th>
 							<td>
 								<?php
 								wp_nonce_field( $this->slug . '_nonce', $this->slug . '_nonce' );
 								if ( 'valid' === $status ) {
 									?>
-								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_deactivate" value="<?php echo $this->strings['deactivate-license']; ?>"/>
+								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_deactivate" value="<?php echo esc_attr( $this->strings['deactivate-license'] ); ?>"/>
 									<?php
 								} else {
 									?>
-								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_activate" value="<?php echo $this->strings['activate-license']; ?>"/>
+								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_activate" value="<?php echo esc_attr( $this->strings['activate-license'] ); ?>"/>
 									<?php
 								}
 								?>
@@ -334,7 +334,7 @@ class Plugin_Updater_Admin {
 		if ( ! empty( $message ) ) {
 			$error_data['success']       = false;
 			$error_data['error_code']    = esc_attr__( 'activate_plugin_license', 'edd-sl-updater' );
-			$error_data['error_message'] = $message;
+			$error_data['error_message'] = esc_html( $message );
 		} else {
 			$error_data = null;
 		}
@@ -373,8 +373,8 @@ class Plugin_Updater_Admin {
 			}
 			if ( ! empty( $message ) ) {
 				$error_data['success']       = false;
-				$error_data['error_code']    = __( 'deactivate_plugin_license', 'edd-sl-updater' );
-				$error_data['error_message'] = $message;
+				$error_data['error_code']    = esc_attr__( 'deactivate_plugin_license', 'edd-sl-updater' );
+				$error_data['error_message'] = esc_html( $message );
 			} else {
 				$error_data['success'] = true;
 			}

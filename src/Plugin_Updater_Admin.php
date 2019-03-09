@@ -217,54 +217,32 @@ class Plugin_Updater_Admin {
 			$message = get_transient( $this->slug . '_license_message' );
 		} ?>
 		<div class="wrap">
-		<h2>
-		<?php echo esc_attr( $this->strings['plugin-license'] . ' - ' . $this->name ); ?>
-		</h2>
-		<form method="post" action="options.php">
-			<?php settings_fields( $this->slug . '_license' ); ?>
-			<table class="form-table">
-				<tbody>
-					<tr valign="top">
-						<th scope="row" valign="top">
-							<?php esc_html_e( 'License Key', 'edd-sl-updater' ); ?>
-						</th>
-						<td>
-							<input id="<?php echo esc_attr( $this->slug ); ?>_license_key" name="<?php echo esc_attr( $this->slug ); ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license, 'edd-sl-updater' ); ?>" />
-							<label class="description" for="<?php echo esc_attr( $this->slug ); ?>_license_key"></label>
-							<p class="description">
-								<?php echo esc_html( $message ); ?>
-							</p>
-					</td>
-					</tr>
-					<?php
-					if ( $license ) {
-						?>
-						<tr valign="top">
-							<th scope="row" valign="top">
-								<?php echo esc_attr( $this->strings['activate-license'] ); ?>
-							</th>
-							<td>
-								<?php
-								wp_nonce_field( $this->slug . '_nonce', $this->slug . '_nonce' );
-								if ( 'valid' === $status ) {
-									?>
-								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_deactivate" value="<?php echo esc_attr( $this->strings['deactivate-license'] ); ?>"/>
-									<?php
-								} else {
-									?>
-								<input type="submit" class="button-secondary" name="<?php echo esc_attr( $this->slug ); ?>_license_activate" value="<?php echo esc_attr( $this->strings['activate-license'] ); ?>"/>
-									<?php
-								}
-								?>
-							</td>
-						</tr>
-						<?php
-					}
-					?>
-				</tbody>
-			</table>
-				<?php submit_button(); ?>
-		</form>
+			<h2>
+			<?php echo esc_attr( $this->strings['plugin-license'] . ' - ' . $this->name ); ?>
+			</h2>
+			<form method="post" action="options.php">
+				<?php
+				settings_fields( $this->slug . '_license' );
+
+				$form_table = ( new License_Form() )->table( $this->slug, $license, $status, $message, $this->strings );
+
+				/**
+				 * Filter to echo a customized license form table.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param string $form_table Table HTML for a license page setting.
+				 * @param string $slug       EDD SL Add-on slug.
+				 * @param string $license    EDD SL license.
+				 * @param string $status     License status.
+				 * @param string $message    License message.
+				 * @param array  $strings    Messaging strings.
+				 */
+				echo apply_filters( 'edd_sl_license_form_table', $form_table, $this->slug, $license, $status, $message, $this->strings );
+
+				submit_button();
+				?>
+			</form>
 		<?php
 	}
 

@@ -64,7 +64,7 @@ class Plugin_Updater {
 	 * @return void
 	 */
 	public function load_hooks() {
-		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
+		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
 		add_filter( 'plugins_api', [ $this, 'plugins_api_filter' ], 10, 3 );
 		remove_action( 'after_plugin_row_' . $this->file, 'wp_plugin_update_row', 10 );
 		add_action( 'after_plugin_row_' . $this->file, [ $this, 'show_update_notification' ], 10, 2 );
@@ -154,7 +154,7 @@ class Plugin_Updater {
 		}
 
 		// Remove our filter on the site transient.
-		remove_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ], 10 );
+		remove_filter( 'site_transient_update_plugins', [ $this, 'check_update' ], 10 );
 
 		$update_cache = get_site_transient( 'update_plugins' );
 		$update_cache = is_object( $update_cache ) ? $update_cache : new stdClass();
@@ -204,7 +204,7 @@ class Plugin_Updater {
 		}
 
 		// Restore our filter.
-		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
+		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
 
 		if ( ! empty( $update_cache->response[ $this->file ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
 			// build a plugin list row, with update notification.

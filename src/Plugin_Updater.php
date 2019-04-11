@@ -174,11 +174,12 @@ class Plugin_Updater {
 				if ( isset( $version_info->banners ) && ! is_array( $version_info->banners ) ) {
 					$version_info->banners = $this->convert_object_to_array( $version_info->banners );
 				}
-
+				if ( isset( $version_info->contributors ) && ! is_array( $version_info->contrbutors ) ) {
+					$version_info->contributors = $this->convert_object_to_array( $version_info->contributors );
+				}
 				if ( isset( $version_info->sections ) && ! is_array( $version_info->sections ) ) {
 					$version_info->sections = $this->convert_object_to_array( $version_info->sections );
 				}
-
 				if ( isset( $version_info->icons ) && ! is_array( $version_info->icons ) ) {
 					$version_info->icons = $this->convert_object_to_array( $version_info->icons );
 				}
@@ -296,13 +297,12 @@ class Plugin_Updater {
 		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
 			$_data->sections = $this->convert_object_to_array( $_data->sections );
 		}
-
-		// Convert banners into an associative array, since we're getting an object, but Core expects an array.
+		if ( isset( $_data->contributors ) && ! is_array( $_data->contributors ) ) {
+			$_data->contributors = $this->convert_object_to_array( $_data->contributors );
+		}
 		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
 			$_data->banners = $this->convert_object_to_array( $_data->banners );
 		}
-
-		// Convert icons into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->icons ) && ! is_array( $_data->icons ) ) {
 			$_data->icons = $this->convert_object_to_array( $_data->icons );
 		}
@@ -330,7 +330,7 @@ class Plugin_Updater {
 	private function convert_object_to_array( $data ) {
 		$new_data = [];
 		foreach ( $data as $key => $value ) {
-			$new_data[ $key ] = $value;
+			$new_data[ $key ] = is_object( $value ) ? $this->convert_object_to_array( $value ) : $value;
 		}
 
 		return $new_data;

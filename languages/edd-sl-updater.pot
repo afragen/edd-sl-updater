@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-03-09T18:03:34+00:00\n"
+"POT-Creation-Date: 2019-04-11T03:08:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: edd-sl-updater\n"
@@ -52,20 +52,20 @@ msgid "deactivate_plugin_license"
 msgstr ""
 
 #. translators: %1: item name, %2: open tag, %3: version number, %4: close tag
-#: src/Plugin_Updater.php:221
+#: src/Plugin_Updater.php:223
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
 #. translators: %1: item name, %2: open tag, %3: version number, %4: close tag, %5: open tag, %6: close tag
-#: src/Plugin_Updater.php:230
+#: src/Plugin_Updater.php:232
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s."
 msgstr ""
 
-#: src/Plugin_Updater.php:469
+#: src/Plugin_Updater.php:470
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: src/Plugin_Updater.php:469
+#: src/Plugin_Updater.php:470
 msgid "Error"
 msgstr ""
 

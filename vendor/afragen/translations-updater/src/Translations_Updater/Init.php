@@ -81,7 +81,6 @@ class Init {
 		add_action(
 			'post_edd_sl_theme_updater_setup',
 			function ( $config ) {
-				$config['slug'] = $config['theme_slug'];
 				$this->run( $config );
 			},
 			15,

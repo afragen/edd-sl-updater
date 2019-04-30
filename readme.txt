@@ -75,7 +75,7 @@ The following is an example of how it instantiate the updater from a theme. It i
 			'api_url'     => 'http://eddstore.test', // Site where EDD SL store is located.
 			'item_name'   => 'EDD Test Theme', // Name of theme.
 			'item_id'     => 27, // ID of the product.
-			'theme_slug'  => 'edd-test-theme', // Theme slug.
+			'slug'        => 'edd-test-theme', // Theme slug.
 			'version'     => '1.0', // Current version of this theme.
 			'author'      => 'Andy Fragen', // Author of this theme
 			'download_id' => '', // Optional, used for generating a license renewal link.

@@ -22,7 +22,7 @@ class Theme_Updater {
 	 */
 	private $api_url      = null;
 	private $response_key = null;
-	private $theme_slug   = null;
+	private $slug         = null;
 	private $license_key  = null;
 	private $version      = null;
 	private $author       = null;
@@ -36,13 +36,13 @@ class Theme_Updater {
 	 */
 	public function __construct( $args = [], $strings = [] ) {
 		$defaults = [
-			'api_url'    => 'http://easydigitaldownloads.com',
-			'theme_slug' => get_stylesheet(),
-			'item_name'  => '',
-			'license'    => '',
-			'version'    => '',
-			'author'     => '',
-			'beta'       => false,
+			'api_url'   => 'http://easydigitaldownloads.com',
+			'slug'      => get_stylesheet(),
+			'item_name' => '',
+			'license'   => '',
+			'version'   => '',
+			'author'    => '',
+			'beta'      => false,
 		];
 
 		$args = wp_parse_args( $args, $defaults );
@@ -50,11 +50,11 @@ class Theme_Updater {
 		$this->license      = $args['license'];
 		$this->item_name    = $args['item_name'];
 		$this->version      = $args['version'];
-		$this->theme_slug   = sanitize_key( $args['theme_slug'] );
+		$this->slug         = sanitize_key( $args['slug'] );
 		$this->author       = $args['author'];
 		$this->beta         = $args['beta'];
 		$this->api_url      = $args['api_url'];
-		$this->response_key = $this->theme_slug . '-' . $this->beta . '-update-response';
+		$this->response_key = $this->slug . '-' . $this->beta . '-update-response';
 		$this->strings      = $strings;
 	}
 
@@ -87,14 +87,14 @@ class Theme_Updater {
 	 * @return void
 	 */
 	public function update_nag() {
-		$theme        = wp_get_theme( $this->theme_slug );
+		$theme        = wp_get_theme( $this->slug );
 		$api_response = get_transient( $this->response_key );
 
 		if ( false === $api_response ) {
 			return;
 		}
 
-		$update_url     = wp_nonce_url( 'update.php?action=upgrade-theme&amp;theme=' . rawurlencode( $this->theme_slug ), 'upgrade-theme_' . $this->theme_slug );
+		$update_url     = wp_nonce_url( 'update.php?action=upgrade-theme&amp;theme=' . rawurlencode( $this->slug ), 'upgrade-theme_' . $this->slug );
 		$update_onclick = ' onclick="if ( confirm(\'' . esc_js( $this->strings['update-notice'] ) . '\') ) {return true;}return false;"';
 
 		if ( version_compare( $this->version, $api_response->new_version, '<' ) ) {
@@ -103,13 +103,13 @@ class Theme_Updater {
 				$this->strings['update-available'],
 				$theme->get( 'Name' ),
 				$api_response->new_version,
-				'#TB_inline?width=640&amp;inlineId=' . $this->theme_slug . '_changelog',
+				'#TB_inline?width=640&amp;inlineId=' . $this->slug . '_changelog',
 				$theme->get( 'Name' ),
 				$update_url,
 				$update_onclick
 			);
 			echo '</div>';
-			echo '<div id="' . $this->theme_slug . '_' . 'changelog" style="display:none;">';
+			echo '<div id="' . $this->slug . '_' . 'changelog" style="display:none;">';
 			echo wpautop( $api_response->sections['changelog'] );
 			echo '</div>';
 		}
@@ -126,9 +126,9 @@ class Theme_Updater {
 		if ( $update_data ) {
 			// Make sure the theme property is set.
 			// See issue 1463 on Github in the Software Licensing Repo.
-			$update_data['theme'] = $this->theme_slug;
+			$update_data['theme'] = $this->slug;
 
-			$value->response[ $this->theme_slug ] = $update_data;
+			$value->response[ $this->slug ] = $update_data;
 		}
 
 		return $value;
@@ -158,7 +158,7 @@ class Theme_Updater {
 				'edd_action' => 'get_version',
 				'license'    => $this->license,
 				'name'       => $this->item_name,
-				'slug'       => $this->theme_slug,
+				'slug'       => $this->slug,
 				'version'    => $this->version,
 				'author'     => $this->author,
 				'beta'       => $this->beta,

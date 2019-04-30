@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Plugin_Updater_Admin
  */
-class Plugin_Updater_Admin {
+class Plugin_Updater_Admin extends Settings {
 	use API_Common;
 
 	/**
@@ -38,6 +38,7 @@ class Plugin_Updater_Admin {
 	protected $wp_override = false;
 	protected $cache_key   = null;
 	protected $strings     = null;
+	protected $plugin_data = null;
 
 	/**
 	 * Class constructor.
@@ -92,9 +93,10 @@ class Plugin_Updater_Admin {
 			$this->version = $plugin['Version'];
 		}
 
-		$config['slug'] = $this->slug;
-		$config['file'] = $this->file;
-		$this->strings  = $this->get_strings();
+		$config['slug']                   = $this->slug;
+		$config['file']                   = $this->file;
+		$this->strings                    = $this->get_strings();
+		$this->plugin_data[ $this->slug ] = $config;
 
 		/**
 		 * Fires after the $config is setup.
@@ -113,26 +115,11 @@ class Plugin_Updater_Admin {
 	 */
 	public function load_hooks() {
 		add_action( 'init', [ $this, 'updater' ] );
-		add_action( 'admin_menu', [ $this, 'license_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_option' ] );
 		add_action( 'admin_init', [ $this, 'license_action' ] );
 		add_action( 'admin_notices', [ $this, 'show_error' ] );
-		add_action( 'update_option_' . $this->slug . '_license_key', [ $this, 'activate_license' ] );
-	}
-
-	/**
-	 * Create menu.
-	 *
-	 * @return void
-	 */
-	public function license_menu() {
-		add_plugins_page(
-			$this->name . ' License',
-			$this->name . ' License',
-			'manage_options',
-			$this->slug . '-license',
-			[ $this, 'license_page' ]
-		);
+		add_action( 'admin_init', [ $this, 'update_settings' ] );
+		add_filter( 'edd_sl_updater_add_admin_page', [ $this, 'license_page' ] );
 	}
 
 	/**
@@ -144,25 +131,8 @@ class Plugin_Updater_Admin {
 		register_setting(
 			$this->slug . '_license',
 			$this->slug . '_license_key',
-			'sanitize_license'
+			[]
 		);
-	}
-
-	/**
-	 * Sanitize license.
-	 *
-	 * @param string $new License.
-	 *
-	 * @return string $new
-	 */
-	public function sanitize_license( $new ) {
-		$old = $this->license;
-		if ( $old && $old !== $new ) {
-			delete_option( $this->slug . '_license_status' );
-			delete_transient( $this->slug . '_license_message' );
-		}
-
-		return $new;
 	}
 
 	/**
@@ -176,7 +146,7 @@ class Plugin_Updater_Admin {
 		}
 
 		// If there is no valid license key status, don't allow updates.
-		if ( 'valid' !== get_option( $this->slug . '_license_status', false ) ) {
+		if ( 'valid' !== get_option( $this->slug . '_license_key_status', false ) ) {
 			return;
 		}
 
@@ -203,47 +173,38 @@ class Plugin_Updater_Admin {
 	 * Outputs the markup used on the plugin license page.
 	 */
 	public function license_page() {
-		$license = $this->license;
-		$status  = get_option( $this->slug . '_license_status' );
+		$license       = $this->license;
+		$license_check = $this->check_license( $this->slug );
+		$status        = $license_check['license'];
 
 		// Checks license status to display under license key.
 		if ( ! $license ) {
 			$message = $this->strings['enter-key'];
 		} else {
-			// delete_transient( $this->slug . '_license_message' );
+			delete_transient( $this->slug . '_license_message' );
 			if ( ! get_transient( $this->slug . '_license_message', false ) ) {
-				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), ( 60 * 60 * 24 ) );
+				set_transient( $this->slug . '_license_message', $license_check['message'], ( 60 * 60 * 24 ) );
 			}
 			$message = get_transient( $this->slug . '_license_message' );
-		} ?>
-		<div class="wrap">
-			<h2>
-			<?php echo esc_attr( $this->strings['plugin-license'] . ' - ' . $this->name ); ?>
-			</h2>
-			<form method="post" action="options.php">
-				<?php
-				settings_fields( $this->slug . '_license' );
+		}
+		foreach ( $this->plugin_data as $plugin ) {
+			settings_fields( $plugin['slug'] . '_license' );
+			$form_table_row = ( new License_Form() )->settings_row( $plugin, $license, $status, $message, $this->strings );
 
-				$form_table = ( new License_Form() )->table( $this->slug, $license, $status, $message, $this->strings );
-
-				/**
-				 * Filter to echo a customized license form table.
-				 *
-				 * @since 1.0.0
-				 *
-				 * @param string $form_table Table HTML for a license page setting.
-				 * @param string $slug       EDD SL Add-on slug.
-				 * @param string $license    EDD SL license.
-				 * @param string $status     License status.
-				 * @param string $message    License message.
-				 * @param array  $strings    Messaging strings.
-				 */
-				echo apply_filters( 'edd_sl_license_form_table', $form_table, $this->slug, $license, $status, $message, $this->strings );
-
-				submit_button();
-				?>
-			</form>
-		<?php
+			/**
+			 * Filter to echo a customized license form table.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $form_table Table HTML for a license page setting.
+			 * @param string $slug       EDD SL Add-on slug.
+			 * @param string $license    EDD SL license.
+			 * @param string $status     License status.
+			 * @param string $message    License message.
+			 * @param array  $strings    Messaging strings.
+			 */
+			echo apply_filters( 'edd_sl_license_form_table', $form_table_row, $plugin, $license, $status, $message, $this->strings );
+		}
 	}
 
 	/**
@@ -271,7 +232,7 @@ class Plugin_Updater_Admin {
 			add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
 			$license_data = $this->get_api_response( $this->api_url, $api_params );
 
-			if ( $license_data->success && isset( $license_data->error ) ) {
+			if ( ! $license_data->success && isset( $license_data->error ) ) {
 				switch ( $license_data->error ) {
 					case 'expired':
 						$message = sprintf(
@@ -303,9 +264,8 @@ class Plugin_Updater_Admin {
 			}
 		}
 
-		// $response->license will be either "active" or "inactive".
-		if ( $license_data && isset( $license_data->license ) ) {
-			update_option( $this->slug . '_license_status', $license_data->license );
+		if ( isset( $license_data, $license_data->license ) ) {
+			update_option( $this->slug . '_license_key_status', $license_data->license );
 			delete_transient( $this->slug . '_license_message' );
 		}
 
@@ -357,8 +317,8 @@ class Plugin_Updater_Admin {
 				$error_data['success'] = true;
 			}
 
-			if ( 'deactivated' === $license_data->license ) {
-				delete_option( $this->slug . '_license_status' );
+			if ( ! isset( $license_data->license ) || 'deactivated' === $license_data->license ) {
+				delete_option( $this->slug . '_license_key_status' );
 				delete_transient( $this->slug . '_license_message' );
 			}
 			$this->redirect( $error_data );

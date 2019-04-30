@@ -93,20 +93,26 @@ trait API_Common {
 
 		if ( is_wp_error( $response ) ) {
 			$error_data['success']       = false;
-			$error_data['error_code']    = __( 'WP_Error' );
+			$error_data['error_code']    = __( 'WP_Error', 'edd-sl-updater' );
 			$error_data['error_message'] = $response->get_error_message();
 			$this->redirect( $error_data );
 		}
 
 		if ( 200 !== $code ) {
 			$error_data['success']       = false;
-			$error_data['error_code']    = __( 'HTTP Error Code' );
+			$error_data['error_code']    = __( 'HTTP Error Code', 'edd-sl-updater' );
 			$error_data['error_message'] = $code;
 			$this->redirect( $error_data );
 		}
 
-		$response          = json_decode( wp_remote_retrieve_body( $response ) );
-		$response->success = true;
+		$response = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( empty( $response ) ) {
+			$response          = new \stdClass();
+			$response->success = false;
+		}
+
+		$response->success = isset( $response->success ) ? $response->success : true;
 
 		return $response;
 	}
@@ -192,31 +198,27 @@ trait API_Common {
 				$message = $this->strings['license-status-unknown'];
 		}
 
-		return sanitize_text_field( $message );
+		$license_check['success'] = $license_data->success;
+		$license_check['license'] = $license_data->license;
+		$license_check['message'] = sanitize_text_field( $message );
+
+		return $license_check;
 	}
 
 	/**
 	 * Redirect to where we came from.
 	 *
 	 * @param array $error_data Data for error notice.
+	 *                          Default is null.
 	 *
 	 * @return void
 	 */
-	public function redirect( $error_data ) {
-		if ( $this instanceof Theme_Updater_Admin ) {
-			$redirect_url = wp_nonce_url( admin_url( 'themes.php' ) );
-			$location     = add_query_arg(
-				[ 'page' => $this->theme_slug . '-license' ],
-				$redirect_url
-			);
-		}
-		if ( $this instanceof Plugin_Updater_Admin ) {
-			$redirect_url = wp_nonce_url( admin_url( 'plugins.php' ) );
-			$location     = add_query_arg(
-				[ 'page' => $this->slug . '-license' ],
-				$redirect_url
-			);
-		}
+	public function redirect( $error_data = null ) {
+		$redirect_url = wp_nonce_url( admin_url( 'options-general.php' ) );
+		$location     = add_query_arg(
+			[ 'page' => 'edd-sl-updater' ],
+			$redirect_url
+		);
 
 		// Save error message data to very short transient.
 		if ( ! $error_data['success'] ) {

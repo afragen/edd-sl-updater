@@ -29,6 +29,7 @@ class Init {
 	 * @return void
 	 */
 	public function run( $config ) {
+		( new Settings() )->load_hooks();
 		if ( in_array( 'plugin', $config, true ) ) {
 			( new Plugin_Updater_Admin( $config ) )->load_hooks();
 		}

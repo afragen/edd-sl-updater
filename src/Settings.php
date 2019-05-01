@@ -106,6 +106,7 @@ class Settings {
 					$slug  = str_replace( '_license_key', '', $option );
 					$value = $this->sanitize_license( $slug, $value );
 					update_option( sanitize_key( $option ), sanitize_text_field( $value ) );
+					delete_transient( $slug . '_license_message' );
 				}
 			}
 			$this->redirect();

@@ -55,29 +55,26 @@ class Settings {
 			</h2>
 			<form method="post" action="options.php">
 			<table class="form-table">
-		<tbody>
-			<tr valign="top">
-			<th></th>
-			<th scope="row" valign="top">
-			<?php esc_html_e( 'License Key', 'edd-sl-updater' ); ?></th>
-			<th scope="row" valign="top">
-			<?php esc_html_e( 'License Action', 'edd-sl-updater' ); ?></th>
-			</th>
-			</tr>
-
-			<?php
-			/**
-			 * Action hook to add admin page data to appropriate $tab.
-			 *
-			 * @since 8.0.0
-			 */
-			do_action( 'edd_sl_updater_add_admin_page' );
-
-			echo '</tbody></table></div>';
-			submit_button();
-			?>
-			</form>
+			<tbody>
+				<tr valign="top">
+				<th></th>
+				<th scope="row" valign="top">
+				<?php esc_html_e( 'License Key', 'edd-sl-updater' ); ?></th>
+				<th scope="row" valign="top">
+				<?php esc_html_e( 'License Action', 'edd-sl-updater' ); ?></th>
+				</th>
+				</tr>
 		<?php
+		/**
+		 * Action hook to add admin page data to appropriate $tab.
+		 *
+		 * @since 8.0.0
+		 */
+		do_action( 'edd_sl_updater_add_admin_page' );
+
+		echo '</tbody></table></div>';
+		submit_button();
+		echo '</form>';
 	}
 
 	/**

@@ -173,23 +173,22 @@ class Plugin_Updater_Admin extends Settings {
 	 * Outputs the markup used on the plugin license page.
 	 */
 	public function license_page() {
-		$license       = $this->license;
-		$license_check = $this->check_license( $this->slug );
-		$status        = $license_check['license'];
+		$license = $this->license;
+		$status  = get_option( $this->slug . '_license_key_status', false );
 
 		// Checks license status to display under license key.
 		if ( ! $license ) {
 			$message = $this->strings['enter-key'];
 		} else {
-			delete_transient( $this->slug . '_license_message' );
+			// delete_transient( $this->slug . '_license_message' );
 			if ( ! get_transient( $this->slug . '_license_message', false ) ) {
-				set_transient( $this->slug . '_license_message', $license_check['message'], ( 60 * 60 * 24 ) );
+				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), DAY_IN_SECONDS );
 			}
 			$message = get_transient( $this->slug . '_license_message' );
 		}
 		foreach ( $this->plugin_data as $plugin ) {
 			settings_fields( $plugin['slug'] . '_license' );
-			$form_table_row = ( new License_Form() )->settings_row( $plugin, $license, $status, $message, $this->strings );
+			$form_table_row = ( new License_Form() )->row( $plugin, $license, $status, $message, $this->strings );
 
 			/**
 			 * Filter to echo a customized license form table.

@@ -198,11 +198,7 @@ trait API_Common {
 				$message = $this->strings['license-status-unknown'];
 		}
 
-		$license_check['success'] = $license_data->success;
-		$license_check['license'] = $license_data->license;
-		$license_check['message'] = sanitize_text_field( $message );
-
-		return $license_check;
+		return sanitize_text_field( $message );
 	}
 
 	/**

@@ -148,22 +148,21 @@ class Theme_Updater_Admin extends Settings {
 	 * Outputs the markup used on the theme license page.
 	 */
 	public function license_page() {
-		$license_check = $this->check_license( $this->slug );
-		$license       = trim( get_option( $this->slug . '_license_key' ) );
-		$status        = $license_check['license'];
+		$license = trim( get_option( $this->slug . '_license_key' ) );
+		$status  = get_option( $this->slug . '_license_key_status', false );
 
 		// Checks license status to display under license key.
 		if ( ! $license ) {
 			$message = $strings['enter-key'];
 		} else {
-			delete_transient( $this->slug . '_license_message' );
+			// delete_transient( $this->slug . '_license_message' );
 			if ( ! get_transient( $this->slug . '_license_message', false ) ) {
-				set_transient( $this->slug . '_license_message', $license_check['message'], ( 60 * 60 * 24 ) );
+				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), DAY_IN_SECONDS );
 			}
 			$message = get_transient( $this->slug . '_license_message' );
 		}
 		settings_fields( $this->slug . '-license' );
-		$form_table_row = ( new License_Form() )->settings_row( $this->theme_data, $license, $status, $message, $this->strings );
+		$form_table_row = ( new License_Form() )->row( $this->theme_data, $license, $status, $message, $this->strings );
 
 		/**
 		 * Filter to echo a customized license form table.

@@ -7,7 +7,7 @@
 * Tags:
 * Requires at least: 4.6
 * Requires PHP: 5.4
-* Tested up to: 5.1
+* Tested up to: 5.2
 * Stable Tag: master
 * License: MIT
 

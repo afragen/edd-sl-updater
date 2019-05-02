@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Theme_Updater_Admin extends Settings {
 	use API_Common;
+	use License_Actions;
 
 	/**
 	 * Variables required for the theme updater
@@ -134,107 +135,6 @@ class Theme_Updater_Admin extends Settings {
 	}
 
 	/**
-	 * Activates the license key.
-	 */
-	public function activate_license() {
-		$license = trim( get_option( $this->slug . '_license_key' ) );
-
-		// Data to send in our API request.
-		$api_params = [
-			'edd_action' => 'activate_license',
-			'license'    => $license,
-			'item_name'  => rawurlencode( $this->item_name ),
-			'item_id'    => $this->item_id,
-			'url'        => home_url(),
-		];
-
-		$license_data = $this->get_api_response( $this->api_url, $api_params );
-
-		if ( ! $license_data->success && isset( $license_data->error ) ) {
-			switch ( $license_data->error ) {
-				case 'expired':
-					$message = sprintf(
-						$this->strings['license-key-expired-%s'],
-						date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
-					);
-					break;
-				case 'disabled':
-				case 'revoked':
-					$message = $this->strings['license-key-is-disabled'];
-					break;
-				case 'missing':
-					$message = $this->strings['status-invalid'];
-					break;
-				case 'invalid':
-				case 'site_inactive':
-					$this->strings['license-inactive-url'];
-					break;
-				case 'item_name_mismatch':
-					$message = sprintf( $this->strings['item-name-mismatch-%s'], $this->item_name );
-					break;
-				case 'no_activations_left':
-					$message = $this->strings['license-activation-limit'];
-					break;
-				default:
-					$message = $this->strings['error'];
-					break;
-			}
-		}
-
-		if ( isset( $license_data, $license_data->license ) ) {
-			update_option( $this->slug . '_license_key_status', $license_data->license );
-			delete_transient( $this->slug . '_license_message' );
-		}
-
-		if ( ! empty( $message ) ) {
-			$error_data['success']       = false;
-			$error_data['error_code']    = esc_attr__( 'activate_theme_license', 'edd-sl-updater' );
-			$error_data['error_message'] = esc_html( $message );
-		} else {
-			$error_data = null;
-		}
-		$this->redirect( $error_data );
-	}
-
-	/**
-	 * Deactivates the license key.
-	 */
-	public function deactivate_license() {
-		// Retrieve the license from the database.
-		$license = trim( get_option( $this->slug . '_license_key' ) );
-
-		// Data to send in our API request.
-		$api_params = [
-			'edd_action' => 'deactivate_license',
-			'license'    => $license,
-			'item_name'  => rawurlencode( $this->item_name ),
-			'item_id'    => $this->item_id,
-			'url'        => home_url(),
-		];
-
-		add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
-		$license_data = $this->get_api_response( $this->api_url, $api_params );
-
-		if ( $license_data->success && property_exists( $license_data, 'error' ) ) {
-			$message = $this->strings['error'];
-		}
-		if ( ! empty( $message ) ) {
-			$error_data['success']       = false;
-			$error_data['error_code']    = esc_attr__( 'deactivate_theme_license', 'edd-sl-updater' );
-			$error_data['error_message'] = esc_html( $message );
-		} else {
-			$error_data['success'] = true;
-		}
-
-		// $license_data->license will be either "deactivated" or "failed".
-		if ( $license_data && ( 'deactivated' === $license_data->license ) ) {
-			delete_option( $this->slug . '_license_key_status' );
-			delete_transient( $this->slug . '_license_message' );
-		}
-		$this->redirect( $error_data );
-	}
-
-	/**
 	 * Constructs a renewal link.
 	 *
 	 * @since 1.0.0
@@ -256,25 +156,6 @@ class Theme_Updater_Admin extends Settings {
 
 		// Otherwise return the api_url.
 		return $this->api_url;
-	}
-
-	/**
-	 * Checks if a license action was submitted.
-	 *
-	 * @since 1.0.0
-	 */
-	public function license_action() {
-		if ( isset( $_POST[ $this->slug . '_license_activate' ] ) ) {
-			if ( check_admin_referer( $this->slug . '_nonce', $this->slug . '_nonce' ) ) {
-				$this->activate_license();
-			}
-		}
-
-		if ( isset( $_POST[ $this->slug . '_license_deactivate' ] ) ) {
-			if ( check_admin_referer( $this->slug . '_nonce', $this->slug . '_nonce' ) ) {
-				$this->deactivate_license();
-			}
-		}
 	}
 
 	/**

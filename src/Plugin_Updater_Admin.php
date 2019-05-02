@@ -28,7 +28,6 @@ class Plugin_Updater_Admin extends Settings {
 	 */
 	protected $api_url     = null;
 	protected $api_data    = [];
-	protected $name        = null;
 	protected $item_name   = null;
 	protected $item_id     = null;
 	protected $download_id = null;
@@ -66,7 +65,6 @@ class Plugin_Updater_Admin extends Settings {
 
 		// Set config arguments.
 		$this->api_url     = $config['api_url'];
-		$this->name        = $config['item_name'];
 		$this->item_name   = $config['item_name'];
 		$this->item_id     = $config['item_id'];
 		$this->download_id = $config['item_id'];
@@ -142,7 +140,7 @@ class Plugin_Updater_Admin extends Settings {
 			[
 				'api_url'     => $this->api_url,
 				'api_data'    => $this->api_data,
-				'name'        => $this->name,
+				'name'        => $this->item_name,
 				'file'        => $this->file,
 				'item_id'     => $this->item_id,
 				'slug'        => $this->slug,

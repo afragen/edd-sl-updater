@@ -54,7 +54,7 @@ trait License_Actions {
 			$api_params = [
 				'edd_action' => 'activate_license',
 				'license'    => $this->license,
-				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD.
+				'item_name'  => rawurlencode( $this->item_name ), // the name of our product in EDD.
 				'item_id'    => $this->item_id,
 				'url'        => home_url(),
 			];
@@ -126,7 +126,7 @@ trait License_Actions {
 			$api_params = [
 				'edd_action' => 'deactivate_license',
 				'license'    => $this->license,
-				'item_name'  => rawurlencode( $this->name ), // the name of our product in EDD.
+				'item_name'  => rawurlencode( $this->item_name ), // the name of our product in EDD.
 				'item_id'    => $this->item_id,
 				'url'        => home_url(),
 			];

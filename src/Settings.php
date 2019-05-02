@@ -1,5 +1,4 @@
 <?php
-
 /**
  * EDD SL Updater
  *
@@ -15,9 +14,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Settings
+ */
 class Settings {
 	use API_Common;
 
+	/**
+	 * Load hooks.
+	 *
+	 * @return void
+	 */
 	public function load_hooks() {
 		add_action( 'admin_menu', [ $this, 'add_plugin_menu' ] );
 	}
@@ -173,6 +180,6 @@ class Settings {
 		 * @param string $message     License message.
 		 * @param array  $strings     Messaging strings.
 		 */
-		echo apply_filters( 'edd_sl_license_form_table', $form_table_row, $this->data, $license, $status, $message, $this->strings );
+		echo esc_html( apply_filters( 'edd_sl_license_form_table', $form_table_row, $this->data, $license, $status, $message, $this->strings ) );
 	}
 }

@@ -18,7 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Bootstrap
  */
 class Bootstrap {
+	/**
+	 * File name.
+	 *
+	 * @var string
+	 */
 	protected $file;
+
+	/**
+	 * File directory.
+	 *
+	 * @var string
+	 */
 	protected $dir;
 
 	/**

@@ -163,10 +163,10 @@ class Theme_Updater_Admin extends Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array  $r
-	 * @param string $url
+	 * @param array  $r   An array of HTTP request arguments.
+	 * @param string $url The request URL.
 	 *
-	 * @return array $r
+	 * @return array
 	 */
 	public function disable_wporg_request( $r, $url ) {
 		// If it's not a theme update request, bail.

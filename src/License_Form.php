@@ -23,7 +23,7 @@ class License_Form {
 	 *
 	 * Can override using `edd_sl_license_form_table` filter.
 	 *
-	 * @param array  $addon    Array of add-on data.
+	 * @param array  $addon   Array of add-on data.
 	 * @param string $license EDD SL license.
 	 * @param string $status  'valid' or 'invalid'.
 	 * @param string $message Activation/deactivation messsage.
@@ -37,10 +37,9 @@ class License_Form {
 		$dashicon = 'plugin' === $addon['type'] ? '<span class="dashicons dashicons-admin-plugins"></span>&nbsp;&nbsp;' : '&nbsp;';
 		$dashicon = 'theme' === $addon['type'] ? '<span class="dashicons dashicons-admin-appearance"></span>&nbsp;&nbsp;' : $dashicon;
 
-		echo '<tr valign="top">';
-		?>
+		echo '<tr valign="top">'; ?>
 			<th scope="row" valign="top">
-				<?php echo( $dashicon . esc_html( $name ) ); ?>
+				<?php echo wp_kses_post( $dashicon . $name ); ?>
 			</th>
 			<td>
 				<input id="<?php echo esc_attr( $slug ); ?>_license_key" name="<?php echo esc_attr( $slug ); ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license, 'edd-sl-updater' ); ?>" />

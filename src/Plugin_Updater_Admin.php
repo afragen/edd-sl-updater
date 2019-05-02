@@ -38,7 +38,7 @@ class Plugin_Updater_Admin extends Settings {
 	protected $wp_override = false;
 	protected $cache_key   = null;
 	protected $strings     = null;
-	protected $plugin_data = null;
+	protected $data        = null;
 
 	/**
 	 * Class constructor.
@@ -96,7 +96,7 @@ class Plugin_Updater_Admin extends Settings {
 		$config['slug']                   = $this->slug;
 		$config['file']                   = $this->file;
 		$this->strings                    = $this->get_strings();
-		$this->plugin_data[ $this->slug ] = $config;
+		$this->data     = $config;
 
 		/**
 		 * Fires after the $config is setup.
@@ -120,19 +120,6 @@ class Plugin_Updater_Admin extends Settings {
 		add_action( 'admin_notices', [ $this, 'show_error' ] );
 		add_action( 'admin_init', [ $this, 'update_settings' ] );
 		add_filter( 'edd_sl_updater_add_admin_page', [ $this, 'license_page' ] );
-	}
-
-	/**
-	 * Register options.
-	 *
-	 * @return void
-	 */
-	public function register_option() {
-		register_setting(
-			$this->slug . '_license',
-			$this->slug . '_license_key',
-			[]
-		);
 	}
 
 	/**
@@ -167,43 +154,6 @@ class Plugin_Updater_Admin extends Settings {
 			],
 			$this->strings
 		) )->load_hooks();
-	}
-
-	/**
-	 * Outputs the markup used on the plugin license page.
-	 */
-	public function license_page() {
-		$license = $this->license;
-		$status  = get_option( $this->slug . '_license_key_status', false );
-
-		// Checks license status to display under license key.
-		if ( ! $license ) {
-			$message = $this->strings['enter-key'];
-		} else {
-			// delete_transient( $this->slug . '_license_message' );
-			if ( ! get_transient( $this->slug . '_license_message', false ) ) {
-				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), DAY_IN_SECONDS );
-			}
-			$message = get_transient( $this->slug . '_license_message' );
-		}
-		foreach ( $this->plugin_data as $plugin ) {
-			settings_fields( $plugin['slug'] . '_license' );
-			$form_table_row = ( new License_Form() )->row( $plugin, $license, $status, $message, $this->strings );
-
-			/**
-			 * Filter to echo a customized license form table.
-			 *
-			 * @since 1.0.0
-			 *
-			 * @param string $form_table Table HTML for a license page setting.
-			 * @param string $slug       EDD SL Add-on slug.
-			 * @param string $license    EDD SL license.
-			 * @param string $status     License status.
-			 * @param string $message    License message.
-			 * @param array  $strings    Messaging strings.
-			 */
-			echo apply_filters( 'edd_sl_license_form_table', $form_table_row, $plugin, $license, $status, $message, $this->strings );
-		}
 	}
 
 	/**

@@ -23,6 +23,17 @@ class Settings {
 	}
 
 	/**
+	 * Registers the option used to store the license key in the options table.
+	 */
+	public function register_option() {
+		register_setting(
+			$this->slug . '-license',
+			$this->slug . '_license_key',
+			[]
+		);
+	}
+
+	/**
 	 * Add options page.
 	 */
 	public function add_plugin_menu() {
@@ -129,5 +140,39 @@ class Settings {
 		}
 
 		return $new;
+	}
+
+	/**
+	 * Outputs the markup used on the plugin license page.
+	 */
+	public function license_page() {
+		$license = $this->license;
+		$status  = get_option( $this->slug . '_license_key_status', false );
+
+		// Checks license status to display under license key.
+		if ( ! $license ) {
+			$message = $this->strings['enter-key'];
+		} else {
+			// delete_transient( $this->slug . '_license_message' );
+			if ( ! get_transient( $this->slug . '_license_message', false ) ) {
+				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), DAY_IN_SECONDS );
+			}
+			$message = get_transient( $this->slug . '_license_message' );
+		}
+		settings_fields( $this->data['slug'] . '_license' );
+		$form_table_row = ( new License_Form() )->row( $this->data, $license, $status, $message, $this->strings );
+		/**
+		 * Filter to echo a customized license form table.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $form_table  Table HTML for a license page setting.
+		 * @param string $plugin_data EDD SL Add-on data.
+		 * @param string $license     EDD SL license.
+		 * @param string $status      License status.
+		 * @param string $message     License message.
+		 * @param array  $strings     Messaging strings.
+		 */
+		echo apply_filters( 'edd_sl_license_form_table', $form_table_row, $this->data, $license, $status, $message, $this->strings );
 	}
 }

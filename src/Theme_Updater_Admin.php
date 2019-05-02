@@ -36,7 +36,7 @@ class Theme_Updater_Admin extends Settings {
 	protected $download_id = null;
 	protected $renew_url   = null;
 	protected $strings     = null;
-	protected $theme_data  = null;
+	protected $data        = null;
 
 	/**
 	 * Class constructor.
@@ -79,7 +79,7 @@ class Theme_Updater_Admin extends Settings {
 		}
 
 		$this->strings    = $this->get_strings();
-		$this->theme_data = $config;
+		$this->data    = $config;
 
 		/**
 		 * Fires after the theme $config is setup.
@@ -131,52 +131,6 @@ class Theme_Updater_Admin extends Settings {
 			],
 			$this->strings
 		) )->load_hooks();
-	}
-
-	/**
-	 * Registers the option used to store the license key in the options table.
-	 */
-	public function register_option() {
-		register_setting(
-			$this->slug . '-license',
-			$this->slug . '_license_key',
-			[]
-		);
-	}
-
-	/**
-	 * Outputs the markup used on the theme license page.
-	 */
-	public function license_page() {
-		$license = trim( get_option( $this->slug . '_license_key' ) );
-		$status  = get_option( $this->slug . '_license_key_status', false );
-
-		// Checks license status to display under license key.
-		if ( ! $license ) {
-			$message = $strings['enter-key'];
-		} else {
-			// delete_transient( $this->slug . '_license_message' );
-			if ( ! get_transient( $this->slug . '_license_message', false ) ) {
-				set_transient( $this->slug . '_license_message', $this->check_license( $this->slug ), DAY_IN_SECONDS );
-			}
-			$message = get_transient( $this->slug . '_license_message' );
-		}
-		settings_fields( $this->slug . '-license' );
-		$form_table_row = ( new License_Form() )->row( $this->theme_data, $license, $status, $message, $this->strings );
-
-		/**
-		 * Filter to echo a customized license form table.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $form_table Table HTML for a license page setting.
-		 * @param string $slug       EDD SL Add-on slug.
-		 * @param string $license    EDD SL license.
-		 * @param string $status     License status.
-		 * @param string $message    License message.
-		 * @param array  $strings    Messaging strings.
-		 */
-		echo apply_filters( 'edd_sl_license_form_table', $form_table_row, $this->theme_data, $license, $status, $message, $this->strings );
 	}
 
 	/**

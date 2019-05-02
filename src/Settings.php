@@ -64,14 +64,14 @@ class Settings {
 			<h2>
 				<?php esc_html_e( 'EDD SL Licenses', 'edd-sl-updater' ); ?>
 			</h2>
-			<form method="post" action="options.php">
-			<table class="form-table">
+			<form method='post' action='options.php'>
+			<table class='form-table'>
 			<tbody>
-				<tr valign="top">
+				<tr>
 				<th></th>
-				<th scope="row" valign="top">
+				<th>
 				<?php esc_html_e( 'License Key', 'edd-sl-updater' ); ?></th>
-				<th scope="row" valign="top">
+				<th>
 				<?php esc_html_e( 'License Action', 'edd-sl-updater' ); ?></th>
 				</th>
 				</tr>

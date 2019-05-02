@@ -93,9 +93,9 @@ class Plugin_Updater_Admin extends Settings {
 			$this->version = $plugin['Version'];
 		}
 
-		$config['slug']                   = $this->slug;
-		$config['file']                   = $this->file;
-		$this->strings                    = $this->get_strings();
+		$config['slug'] = $this->slug;
+		$config['file'] = $this->file;
+		$this->strings  = $this->get_strings();
 		$this->data     = $config;
 
 		/**

@@ -78,7 +78,7 @@ class Theme_Updater_Admin extends Settings {
 			$this->version = $theme->get( 'Version' );
 		}
 
-		$this->strings    = $this->get_strings();
+		$this->strings = $this->get_strings();
 		$this->data    = $config;
 
 		/**

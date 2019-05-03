@@ -56,7 +56,7 @@ class Bootstrap {
 			}
 		);
 
-		// Run for decoupled language pack updating.
+		// Initiate decoupled language pack updating.
 		( new \Fragen\Translations_Updater\Init() )->edd_run();
 
 		$updater_config = [

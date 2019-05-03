@@ -85,7 +85,7 @@ class Settings {
 		/**
 		 * Action hook to add admin page data to appropriate $tab.
 		 *
-		 * @since 8.0.0
+		 * @since 1.0.0
 		 */
 		do_action( 'edd_sl_updater_add_admin_page' );
 

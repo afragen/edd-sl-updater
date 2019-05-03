@@ -73,7 +73,7 @@ class Plugin_Updater_Admin extends Settings {
 		$this->author      = $config['author'];
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
-		$this->license     = trim( get_option( $this->slug . '_license_key' ) );
+		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_option( $this->slug . '_license_key' ) );
 		$this->api_data    = $config;
 		$this->version     = $config['version'];
 		$this->wp_override = isset( $config['wp_override'] ) ? (bool) $config['wp_override'] : false;

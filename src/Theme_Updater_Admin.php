@@ -66,7 +66,7 @@ class Theme_Updater_Admin extends Settings {
 		$this->item_id     = $config['item_id'];
 		$this->download_id = $config['download_id'];
 		$this->slug        = sanitize_key( $config['slug'] );
-		$this->license     = trim( get_option( $this->slug . '_license_key' ) );
+		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_option( $this->slug . '_license_key' ) );
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
 		$this->renew_url   = $config['renew_url'];

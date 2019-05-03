@@ -90,10 +90,13 @@ The following is an example of how to instantiate the settings/updater from a th
 
 ### Updater Only
 
-You **must** save/get your plugin/theme license in an option with the format `get_option( $slug . '_license_key' );`
 If your plugin or theme creates and manages it's own settings you can simply activate only the updater by changing the init code line to the following.
 
 	( new EDD\Software_Licensing\Updater\Init() )->updater( $config );
+
+You **must** save/get your plugin/theme license in an option with the format `get_option( $slug . '_license_key' );` or you can set a key/value pair in the config array to return the license by setting the optional `license` key in the config array. Something like the following.
+
+	'license' => get_option( 'my-license-key '),
 
 ### Decoupled Translation Packs
 

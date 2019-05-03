@@ -53,6 +53,7 @@ function prefix_plugin_updater() {
 		'version'   => '1.0', // Current version number.
 		'author'    => 'Andy Fragen', // Author of this plugin.
 		'beta'      => false,
+		'license'   => '', // Optional, if plugin handles license actions you can set license here.
 	];
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Init() )->run( $config );
@@ -83,6 +84,7 @@ function prefix_theme_updater() {
 		'download_id' => '', // Optional, used for generating a license renewal link.
 		'renew_url'   => '', // Optional, allows for a custom license renewal link.
 		'beta'        => false, // Optional, set to true to opt into beta versions.
+		'license'     => '', // Optional, if plugin handles license actions you can set license here.
 	];
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Init() )->run( $config );
@@ -93,11 +95,16 @@ add_action( 'after_setup_theme', 'prefix_theme_updater' );
 
 ### Updater Only
 
-You **must** save/get your plugin/theme license in an option with the format `get_option( $slug . '_license_key' );`
 If your plugin or theme creates and manages it's own settings you can simply activate only the updater by changing the init code line to the following.
 
 ```php
 ( new EDD\Software_Licensing\Updater\Init() )->updater( $config );
+```
+
+You **must** save/get your plugin/theme license in an option with the format `get_option( $slug . '_license_key' );` or you can set a key/value pair in the config array to return the license by setting the optional `license` key in the config array. Something like the following.
+
+```php
+'license' => get_option( 'my-license-key '),
 ```
 
 ### Decoupled Translation Packs

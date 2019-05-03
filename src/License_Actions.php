@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Trait License_Actions
  */
 trait License_Actions {
+	use API_Common;
+
 	/**
 	 * Checks if a license action was submitted.
 	 *

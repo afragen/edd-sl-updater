@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Theme_Updater_Admin
  */
 class Theme_Updater_Admin extends Settings {
-	use API_Common;
 	use License_Actions;
 
 	/**

@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Plugin_Updater_Admin
  */
 class Plugin_Updater_Admin extends Settings {
-	use API_Common;
 	use License_Actions;
 
 	/**

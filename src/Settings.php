@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Settings
  */
 class Settings {
-	use API_Common;
 
 	/**
 	 * Load hooks.

@@ -95,5 +95,17 @@ If your plugin or theme creates and manages it's own settings you can simply act
 
 	( new EDD\Software_Licensing\Updater\Init() )->updater( $config );
 
+### Decoupled Translation Packs
+
+This added framework allows for decoupled language pack updates. For more complete instructions please refer to [translations-updater framework](https://github.com/afragen/translations-updater).
+
+The URI should point to a repository that contains the translations files. Refer to [GitHub Updater Translations](https://github.com/afragen/github-updater-translations) as an example. It is created using the [Language Pack Maker](https://github.com/afragen/language-pack-maker). The repo **must** be a public repo.
+
+You will need to add three key/value pairs to your EDD SL Add-on config array similar to the following,
+
+	'type'      => '(plugin|theme)',
+	'git'       => 'github',
+	'languages' => 'https://github.com/<USER>/my-language-pack',
+
 ## Changelog
 [Changelog](./CHANGES.md)

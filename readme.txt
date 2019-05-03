@@ -35,7 +35,7 @@ The EDD SL Updater now uses a universal instantiation function that will correct
 
 ### Plugin Updater Example
 
-The following is an example of how to instantiate the updater from a plugin. It is run from the main plugin file.
+The following is an example of how to instantiate the settings/updater from a plugin. It is run from the main plugin file. This will provide a settings page for the plugin too.
 
 	// Automatically install EDD SL Updater.
 	require_once __DIR__ . '/vendor/autoload.php';
@@ -62,7 +62,7 @@ The following is an example of how to instantiate the updater from a plugin. It 
 
 ### Theme Updater Example
 
-The following is an example of how it instantiate the updater from a theme. It is run from the theme's `functions.php` file.
+The following is an example of how to instantiate the settings/updater from a theme. It is run from the theme's `functions.php` file. This will provide a settings page for your theme too.
 
 	// Automatically install EDD SL Updater.
 	require_once __DIR__ . '/vendor/autoload.php';
@@ -86,8 +86,14 @@ The following is an example of how it instantiate the updater from a theme. It i
 			( new EDD\Software_Licensing\Updater\Init() )->run( $config );
 		}
 	}
-  	add_action( 'after_setup_theme', 'prefix_theme_updater' );
+	add_action( 'after_setup_theme', 'prefix_theme_updater' );
 
+### Updater Only
+
+You **must** save/get your plugin/theme license in an option with the format `get_option( $slug . '_license_key' );`
+If your plugin or theme creates and manages it's own settings you can simply activate only the updater by changing the init code line to the following.
+
+	( new EDD\Software_Licensing\Updater\Init() )->updater( $config );
 
 ## Changelog
 [Changelog](./CHANGES.md)

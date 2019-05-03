@@ -10,3 +10,4 @@
 * created filter hook `edd_sl_license_form_table` to easily customize the license form
 * switch to `site_transient_update_{plugins|themes}` filter
 * created Settings page for licenses instead of appending to menus
+* added ability to set updater only using `Init->updater( $config )`

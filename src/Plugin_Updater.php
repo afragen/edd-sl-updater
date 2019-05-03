@@ -353,7 +353,7 @@ class Plugin_Updater {
 	}
 
 	/**
-	 * Calls the API and, if successfull, returns the object delivered by the API.
+	 * Calls the API and, if successful, returns the object delivered by the API.
 	 *
 	 * @param  array $_data Parameters for the API action.
 	 * @return false|object

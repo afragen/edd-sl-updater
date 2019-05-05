@@ -40,6 +40,7 @@ trait API_Common {
 		$code = (int) wp_remote_retrieve_response_code( $response );
 
 		if ( is_wp_error( $response ) ) {
+			$error_data['slug']          = $this->slug;
 			$error_data['success']       = false;
 			$error_data['error_code']    = __( 'WP_Error', 'edd-sl-updater' );
 			$error_data['error_message'] = $response->get_error_message();
@@ -47,6 +48,7 @@ trait API_Common {
 		}
 
 		if ( 200 !== $code ) {
+			$error_data['slug']          = $this->slug;
 			$error_data['success']       = false;
 			$error_data['error_code']    = __( 'HTTP Error Code', 'edd-sl-updater' );
 			$error_data['error_message'] = $code;

@@ -103,6 +103,7 @@ trait License_Actions {
 			delete_transient( $this->slug . '_license_message' );
 		}
 		if ( ! empty( $message ) ) {
+			$error_data['slug']       = $this->slug;
 			$error_data['success']    = false;
 			$error_data['error_code'] =
 			/* translators: %s: item type 'plugin' or 'theme' */
@@ -153,6 +154,7 @@ trait License_Actions {
 			delete_transient( $this->slug . '_license_message' );
 		}
 		if ( ! empty( $message ) ) {
+			$error_data['slug']       = $this->slug;
 			$error_data['success']    = false;
 			$error_data['error_code'] =
 			/* translators: %s: item type 'plugin' or 'theme' */
@@ -229,7 +231,7 @@ trait License_Actions {
 		if ( $this instanceof Theme_Updater_Admin ) {
 			$error_data = get_transient( 'sl_theme_activation' );
 		}
-		if ( ! $error_data ) {
+		if ( ! $error_data || $this->slug !== $error_data['slug'] ) {
 			return;
 		}
 		echo '<div class="notice-error notice"><p>';

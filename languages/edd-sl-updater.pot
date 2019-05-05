@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the EDD Software Licensing Updater plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: EDD Software Licensing Updater 0.10\n"
+"Project-Id-Version: EDD Software Licensing Updater 0.11.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/edd-sl-updater\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-05-03T00:53:39+00:00\n"
+"POT-Creation-Date: 2019-05-05T17:06:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.2.0\n"
 "X-Domain: edd-sl-updater\n"
@@ -30,26 +30,132 @@ msgstr ""
 msgid "Andy Fragen"
 msgstr ""
 
-#. translators: %s: item type 'plugin' or 'theme'
-#: src/License_Actions.php:107
-#: src/License_Actions.php:157
-msgid "activate_license_%s"
+#. translators: %s: item name
+#: src/License_Actions.php:110
+#: src/License_Actions.php:161
+msgid "activate_license-%s"
+msgstr ""
+
+#: src/License_Actions.php:176
+msgid "Theme License"
+msgstr ""
+
+#: src/License_Actions.php:177
+msgid "Plugin License"
+msgstr ""
+
+#: src/License_Actions.php:178
+msgid "Enter your license key."
+msgstr ""
+
+#: src/License_Actions.php:179
+#: src/Settings.php:79
+msgid "License Key"
+msgstr ""
+
+#: src/License_Actions.php:180
+#: src/Settings.php:81
+msgid "License Action"
+msgstr ""
+
+#: src/License_Actions.php:181
+msgid "Deactivate License"
+msgstr ""
+
+#: src/License_Actions.php:182
+msgid "Activate License"
+msgstr ""
+
+#: src/License_Actions.php:183
+#: src/License_Actions.php:203
+msgid "License status is unknown."
+msgstr ""
+
+#: src/License_Actions.php:184
+msgid "Invalid License."
+msgstr ""
+
+#. translators: %s: item name
+#: src/License_Actions.php:186
+msgid "This appears to be an invalid license key for %s."
+msgstr ""
+
+#: src/License_Actions.php:187
+msgid "Renew?"
+msgstr ""
+
+#: src/License_Actions.php:188
+msgid "unlimited"
+msgstr ""
+
+#: src/License_Actions.php:189
+msgid "License key is active."
+msgstr ""
+
+#. translators: %s: expiration date
+#: src/License_Actions.php:191
+msgid "Expires %s."
+msgstr ""
+
+#: src/License_Actions.php:192
+msgid "Lifetime License."
+msgstr ""
+
+#. translators: %1: number of sites activated, %2: total number of sites activated
+#: src/License_Actions.php:194
+msgid "You have %1$s / %2$s sites activated."
+msgstr ""
+
+#. translators: %s: expiration date
+#: src/License_Actions.php:196
+msgid "License key expired on %s."
+msgstr ""
+
+#: src/License_Actions.php:197
+msgid "License key has expired."
+msgstr ""
+
+#: src/License_Actions.php:198
+msgid "License keys do not match."
+msgstr ""
+
+#: src/License_Actions.php:199
+msgid "License is inactive."
+msgstr ""
+
+#: src/License_Actions.php:200
+msgid "License key is disabled."
+msgstr ""
+
+#: src/License_Actions.php:201
+msgid "Your license is not active for this URL."
+msgstr ""
+
+#: src/License_Actions.php:202
+msgid "Site is inactive."
+msgstr ""
+
+#: src/License_Actions.php:204
+msgid "Your license key has reached its activation limit."
+msgstr ""
+
+#: src/License_Actions.php:205
+msgid "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update."
+msgstr ""
+
+#. translators: %1: Name, %2: new version, %3: URL, %4: link title, %5: URL, %6: opening tag
+#: src/License_Actions.php:207
+msgid "<strong>%1$s %2$s</strong> is available. <a href=\"%3$s\" class=\"thickbox\" title=\"%4$s\">Check out what's new</a> or <a href=\"%5$s\"%6$s>update now</a>."
+msgstr ""
+
+#: src/License_Actions.php:208
+msgid "An error occurred, please try again."
 msgstr ""
 
 #: src/Settings.php:56
 #: src/Settings.php:57
 #: src/Settings.php:71
 msgid "EDD SL Licenses"
-msgstr ""
-
-#: src/Settings.php:79
-#: src/API_Common.php:31
-msgid "License Key"
-msgstr ""
-
-#: src/Settings.php:81
-#: src/API_Common.php:32
-msgid "License Action"
 msgstr ""
 
 #. translators: %1: item name, %2: open tag, %3: version number, %4: close tag
@@ -70,116 +176,10 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: src/API_Common.php:28
-msgid "Theme License"
-msgstr ""
-
-#: src/API_Common.php:29
-msgid "Plugin License"
-msgstr ""
-
-#: src/API_Common.php:30
-msgid "Enter your license key."
-msgstr ""
-
-#: src/API_Common.php:33
-msgid "Deactivate License"
-msgstr ""
-
-#: src/API_Common.php:34
-msgid "Activate License"
-msgstr ""
-
-#: src/API_Common.php:35
-#: src/API_Common.php:55
-msgid "License status is unknown."
-msgstr ""
-
-#: src/API_Common.php:36
-msgid "Invalid License."
-msgstr ""
-
-#. translators: %s: item name
-#: src/API_Common.php:38
-msgid "This appears to be an invalid license key for %s."
-msgstr ""
-
-#: src/API_Common.php:39
-msgid "Renew?"
-msgstr ""
-
-#: src/API_Common.php:40
-msgid "unlimited"
-msgstr ""
-
-#: src/API_Common.php:41
-msgid "License key is active."
-msgstr ""
-
-#. translators: %s: expiration date
-#: src/API_Common.php:43
-msgid "Expires %s."
-msgstr ""
-
-#: src/API_Common.php:44
-msgid "Lifetime License."
-msgstr ""
-
-#. translators: %1: number of sites activated, %2: total number of sites activated
-#: src/API_Common.php:46
-msgid "You have %1$s / %2$s sites activated."
-msgstr ""
-
-#. translators: %s: expiration date
-#: src/API_Common.php:48
-msgid "License key expired on %s."
-msgstr ""
-
-#: src/API_Common.php:49
-msgid "License key has expired."
-msgstr ""
-
-#: src/API_Common.php:50
-msgid "License keys do not match."
-msgstr ""
-
-#: src/API_Common.php:51
-msgid "License is inactive."
-msgstr ""
-
-#: src/API_Common.php:52
-msgid "License key is disabled."
-msgstr ""
-
-#: src/API_Common.php:53
-msgid "Your license is not active for this URL."
-msgstr ""
-
-#: src/API_Common.php:54
-msgid "Site is inactive."
-msgstr ""
-
-#: src/API_Common.php:56
-msgid "Your license key has reached its activation limit."
-msgstr ""
-
-#: src/API_Common.php:57
-msgid "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update."
-msgstr ""
-
-#. translators: %1: Name, %2: new version, %3: URL, %4: link title, %5: URL, %6: opening tag
-#: src/API_Common.php:59
-msgid "<strong>%1$s %2$s</strong> is available. <a href=\"%3$s\" class=\"thickbox\" title=\"%4$s\">Check out what's new</a> or <a href=\"%5$s\"%6$s>update now</a>."
-msgstr ""
-
-#: src/API_Common.php:60
-msgid "An error occurred, please try again."
-msgstr ""
-
-#: src/API_Common.php:96
+#: src/API_Common.php:45
 msgid "WP_Error"
 msgstr ""
 
-#: src/API_Common.php:103
+#: src/API_Common.php:53
 msgid "HTTP Error Code"
 msgstr ""

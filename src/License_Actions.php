@@ -106,8 +106,8 @@ trait License_Actions {
 			$error_data['slug']       = $this->slug;
 			$error_data['success']    = false;
 			$error_data['error_code'] =
-			/* translators: %s: item type 'plugin' or 'theme' */
-			sprintf( esc_attr__( 'activate_license_%s', 'edd-sl-updater' ), $this->data['type'] );
+			/* translators: %s: item name */
+			sprintf( esc_attr__( 'activate_license-%s', 'edd-sl-updater' ), $this->data['item_name'] );
 			$error_data['error_message'] = esc_html( $message );
 		} else {
 			$error_data = null;
@@ -157,8 +157,8 @@ trait License_Actions {
 			$error_data['slug']       = $this->slug;
 			$error_data['success']    = false;
 			$error_data['error_code'] =
-			/* translators: %s: item type 'plugin' or 'theme' */
-			sprintf( esc_attr__( 'activate_license_%s', 'edd-sl-updater' ), $this->data['type'] );
+			/* translators: %s: item name */
+			sprintf( esc_attr__( 'activate_license-%s', 'edd-sl-updater' ), $this->data['item_name'] );
 			$error_data['error_message'] = esc_html( $message );
 		} else {
 			$error_data = null;

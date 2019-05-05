@@ -27,6 +27,7 @@ function edd_test_plugin_updater() {
 		'version'   => '1.0', // Current version number.
 		'author'    => 'Andy Fragen', // Author of this plugin.
 		'beta'      => false,
+		'license'   => '', // Optional, if plugin handles license actions you can set license here.
 	];
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Init() )->run( $config );

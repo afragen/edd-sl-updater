@@ -35,6 +35,7 @@ function edd_test_theme_updater() {
 		'download_id' => '', // Optional, used for generating a license renewal link.
 		'renew_url'   => '', // Optional, allows for a custom license renewal link.
 		'beta'        => false, // Optional, set to true to opt into beta versions.
+		'license'     => '', // Optional, if theme handles license actions you can set license here.
 	];
 	if ( class_exists( 'EDD\\Software_Licensing\\Updater\\Bootstrap' ) ) {
 		( new EDD\Software_Licensing\Updater\Init() )->run( $config );

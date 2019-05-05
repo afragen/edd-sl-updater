@@ -94,7 +94,7 @@ If your plugin or theme creates and manages it's own settings you can simply act
 
 	( new EDD\Software_Licensing\Updater\Init() )->updater( $config );
 
-You **must** save/get your plugin/theme license in an option with the format `get_option( $slug . '_license_key' );` or you can set a key/value pair in the config array to return the license by setting the optional `license` key in the config array. Something like the following.
+You must save/get your plugin/theme license in an option with the format `get_option( $slug . '_license_key' );` **or** you can set a key/value pair in the config array to return the license by setting the optional `license` key in the config array. Something like the following.
 
 	'license' => get_option( 'my-license-key '),
 
@@ -104,9 +104,8 @@ This added framework allows for decoupled language pack updates. For more comple
 
 The URI should point to a repository that contains the translations files. Refer to [GitHub Updater Translations](https://github.com/afragen/github-updater-translations) as an example. It is created using the [Language Pack Maker](https://github.com/afragen/language-pack-maker). The repo **must** be a public repo.
 
-You will need to add three key/value pairs to your EDD SL Add-on config array similar to the following,
+You will need to add two key/value pairs to your EDD SL Add-on config array similar to the following,
 
-	'type'      => '(plugin|theme)',
 	'git'       => 'github',
 	'languages' => 'https://github.com/<USER>/my-language-pack',
 

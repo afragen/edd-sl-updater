@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/afragen/translations-updater.git",
-                "reference": "3f0c287104f693136136703519fd535e3c4d2029"
+                "reference": "a9398d349c893bb511bc903f9c204ada04cb76da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/afragen/translations-updater/zipball/3f0c287104f693136136703519fd535e3c4d2029",
-                "reference": "3f0c287104f693136136703519fd535e3c4d2029",
+                "url": "https://api.github.com/repos/afragen/translations-updater/zipball/a9398d349c893bb511bc903f9c204ada04cb76da",
+                "reference": "a9398d349c893bb511bc903f9c204ada04cb76da",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 "updater",
                 "wordpress"
             ],
-            "time": "2019-04-11T03:06:13+00:00"
+            "time": "2019-05-06T01:01:31+00:00"
         }
     ],
     "packages-dev": [],

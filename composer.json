@@ -34,7 +34,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=5.4",
-    "afragen/translations-updater": "dev-edd-sl"
+    "afragen/translations-updater": "dev-develop"
   },
   "autoload": {
     "psr-4": {

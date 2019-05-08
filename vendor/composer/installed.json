@@ -1,23 +1,23 @@
 [
     {
         "name": "afragen/translations-updater",
-        "version": "dev-edd-sl",
-        "version_normalized": "dev-edd-sl",
+        "version": "dev-develop",
+        "version_normalized": "dev-develop",
         "source": {
             "type": "git",
             "url": "https://github.com/afragen/translations-updater.git",
-            "reference": "a9398d349c893bb511bc903f9c204ada04cb76da"
+            "reference": "07c40e906dde67e1f90c087becb7c2605a808802"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/afragen/translations-updater/zipball/a9398d349c893bb511bc903f9c204ada04cb76da",
-            "reference": "a9398d349c893bb511bc903f9c204ada04cb76da",
+            "url": "https://api.github.com/repos/afragen/translations-updater/zipball/07c40e906dde67e1f90c087becb7c2605a808802",
+            "reference": "07c40e906dde67e1f90c087becb7c2605a808802",
             "shasum": ""
         },
         "require": {
             "php": ">=5.4"
         },
-        "time": "2019-05-06T01:01:31+00:00",
+        "time": "2019-05-08T00:07:02+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

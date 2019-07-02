@@ -528,6 +528,10 @@ class Plugin_Updater {
 			return false; // Cache is expired.
 		}
 
+		if ( empty( $cache['value'] ) ) {
+			return false; // Ensure there is some useful data.
+		}
+
 		// We need to turn the icons into an array, thanks to WP Core forcing these into an object at some point.
 		$cache['value'] = json_decode( $cache['value'] );
 		if ( ! empty( $cache['value']->icons ) ) {

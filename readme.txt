@@ -4,10 +4,10 @@ Author URI: https://easydigitaldownloads.com
 Plugin URI: https://easydigitaldownloads.com
 Contributors: easydigitaldownloads, afragen
 Donate link: https://easydigitaldownloads.com/donate/
-Tags:
+Tags: easydigitaldownloads, updater
 Requires at least: 4.6
 Requires PHP: 5.4
-Tested up to: 5.2
+Tested up to: 5.3
 Stable Tag: x.x
 License: MIT
 

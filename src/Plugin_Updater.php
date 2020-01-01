@@ -405,7 +405,7 @@ class Plugin_Updater {
 		 * @link https://github.com/easydigitaldownloads/easy-digital-downloads/issues/7168
 		 */
 		if ( trailingslashit( home_url() ) === $this->api_url ) {
-			return false; // Don't allow a plugin to ping itself
+			return false; // Don't allow a plugin to ping itself.
 		}
 
 		$api_params = [

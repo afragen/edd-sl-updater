@@ -109,8 +109,8 @@ class Theme_Updater {
 				$update_onclick
 			);
 			echo '</div>';
-			echo '<div id="' . $this->slug . '_' . 'changelog" style="display:none;">';
-			echo wpautop( $api_response->sections['changelog'] );
+			echo '<div id="' . $this->slug . '_changelog" style="display:none;">';
+			echo esc_html( wpautop( $api_response->sections['changelog'] ) );
 			echo '</div>';
 		}
 	}

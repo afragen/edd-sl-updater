@@ -73,7 +73,7 @@ trait License_Actions {
 				case 'expired':
 					$message = sprintf(
 						$this->strings['license-key-expired-%s'],
-						date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
+						date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, time() ) )
 					);
 					break;
 				case 'disabled':

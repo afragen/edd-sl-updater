@@ -42,7 +42,7 @@ class License_Form {
 				<?php echo wp_kses_post( $dashicon . $name ); ?>
 			</th>
 			<td>
-				<input id="<?php echo esc_attr( $slug ); ?>_license_key" name="<?php echo esc_attr( $slug ); ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license, 'edd-sl-updater' ); ?>" />
+				<input id="<?php echo esc_attr( $slug ); ?>_license_key" name="<?php echo esc_attr( $slug ); ?>_license_key" type="text" class="regular-text" value="<?php echo esc_attr( $license ); ?>" />
 				<label class="description" for="<?php echo esc_attr( $slug ); ?>_license_key"></label>
 				<p class="description">
 					<?php echo esc_html( $message ); ?>

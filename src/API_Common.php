@@ -103,7 +103,7 @@ trait API_Common {
 		// Get expire date.
 		$expires = false;
 		if ( isset( $license_data->expires ) && 'lifetime' !== $license_data->expires ) {
-			$expires    = date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) );
+			$expires    = date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, time() ) );
 			$renew_link = '<a href="' . esc_url( $this->get_renewal_link() ) . '"target="_blank">' . esc_attr( $this->strings['renew'] ) . '</a>';
 		} elseif ( isset( $license_data->expires ) && 'lifetime' === $license_data->expires ) {
 			$expires = 'lifetime';

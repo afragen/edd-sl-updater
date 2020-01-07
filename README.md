@@ -6,7 +6,7 @@
 * Donate link: https://easydigitaldownloads.com/donate/
 * Tags: easydigitaldownloads, updater
 * Requires at least: 4.6
-* Requires PHP: 5.4
+* Requires PHP: 5.6
 * Tested up to: 5.3
 * Stable Tag: master
 * License: MIT

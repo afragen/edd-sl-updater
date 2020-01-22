@@ -54,7 +54,7 @@ class Settings {
 		add_submenu_page(
 			$parent,
 			esc_html__( 'EDD SL Licenses', 'edd-sl-updater' ),
-			esc_html__( 'EDD SL Licenses', 'edd-sl-updater' ),
+			esc_html_x( 'EDD SL Licenses', 'Menu item', 'edd-sl-updater' ),
 			$capability,
 			'edd-sl-updater',
 			[ $this, 'create_admin_page' ]

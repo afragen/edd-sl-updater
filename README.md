@@ -23,7 +23,7 @@ PRs welcome at [EDD SL Updater](https://github.com/afragen/edd-sl-updater).
 
 The following code examples show how to instantiate and install the EDD SL Updater plugin for EDD SL Add-on plugins and themes.
 
-In the samples, the `wp-dependency.json` file **must** be included with all EDD SL Add-ons. To add the appropriate elements to your `composer.json` run the following command from your plugin/theme folder.
+In the samples, the `wp-dependency.json` file **must** be included with all EDD SL Add-ons. To add the appropriate elements to your `composer.json` run the following command from your plugin/theme folder. If you have done this previously please ensure you are using the _latest_ version of `wp-dependency-installer` by adjusting your `composer.json`, if needed.
 
 `composer require afragen/wp-dependency-installer`
 
@@ -40,7 +40,7 @@ The following is an example of how to instantiate the settings/updater from a pl
 ```php
 // Automatically install EDD SL Updater.
 require_once __DIR__ . '/vendor/autoload.php';
-\WP_Dependency_Installer::instance()->run( __DIR__ );
+\WP_Dependency_Installer::instance( __DIR__ )->run();
 
 // Loads the updater classes
 function prefix_plugin_updater() {

@@ -13,7 +13,7 @@
 
 // Automatically install EDD SL Updater.
 require_once __DIR__ . '/vendor/autoload.php';
-\WP_Dependency_Installer::instance()->run( __DIR__ );
+\WP_Dependency_Installer::instance( __DIR__ )->run();
 
 // Required filter to ensure persist-admin-notices-dismissal properly loads JS.
 add_filter( 'pand_theme_loader', '__return_true' );

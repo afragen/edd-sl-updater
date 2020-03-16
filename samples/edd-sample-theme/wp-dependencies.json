@@ -4,7 +4,7 @@
     "host": "github",
     "slug": "edd-sl-updater/edd-sl-updater.php",
     "uri": "https://github.com/afragen/edd-sl-updater",
-    "optional": false,
+    "required": true,
     "branch": "develop"
   }
 ]

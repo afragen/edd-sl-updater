@@ -9,7 +9,7 @@
 
 // Automatically install EDD SL Updater.
 require_once __DIR__ . '/vendor/autoload.php';
-\WP_Dependency_Installer::instance()->run( __DIR__ );
+\WP_Dependency_Installer::instance( __DIR__ )->run();
 
 /**
  * Load updater.

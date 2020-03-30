@@ -29,5 +29,5 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-require_once __DIR__ . '/src/Bootstrap.php';
+require_once __DIR__ . '/vendor/autoload.php';
 ( new Bootstrap( __FILE__ ) )->run();

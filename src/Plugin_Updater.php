@@ -81,22 +81,22 @@ class Plugin_Updater {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param  array $_transient_data Update array build by WordPress.
+	 * @param  array $transient Update array build by WordPress.
 	 * @return array Modified update array with custom plugin data.
 	 */
-	public function check_update( $_transient_data ) {
+	public function check_update( $transient ) {
 		global $pagenow;
 
-		if ( ! is_object( $_transient_data ) ) {
-			$_transient_data = new \stdClass();
+		if ( ! is_object( $transient ) ) {
+			$transient = new \stdClass();
 		}
 
 		if ( 'plugins.php' === $pagenow && is_multisite() ) {
-			return $_transient_data;
+			return $transient;
 		}
 
-		if ( ! empty( $_transient_data->response ) && ! empty( $_transient_data->response[ $this->file ] ) && false === $this->wp_override ) {
-			return $_transient_data;
+		if ( ! empty( $transient->response ) && ! empty( $transient->response[ $this->file ] ) && false === $this->wp_override ) {
+			return $transient;
 		}
 
 		$version_info = $this->get_cached_version_info();
@@ -114,18 +114,18 @@ class Plugin_Updater {
 
 		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$_transient_data->response[ $this->file ] = $version_info;
+				$transient->response[ $this->file ] = $version_info;
 
 				// Make sure the plugin property is set to the plugin's file/location.
 				// See issue 1463 on Software Licensing's GitHub repo.
-				$_transient_data->response[ $this->file ]->plugin = $this->file;
+				$transient->response[ $this->file ]->plugin = $this->file;
 			}
 
-			$_transient_data->last_checked           = time();
-			$_transient_data->checked[ $this->file ] = $this->version;
+			$transient->last_checked           = time();
+			$transient->checked[ $this->file ] = $this->version;
 		}
 
-		return $_transient_data;
+		return $transient;
 	}
 
 	/**

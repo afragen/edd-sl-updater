@@ -84,10 +84,7 @@ class Plugin_Updater_Admin extends Settings {
 
 		// Populate version fallback.
 		if ( empty( $config['version'] ) ) {
-			if ( ! function_exists( 'get_plugin_data' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-			$plugin        = get_plugin_data( $config['file'] );
+			$plugin        = get_file_data( $config['file'], 'plugin' );
 			$this->version = $plugin['Version'];
 		}
 

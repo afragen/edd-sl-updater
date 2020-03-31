@@ -72,7 +72,7 @@ class Theme_Updater {
 	}
 
 	/**
-	 * Show the update notification when neecessary.
+	 * Show the update notification when necessary.
 	 *
 	 * @return void
 	 */
@@ -103,7 +103,8 @@ class Theme_Updater {
 				$this->strings['update-available'],
 				$theme->get( 'Name' ),
 				$api_response->new_version,
-				'#TB_inline?width=640&amp;inlineId=' . $this->slug . '_changelog',
+				// $api_response->url . '#TB_inline?width=640&amp;inlineId=' . $this->slug . '_changelog',
+				$api_response->url . '&TB_iframe=true&width=1024&width=800',
 				$theme->get( 'Name' ),
 				$update_url,
 				$update_onclick
@@ -118,20 +119,22 @@ class Theme_Updater {
 	/**
 	 * Update the theme update transient with the response from the version check.
 	 *
-	 * @param  array $value The default update values.
-	 * @return array|boolean If an update is available, returns the update parameters, if no update is needed returns false, if the request fails returns false.
+	 * @param  array $transient Theme update transient.
+	 * @return array|boolean If an update is available, returns the update parameters.
+	 *                                 If no update is needed returns false.
+	 *                                 If the request fails returns false.
 	 */
-	public function theme_update_transient( $value ) {
+	public function theme_update_transient( $transient ) {
 		$update_data = $this->check_for_update();
 		if ( $update_data ) {
 			// Make sure the theme property is set.
 			// See issue 1463 on Github in the Software Licensing Repo.
 			$update_data['theme'] = $this->slug;
 
-			$value->response[ $this->slug ] = $update_data;
+			$transient->response[ $this->slug ] = $update_data;
 		}
 
-		return $value;
+		return $transient;
 	}
 
 	/**

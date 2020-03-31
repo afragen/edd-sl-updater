@@ -123,7 +123,7 @@ class Theme_Updater_Admin extends Settings {
 			[
 				'api_url'   => $this->api_url,
 				'version'   => $this->version,
-				'license'   => trim( get_option( $this->slug . '_license_key' ) ),
+				'license'   => $this->license,
 				'item_name' => $this->item_name,
 				'item_id'   => $this->item_id,
 				'author'    => $this->author,
@@ -182,7 +182,7 @@ class Theme_Updater_Admin extends Settings {
 		unset( $themes->themes->$parent, $themes->themes->$child );
 
 		// Encode the updated JSON response.
-		$r['body']['themes'] = json_encode( $themes );
+		$r['body']['themes'] = wp_json_encode( $themes );
 
 		return $r;
 	}

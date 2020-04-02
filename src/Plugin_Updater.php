@@ -544,12 +544,15 @@ class Plugin_Updater {
 	/**
 	 * Set version info cache.
 	 *
-	 * @param string $value
-	 * @param string $cache_key
+	 * @param string $value     Cache value.
+	 * @param string $cache_key Cache key.
 	 *
-	 * @return void
+	 * @return bool|void
 	 */
 	public function set_version_info_cache( $value = '', $cache_key = '' ) {
+		if ( empty( $value ) ) {
+			return false;
+		}
 		if ( empty( $cache_key ) ) {
 			$cache_key = $this->cache_key;
 		}

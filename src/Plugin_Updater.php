@@ -22,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin_Updater {
 	use API_Common;
 
-	/**
-	 * Variables.
-	 *
-	 * @var string|array
-	 */
+	// phpcs:disable Squiz.Commenting.VariableComment.Missing
 	private $api_url              = null;
 	private $api_data             = [];
 	private $file                 = null;
@@ -36,6 +32,7 @@ class Plugin_Updater {
 	private $cache_key            = null;
 	private $strings              = null;
 	private $health_check_timeout = 5;
+	// phpcs:enable
 
 	/**
 	 * Class constructor.
@@ -81,22 +78,22 @@ class Plugin_Updater {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param  array $_transient_data Update array build by WordPress.
+	 * @param  array $transient Update array build by WordPress.
 	 * @return array Modified update array with custom plugin data.
 	 */
-	public function check_update( $_transient_data ) {
+	public function check_update( $transient ) {
 		global $pagenow;
 
-		if ( ! is_object( $_transient_data ) ) {
-			$_transient_data = new \stdClass();
+		if ( ! is_object( $transient ) ) {
+			$transient = new \stdClass();
 		}
 
 		if ( 'plugins.php' === $pagenow && is_multisite() ) {
-			return $_transient_data;
+			return $transient;
 		}
 
-		if ( ! empty( $_transient_data->response ) && ! empty( $_transient_data->response[ $this->file ] ) && false === $this->wp_override ) {
-			return $_transient_data;
+		if ( ! empty( $transient->response ) && ! empty( $transient->response[ $this->file ] ) && false === $this->wp_override ) {
+			return $transient;
 		}
 
 		$version_info = $this->get_cached_version_info();
@@ -114,18 +111,18 @@ class Plugin_Updater {
 
 		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$_transient_data->response[ $this->file ] = $version_info;
+				$transient->response[ $this->file ] = $version_info;
 
 				// Make sure the plugin property is set to the plugin's file/location.
 				// See issue 1463 on Software Licensing's GitHub repo.
-				$_transient_data->response[ $this->file ]->plugin = $this->file;
+				$transient->response[ $this->file ]->plugin = $this->file;
 			}
 
-			$_transient_data->last_checked           = time();
-			$_transient_data->checked[ $this->file ] = $this->version;
+			$transient->last_checked           = time();
+			$transient->checked[ $this->file ] = $this->version;
 		}
 
-		return $_transient_data;
+		return $transient;
 	}
 
 	/**
@@ -133,8 +130,8 @@ class Plugin_Updater {
 	 *
 	 * Needed for multisite subsites, because WP won't tell you otherwise!
 	 *
-	 * @param string $file
-	 * @param array  $plugin
+	 * @param string $file   Plugin file.
+	 * @param array  $plugin Plugin data.
 	 */
 	public function show_update_notification( $file, $plugin ) {
 		if ( is_network_admin() ) {
@@ -210,7 +207,7 @@ class Plugin_Updater {
 			// build a plugin list row, with update notification.
 			$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 			// <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
-			echo '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">';
+			echo wp_kses_post( '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">' );
 			echo '<td colspan="3" class="plugin-update colspanchange">';
 			echo '<div class="update-message notice inline notice-warning notice-alt">';
 
@@ -238,6 +235,7 @@ class Plugin_Updater {
 				);
 			}
 
+			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			do_action( "in_plugin_update_message-{$file}", $plugin, $version_info );
 
 			echo '</div></td></tr>';
@@ -249,9 +247,9 @@ class Plugin_Updater {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param  mixed  $_data
-	 * @param  string $_action
-	 * @param  object $_args
+	 * @param  mixed  $_data   Default false.
+	 * @param  string $_action The type of information being requested from the Plugin Installation API.
+	 * @param  object $_args   Plugin API arguments.
 	 * @return object $_data
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
@@ -323,7 +321,7 @@ class Plugin_Updater {
 	 *
 	 * @since 3.6.5
 	 *
-	 * @param stdClass $data
+	 * @param stdClass $data Data to be converted.
 	 *
 	 * @return array
 	 */
@@ -339,8 +337,8 @@ class Plugin_Updater {
 	/**
 	 * Disable SSL verification in order to prevent download update failures.
 	 *
-	 * @param  array  $args
-	 * @param  string $url
+	 * @param  array  $args Array of HTTP args.
+	 * @param  string $url  URL.
 	 * @return object $array
 	 */
 	public function http_request_args( $args, $url ) {
@@ -453,6 +451,7 @@ class Plugin_Updater {
 	public function show_changelog() {
 		global $edd_plugin_data;
 
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) {
 			return;
 		}
@@ -464,13 +463,16 @@ class Plugin_Updater {
 		if ( empty( $_REQUEST['slug'] ) ) {
 			return;
 		}
+		// phpcs:enable
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			wp_die( esc_html__( 'You do not have permission to install plugin updates.', 'edd-sl-updater' ), esc_html__( 'Error', 'edd-sl-updater' ), [ 'response' => 403 ] );
 		}
 
-		$data         = $edd_plugin_data[ $_REQUEST['slug'] ];
-		$beta         = ! empty( $data['beta'] ) ? true : false;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$data = $edd_plugin_data[ sanitize_file_name( wp_unslash( $_REQUEST['slug'] ) ) ];
+		$beta = ! empty( $data['beta'] ) ? true : false;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
 		$cache_key    = $this->cache_key;
 		$version_info = $this->get_cached_version_info( $cache_key );
@@ -480,7 +482,8 @@ class Plugin_Updater {
 				'edd_action' => 'get_version',
 				'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
 				'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
-				'slug'       => esc_attr( $_REQUEST['slug'] ),
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'slug'       => sanitize_file_name( wp_unslash( $_REQUEST['slug'] ) ),
 				'author'     => $data['author'],
 				'url'        => home_url(),
 				'beta'       => ! empty( $data['beta'] ),
@@ -504,7 +507,7 @@ class Plugin_Updater {
 		}
 
 		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>';
+			echo '<div style="background:#fff;padding:10px;">' . esc_attr( $version_info->sections['changelog'] ) . '</div>';
 		}
 
 		exit;
@@ -513,7 +516,7 @@ class Plugin_Updater {
 	/**
 	 * Get cached version info.
 	 *
-	 * @param string $cache_key
+	 * @param string $cache_key Cache key.
 	 *
 	 * @return string $cache['value']
 	 */
@@ -544,12 +547,15 @@ class Plugin_Updater {
 	/**
 	 * Set version info cache.
 	 *
-	 * @param string $value
-	 * @param string $cache_key
+	 * @param string $value     Cache value.
+	 * @param string $cache_key Cache key.
 	 *
-	 * @return void
+	 * @return bool|void
 	 */
 	public function set_version_info_cache( $value = '', $cache_key = '' ) {
+		if ( empty( $value ) ) {
+			return false;
+		}
 		if ( empty( $cache_key ) ) {
 			$cache_key = $this->cache_key;
 		}

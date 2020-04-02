@@ -15,11 +15,7 @@ namespace EDD\Software_Licensing\Updater;
 class Theme_Updater {
 	use API_Common;
 
-	/**
-	 * Variables.
-	 *
-	 * @var string
-	 */
+	// phpcs:disable Squiz.Commenting.VariableComment.Missing
 	private $api_url      = null;
 	private $response_key = null;
 	private $slug         = null;
@@ -27,6 +23,7 @@ class Theme_Updater {
 	private $version      = null;
 	private $author       = null;
 	private $strings      = null;
+	// phpcs:enable
 
 	/**
 	 * Class constructor.
@@ -72,7 +69,7 @@ class Theme_Updater {
 	}
 
 	/**
-	 * Show the update notification when neecessary.
+	 * Show the update notification when necessary.
 	 *
 	 * @return void
 	 */
@@ -100,17 +97,18 @@ class Theme_Updater {
 		if ( version_compare( $this->version, $api_response->new_version, '<' ) ) {
 			echo '<div id="update-nag">';
 			printf(
-				$this->strings['update-available'],
-				$theme->get( 'Name' ),
-				$api_response->new_version,
-				'#TB_inline?width=640&amp;inlineId=' . $this->slug . '_changelog',
-				$theme->get( 'Name' ),
-				$update_url,
-				$update_onclick
+				wp_kses_post( $this->strings['update-available'] ),
+				esc_attr( $theme->get( 'Name' ) ),
+				esc_attr( $api_response->new_version ),
+				// $api_response->url . '#TB_inline?width=640&amp;inlineId=' . $this->slug . '_changelog',
+				esc_url( $api_response->url . '&TB_iframe=true&width=1024&width=800' ),
+				esc_attr( $theme->get( 'Name' ) ),
+				esc_url( $update_url ),
+				esc_attr( $update_onclick )
 			);
 			echo '</div>';
-			echo '<div id="' . $this->slug . '_changelog" style="display:none;">';
-			echo esc_html( wpautop( $api_response->sections['changelog'] ) );
+			echo '<div id="' . esc_attr( $this->slug ) . '_changelog" style="display:none;">';
+			echo wp_kses_post( wpautop( $api_response->sections['changelog'] ) );
 			echo '</div>';
 		}
 	}
@@ -118,20 +116,22 @@ class Theme_Updater {
 	/**
 	 * Update the theme update transient with the response from the version check.
 	 *
-	 * @param  array $value The default update values.
-	 * @return array|boolean If an update is available, returns the update parameters, if no update is needed returns false, if the request fails returns false.
+	 * @param  array $transient Theme update transient.
+	 * @return array|boolean If an update is available, returns the update parameters.
+	 *                                 If no update is needed returns false.
+	 *                                 If the request fails returns false.
 	 */
-	public function theme_update_transient( $value ) {
+	public function theme_update_transient( $transient ) {
 		$update_data = $this->check_for_update();
 		if ( $update_data ) {
 			// Make sure the theme property is set.
 			// See issue 1463 on Github in the Software Licensing Repo.
 			$update_data['theme'] = $this->slug;
 
-			$value->response[ $this->slug ] = $update_data;
+			$transient->response[ $this->slug ] = $update_data;
 		}
 
-		return $value;
+		return $transient;
 	}
 
 	/**

@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Settings
  */
 class Settings {
-
 	/**
 	 * Load hooks.
 	 *
@@ -100,16 +99,17 @@ class Settings {
 	 * @return void|bool
 	 */
 	public function update_settings() {
-		if ( ! isset( $_POST['_wp_http_referer'] ) ) {
+		$_post = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_post['_wp_http_referer'] ) ) {
 			return false;
 		}
-		$query = parse_url( $_POST['_wp_http_referer'], PHP_URL_QUERY );
+		$query = parse_url( esc_url_raw( wp_unslash( $_post['_wp_http_referer'] ) ), PHP_URL_QUERY );
 		parse_str( $query, $arr );
 
-		if ( isset( $_POST['option_page'] ) &&
+		if ( isset( $_post['option_page'] ) &&
 			'edd-sl-updater' === $arr['page']
 		) {
-			foreach ( array_keys( $_POST ) as $key ) {
+			foreach ( array_keys( $_post ) as $key ) {
 				if ( false !== strpos( $key, '_deactivate' ) ) {
 					return;
 				}
@@ -118,7 +118,7 @@ class Settings {
 				}
 			}
 
-			foreach ( $_POST as $option => $value ) {
+			foreach ( $_post as $option => $value ) {
 				if ( false !== strpos( $option, '_license_key' ) ) {
 					$slug  = str_replace( '_license_key', '', $option );
 					$value = $this->sanitize_license( $slug, $value );

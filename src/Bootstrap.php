@@ -26,20 +26,12 @@ class Bootstrap {
 	protected $file;
 
 	/**
-	 * File directory.
-	 *
-	 * @var string
-	 */
-	protected $dir;
-
-	/**
 	 * Class constructor.
 	 *
 	 * @param string $file File path.
 	 */
 	public function __construct( $file ) {
 		$this->file = $file;
-		$this->dir  = dirname( $file );
 	}
 
 	/**
@@ -48,10 +40,9 @@ class Bootstrap {
 	 * @return void
 	 */
 	public function run() {
-		require_once $this->dir . '/vendor/autoload.php';
 		add_action(
 			'init',
-			function() {
+			function () {
 				load_plugin_textdomain( 'edd-sl-updater' );
 			}
 		);

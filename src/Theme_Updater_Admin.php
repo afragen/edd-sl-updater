@@ -20,12 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Theme_Updater_Admin extends Settings {
 	use License_Actions;
 
-	/**
-	 * Variables required for the theme updater
-	 *
-	 * @since 1.0.0
-	 * @var string
-	 */
+	// phpcs:disable Squiz.Commenting.VariableComment.Missing
 	protected $api_url     = null;
 	protected $slug        = null;
 	protected $item_name   = null;
@@ -37,6 +32,7 @@ class Theme_Updater_Admin extends Settings {
 	protected $renew_url   = null;
 	protected $strings     = null;
 	protected $data        = null;
+	// phpcs:enable
 
 	/**
 	 * Class constructor.
@@ -123,7 +119,7 @@ class Theme_Updater_Admin extends Settings {
 			[
 				'api_url'   => $this->api_url,
 				'version'   => $this->version,
-				'license'   => trim( get_option( $this->slug . '_license_key' ) ),
+				'license'   => $this->license,
 				'item_name' => $this->item_name,
 				'item_id'   => $this->item_id,
 				'author'    => $this->author,
@@ -182,7 +178,7 @@ class Theme_Updater_Admin extends Settings {
 		unset( $themes->themes->$parent, $themes->themes->$child );
 
 		// Encode the updated JSON response.
-		$r['body']['themes'] = json_encode( $themes );
+		$r['body']['themes'] = wp_json_encode( $themes );
 
 		return $r;
 	}

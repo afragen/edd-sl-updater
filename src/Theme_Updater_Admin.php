@@ -20,12 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Theme_Updater_Admin extends Settings {
 	use License_Actions;
 
-	/**
-	 * Variables required for the theme updater
-	 *
-	 * @since 1.0.0
-	 * @var string
-	 */
+	// phpcs:disable Squiz.Commenting.VariableComment.Missing
 	protected $api_url     = null;
 	protected $slug        = null;
 	protected $item_name   = null;
@@ -37,6 +32,7 @@ class Theme_Updater_Admin extends Settings {
 	protected $renew_url   = null;
 	protected $strings     = null;
 	protected $data        = null;
+	// phpcs:enable
 
 	/**
 	 * Class constructor.

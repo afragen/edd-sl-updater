@@ -42,7 +42,7 @@ class Bootstrap {
 	public function run() {
 		add_action(
 			'init',
-			function() {
+			function () {
 				load_plugin_textdomain( 'edd-sl-updater' );
 			}
 		);

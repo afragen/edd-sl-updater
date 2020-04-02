@@ -15,11 +15,7 @@ namespace EDD\Software_Licensing\Updater;
 class Theme_Updater {
 	use API_Common;
 
-	/**
-	 * Variables.
-	 *
-	 * @var string
-	 */
+	// phpcs:disable Squiz.Commenting.VariableComment.Missing
 	private $api_url      = null;
 	private $response_key = null;
 	private $slug         = null;
@@ -27,6 +23,7 @@ class Theme_Updater {
 	private $version      = null;
 	private $author       = null;
 	private $strings      = null;
+	// phpcs:enable
 
 	/**
 	 * Class constructor.
@@ -100,18 +97,18 @@ class Theme_Updater {
 		if ( version_compare( $this->version, $api_response->new_version, '<' ) ) {
 			echo '<div id="update-nag">';
 			printf(
-				$this->strings['update-available'],
-				$theme->get( 'Name' ),
-				$api_response->new_version,
+				wp_kses_post( $this->strings['update-available'] ),
+				esc_attr( $theme->get( 'Name' ) ),
+				esc_attr( $api_response->new_version ),
 				// $api_response->url . '#TB_inline?width=640&amp;inlineId=' . $this->slug . '_changelog',
-				$api_response->url . '&TB_iframe=true&width=1024&width=800',
-				$theme->get( 'Name' ),
-				$update_url,
-				$update_onclick
+				esc_url( $api_response->url . '&TB_iframe=true&width=1024&width=800' ),
+				esc_attr( $theme->get( 'Name' ) ),
+				esc_url( $update_url ),
+				esc_attr( $update_onclick )
 			);
 			echo '</div>';
-			echo '<div id="' . $this->slug . '_changelog" style="display:none;">';
-			echo esc_html( wpautop( $api_response->sections['changelog'] ) );
+			echo '<div id="' . esc_attr( $this->slug ) . '_changelog" style="display:none;">';
+			echo wp_kses_post( wpautop( $api_response->sections['changelog'] ) );
 			echo '</div>';
 		}
 	}

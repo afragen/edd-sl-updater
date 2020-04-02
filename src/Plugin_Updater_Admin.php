@@ -20,11 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin_Updater_Admin extends Settings {
 	use License_Actions;
 
-	/**
-	 * Variables.
-	 *
-	 * @var string|array
-	 */
+	// phpcs:disable Squiz.Commenting.VariableComment.Missing
 	protected $api_url     = null;
 	protected $api_data    = [];
 	protected $item_name   = null;
@@ -38,6 +34,7 @@ class Plugin_Updater_Admin extends Settings {
 	protected $cache_key   = null;
 	protected $strings     = null;
 	protected $data        = null;
+	// phpcs:enable
 
 	/**
 	 * Class constructor.

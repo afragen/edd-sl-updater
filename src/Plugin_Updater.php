@@ -271,18 +271,15 @@ class Plugin_Updater {
 			],
 		];
 
-		$cache_key = 'edd_api_request_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
-		$cache_key = $this->cache_key;
-
 		// Get the transient where we store the api request for this plugin for 24 hours.
-		$edd_api_request_transient = $this->get_cached_version_info( $cache_key );
+		$edd_api_request_transient = $this->get_cached_version_info();
 
 		// If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
 		if ( empty( $edd_api_request_transient ) ) {
 			$api_response = $this->api_request( $to_send );
 
 			// Expires in 3 hours.
-			$this->set_version_info_cache( $api_response, $cache_key );
+			$this->set_version_info_cache( $api_response );
 
 			if ( false !== $api_response ) {
 				$_data = $api_response;
@@ -470,12 +467,9 @@ class Plugin_Updater {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$data = $edd_plugin_data[ sanitize_file_name( wp_unslash( $_REQUEST['slug'] ) ) ];
-		$beta = ! empty( $data['beta'] ) ? true : false;
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' );
-		$cache_key    = $this->cache_key;
-		$version_info = $this->get_cached_version_info( $cache_key );
+		$data         = $edd_plugin_data[ sanitize_file_name( wp_unslash( $_REQUEST['slug'] ) ) ];
+		$beta         = ! empty( $data['beta'] ) ? true : false;
+		$version_info = $this->get_cached_version_info();
 
 		if ( false === $version_info ) {
 			$api_params = [
@@ -503,7 +497,7 @@ class Plugin_Updater {
 				}
 			}
 
-			$this->set_version_info_cache( $version_info, $cache_key );
+			$this->set_version_info_cache( $version_info );
 		}
 
 		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {

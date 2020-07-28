@@ -128,6 +128,9 @@ class Theme_Updater {
 			// See issue 1463 on Github in the Software Licensing Repo.
 			$update_data['theme'] = $this->slug;
 
+			// Add for auto update links, WP 5.5.
+			$update_data['update-available'] = true;
+
 			$transient->response[ $this->slug ] = $update_data;
 		}
 

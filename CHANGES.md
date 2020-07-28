@@ -14,3 +14,5 @@
 * update examples for `afragen/wp-dependency-installer:^3`
 * sanitize, escape & ignore
 * remove some unnecessary function specific `$cache_key` references, [#1607](https://github.com/easydigitaldownloads/EDD-Software-Licensing/issues/1607)
+* add `update-available` to update transient so auto update link displays, WP 5.5
+* add plugin data to `$transient->no_update` so auto update link displays

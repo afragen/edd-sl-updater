@@ -110,12 +110,18 @@ class Plugin_Updater {
 		}
 
 		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
+			// Make sure the plugin property is set to the plugin's file/location.
+			// See issue 1463 on Software Licensing's GitHub repo.
+			$version_info->{'plugin'} = $this->file;
+
+			// Add for auto update link, WP 5.5.
+			$version_info->{'update-available'} = true;
+
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 				$transient->response[ $this->file ] = $version_info;
 			} else {
 				// Make sure to set the `no_update` array.
 				$transient->no_update[ $this->file ] = $version_info;
-				$transient->response[ $this->file ]->plugin = $this->file;
 			}
 
 			$transient->last_checked           = time();

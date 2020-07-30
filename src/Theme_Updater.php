@@ -123,15 +123,18 @@ class Theme_Updater {
 	 */
 	public function theme_update_transient( $transient ) {
 		$update_data = $this->check_for_update();
-		if ( $update_data ) {
-			// Make sure the theme property is set.
-			// See issue 1463 on Github in the Software Licensing Repo.
-			$update_data['theme'] = $this->slug;
 
-			// Add for auto update links, WP 5.5.
-			$update_data['update-available'] = true;
+		// Make sure the theme property is set.
+		// See issue 1463 on Github in the Software Licensing Repo.
+		$update_data['theme'] = $this->slug;
 
+		// Add for auto update links, WP 5.5.
+		$update_data['update-available'] = true;
+
+		if ( version_compare( $this->version, $update_data['new_version'], '<' ) ) {
 			$transient->response[ $this->slug ] = $update_data;
+		} else {
+			$transient->no_response[ $this->slug ] = $update_data;
 		}
 
 		return $transient;
@@ -187,10 +190,6 @@ class Theme_Updater {
 				$update_data->sections = maybe_unserialize( $update_data->sections );
 				set_transient( $this->response_key, $update_data, strtotime( '+12 hours', time() ) );
 			}
-		}
-
-		if ( version_compare( $this->version, $update_data->new_version, '>=' ) ) {
-			return false;
 		}
 
 		return (array) $update_data;

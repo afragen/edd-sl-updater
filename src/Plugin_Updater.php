@@ -68,7 +68,7 @@ class Plugin_Updater {
 	 */
 	public function load_hooks() {
 		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
-		add_filter( 'plugins_api', [ $this, 'plugins_api_filter' ], 10, 3 );
+		add_filter( 'plugins_api', [ $this, 'plugins_api' ], 10, 3 );
 	}
 
 	/**
@@ -149,16 +149,14 @@ class Plugin_Updater {
 	}
 
 	/**
-	 * Updates information on the "View version x.x details" page with custom data.
-	 *
-	 * @uses api_request()
+	 * Updates information on the "View version x.x details" and "View details" page with custom data.
 	 *
 	 * @param  mixed  $data   Default false.
 	 * @param  string $action The type of information being requested from the Plugin Installation API.
 	 * @param  object $args   Plugin API arguments.
 	 * @return object $data
 	 */
-	public function plugins_api_filter( $data, $action = '', $args = null ) {
+	public function plugins_api( $data, $action = '', $args = null ) {
 		if ( 'plugin_information' !== $action ) {
 			return $data;
 		}

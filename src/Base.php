@@ -71,7 +71,7 @@ trait Base {
 		}
 		$hours = 12;
 		if ( ! $repo ) {
-			$repo = isset( $this->type->slug ) ? $this->type->slug : 'edd-sl';
+			$repo = isset( $this->slug ) ? $this->slug : 'edd-sl';
 		}
 		$cache_key = 'edd-sl-' . md5( $repo );
 		$timeout   = $timeout ? $timeout : '+' . $hours . ' hours';

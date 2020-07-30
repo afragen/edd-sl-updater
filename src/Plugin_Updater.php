@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Plugin_Updater {
 	use API_Common;
+	use Base;
 
 	// phpcs:disable Squiz.Commenting.VariableComment.Missing
 	private $api_url              = null;
@@ -53,6 +54,11 @@ class Plugin_Updater {
 		$this->cache_key                = $args['cache_key'];
 		$this->strings                  = $strings;
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
+
+		$response = $this->get_repo_cache( $this->slug );
+		if ( ! $response || ! isset( $response['data'] ) ) {
+			$this->set_repo_cache( 'data', $args, $this->slug );
+		}
 	}
 
 	/**
@@ -63,8 +69,6 @@ class Plugin_Updater {
 	public function load_hooks() {
 		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
 		add_filter( 'plugins_api', [ $this, 'plugins_api_filter' ], 10, 3 );
-		remove_action( 'after_plugin_row_' . $this->file, 'wp_plugin_update_row', 10 );
-		add_action( 'after_plugin_row_' . $this->file, [ $this, 'show_update_notification' ], 10, 2 );
 		add_action( 'admin_init', [ $this, 'show_changelog' ] );
 	}
 
@@ -82,170 +86,67 @@ class Plugin_Updater {
 	 * @return array Modified update array with custom plugin data.
 	 */
 	public function check_update( $transient ) {
-		global $pagenow;
-
 		if ( ! is_object( $transient ) ) {
 			$transient = new \stdClass();
 		}
 
-		if ( 'plugins.php' === $pagenow && is_multisite() ) {
-			return $transient;
+		// if ( ! empty( $transient->response )
+		// && ( ! empty( $transient->response[ $this->file ] ) || ! empty( $transient->no_response[ $this->file ] ) )
+		// && false === $this->wp_override
+		// ) {
+		// return $transient;
+		// }
+
+		$response = $this->get_repo_cache( $this->slug );
+
+		// TODO: use $this->wp_override.
+		if ( ! $response || ! isset( $response['transient'] ) ) {
+			$current = $this->get_repo_api_data();
+		} else {
+			$current = $response['transient'];
 		}
 
-		if ( ! empty( $transient->response ) && ! empty( $transient->response[ $this->file ] ) && false === $this->wp_override ) {
-			return $transient;
+		if ( version_compare( $this->version, $current->new_version, '<' ) ) {
+			$transient->response[ $this->file ] = $current;
+		} else {
+			$transient->no_update[ $this->file ] = $current;
 		}
+		$transient->last_checked           = time();
+		$transient->checked[ $this->file ] = $this->version;
 
+		return $transient;
+	}
+
+	/**
+	 * Get repo API data from store.
+	 * Save to cache.
+	 *
+	 * @return \stdClass
+	 */
+	public function get_repo_api_data() {
 		$version_info = $this->get_cached_version_info();
 
-		if ( false === $version_info ) {
+		if ( ! $version_info ) {
 			$version_info = $this->api_request(
 				[
 					'slug' => $this->slug,
 					'beta' => $this->beta,
 				]
 			);
-
-			$this->set_version_info_cache( $version_info );
 		}
 
-		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
-			// Make sure the plugin property is set to the plugin's file/location.
-			// See issue 1463 on Software Licensing's GitHub repo.
-			$version_info->{'plugin'} = $this->file;
+		// Make sure the plugin property is set to the plugin's file/location.
+		// See issue 1463 on Software Licensing's GitHub repo.
+		$version_info->{'plugin'} = $this->file;
 
-			// Add for auto update link, WP 5.5.
-			$version_info->{'update-available'} = true;
+		// Add for auto update link, WP 5.5.
+		$version_info->{'update-available'} = true;
 
-			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$transient->response[ $this->file ] = $version_info;
-			} else {
-				// Make sure to set the `no_update` array.
-				$transient->no_update[ $this->file ] = $version_info;
-			}
+		$version_info = $this->convert_sections_to_array( $version_info );
+		$this->set_version_info_cache( $version_info );
+		$this->set_repo_cache( 'transient', $version_info, $this->slug );
 
-			$transient->last_checked           = time();
-			$transient->checked[ $this->file ] = $this->version;
-		}
-
-		return $transient;
-	}
-
-	/**
-	 * Show update notification row.
-	 *
-	 * Needed for multisite subsites, because WP won't tell you otherwise!
-	 *
-	 * @param string $file   Plugin file.
-	 * @param array  $plugin Plugin data.
-	 */
-	public function show_update_notification( $file, $plugin ) {
-		if ( is_network_admin() ) {
-			return;
-		}
-
-		if ( ! current_user_can( 'update_plugins' ) ) {
-			return;
-		}
-
-		if ( ! is_multisite() ) {
-			return;
-		}
-
-		if ( $this->file !== $file ) {
-			return;
-		}
-
-		// Remove our filter on the site transient.
-		remove_filter( 'site_transient_update_plugins', [ $this, 'check_update' ], 10 );
-
-		$update_cache = get_site_transient( 'update_plugins' );
-		$update_cache = is_object( $update_cache ) ? $update_cache : new stdClass();
-
-		if ( empty( $update_cache->response ) || empty( $update_cache->response[ $this->file ] ) ) {
-			$version_info = $this->get_cached_version_info();
-
-			if ( false === $version_info ) {
-				$version_info = $this->api_request(
-					[
-						'slug' => $this->slug,
-						'beta' => $this->beta,
-					]
-				);
-
-				// Since we disabled our filter for the transient, we aren't running our object conversion on banners, sections, or icons. Do this now.
-				if ( isset( $version_info->banners ) && ! is_array( $version_info->banners ) ) {
-					$version_info->banners = $this->convert_object_to_array( $version_info->banners );
-				}
-				if ( isset( $version_info->contributors ) && ! is_array( $version_info->contrbutors ) ) {
-					$version_info->contributors = $this->convert_object_to_array( $version_info->contributors );
-				}
-				if ( isset( $version_info->sections ) && ! is_array( $version_info->sections ) ) {
-					$version_info->sections = $this->convert_object_to_array( $version_info->sections );
-				}
-				if ( isset( $version_info->icons ) && ! is_array( $version_info->icons ) ) {
-					$version_info->icons = $this->convert_object_to_array( $version_info->icons );
-				}
-
-				$this->set_version_info_cache( $version_info );
-			}
-
-			if ( ! is_object( $version_info ) ) {
-				return;
-			}
-
-			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$update_cache->response[ $this->file ] = $version_info;
-			}
-
-			$update_cache->last_checked           = time();
-			$update_cache->checked[ $this->file ] = $this->version;
-
-			set_site_transient( 'update_plugins', $update_cache );
-		} else {
-			$version_info = $update_cache->response[ $this->file ];
-		}
-
-		// Restore our filter.
-		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
-
-		if ( ! empty( $update_cache->response[ $this->file ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
-			// build a plugin list row, with update notification.
-			$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-			// <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
-			echo wp_kses_post( '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">' );
-			echo '<td colspan="3" class="plugin-update colspanchange">';
-			echo '<div class="update-message notice inline notice-warning notice-alt">';
-
-			$changelog_link = self_admin_url( 'index.php?edd_sl_action=view_plugin_changelog&plugin=' . $this->file . '&slug=' . $this->slug . '&TB_iframe=true&width=772&height=911' );
-
-			if ( empty( $version_info->download_link ) ) {
-				printf(
-					/* translators: %1: item name, %2: open tag, %3: version number, %4: close tag */
-					esc_html__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', 'edd-sl-updater' ),
-					esc_html( $version_info->name ),
-					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
-					esc_html( $version_info->new_version ),
-					'</a>'
-				);
-			} else {
-				printf(
-					/* translators: %1: item name, %2: open tag, %3: version number, %4: close tag, %5: open tag, %6: close tag */
-					esc_html__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', 'edd-sl-updater' ),
-					esc_html( $version_info->name ),
-					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
-					esc_html( $version_info->new_version ),
-					'</a>',
-					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->file, 'upgrade-plugin_' . $this->file ) ) . '">',
-					'</a>'
-				);
-			}
-
-			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-			do_action( "in_plugin_update_message-{$file}", $plugin, $version_info );
-
-			echo '</div></td></tr>';
-		}
+		return $version_info;
 	}
 
 	/**
@@ -253,66 +154,28 @@ class Plugin_Updater {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param  mixed  $_data   Default false.
-	 * @param  string $_action The type of information being requested from the Plugin Installation API.
-	 * @param  object $_args   Plugin API arguments.
-	 * @return object $_data
+	 * @param  mixed  $data   Default false.
+	 * @param  string $action The type of information being requested from the Plugin Installation API.
+	 * @param  object $args   Plugin API arguments.
+	 * @return object $data
 	 */
-	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
-		if ( 'plugin_information' !== $_action ) {
-			return $_data;
+	public function plugins_api_filter( $data, $action = '', $args = null ) {
+		if ( 'plugin_information' !== $action ) {
+			return $data;
 		}
 
-		if ( ! isset( $_args->slug ) || ( $this->slug !== $_args->slug ) ) {
-			return $_data;
+		if ( ! isset( $args->slug ) || ( $this->slug !== $args->slug ) ) {
+			return $data;
 		}
 
-		$to_send = [
-			'slug'   => $this->slug,
-			'is_ssl' => is_ssl(),
-			'fields' => [
-				'banners' => [],
-				'reviews' => false,
-				'icons'   => [],
-			],
-		];
-
-		// Get the transient where we store the api request for this plugin for 24 hours.
-		$edd_api_request_transient = $this->get_cached_version_info();
-
-		// If we have no transient-saved value, run the API, set a fresh transient with the API value, and return that value too right now.
-		if ( empty( $edd_api_request_transient ) ) {
-			$api_response = $this->api_request( $to_send );
-
-			// Expires in 3 hours.
-			$this->set_version_info_cache( $api_response );
-
-			if ( false !== $api_response ) {
-				$_data = $api_response;
-			}
+		$response = $this->get_repo_cache( $this->slug );
+		if ( ! $response || ! isset( $response['transient'] ) ) {
+			$data = $this->get_repo_api_data();
 		} else {
-			$_data = $edd_api_request_transient;
+			$data = $response['transient'];
 		}
 
-		// Convert sections into an associative array, since we're getting an object, but Core expects an array.
-		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
-			$_data->sections = $this->convert_object_to_array( $_data->sections );
-		}
-		if ( isset( $_data->contributors ) && ! is_array( $_data->contributors ) ) {
-			$_data->contributors = $this->convert_object_to_array( $_data->contributors );
-		}
-		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
-			$_data->banners = $this->convert_object_to_array( $_data->banners );
-		}
-		if ( isset( $_data->icons ) && ! is_array( $_data->icons ) ) {
-			$_data->icons = $this->convert_object_to_array( $_data->icons );
-		}
-
-		if ( ! isset( $_data->plugin ) ) {
-			$_data->plugin = $this->file;
-		}
-
-		return $_data;
+		return $data;
 	}
 
 	/**
@@ -345,9 +208,8 @@ class Plugin_Updater {
 	 * @return object $array
 	 */
 	public function http_request_args( $args, $url ) {
-		$verify_ssl = $this->verify_ssl();
 		if ( false !== strpos( $url, 'https://' ) && strpos( $url, 'edd_action=package_download' ) ) {
-			$args['sslverify'] = $verify_ssl;
+			$args['sslverify'] = $this->verify_ssl();
 		}
 
 		return $args;
@@ -360,9 +222,7 @@ class Plugin_Updater {
 	 * @return false|object
 	 */
 	private function api_request( $_data ) {
-		global $wp_version, $edd_plugin_url_available;
-
-		$verify_ssl = $this->verify_ssl();
+		global $edd_plugin_url_available;
 
 		// Do a quick status check on this domain if we haven't already checked it.
 		$store_hash = md5( $this->api_url );
@@ -381,7 +241,7 @@ class Plugin_Updater {
 					$test_url,
 					[
 						'timeout'   => $this->health_check_timeout,
-						'sslverify' => $verify_ssl,
+						'sslverify' => $this->verify_ssl(),
 					]
 				);
 				$edd_plugin_url_available[ $store_hash ] = is_wp_error( $response ) ? false : true;

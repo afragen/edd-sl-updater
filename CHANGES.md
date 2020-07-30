@@ -16,3 +16,5 @@
 * remove some unnecessary function specific `$cache_key` references, [#1607](https://github.com/easydigitaldownloads/EDD-Software-Licensing/issues/1607)
 * add `update-available` to update transient so auto update link displays, WP 5.5
 * add plugin data to `$transient->no_update` so auto update link displays
+* refactor to use cache
+* remove calling custom update meta row

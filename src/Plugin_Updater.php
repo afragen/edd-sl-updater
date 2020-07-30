@@ -69,7 +69,6 @@ class Plugin_Updater {
 	public function load_hooks() {
 		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
 		add_filter( 'plugins_api', [ $this, 'plugins_api_filter' ], 10, 3 );
-		add_action( 'admin_init', [ $this, 'show_changelog' ] );
 	}
 
 	/**
@@ -304,73 +303,6 @@ class Plugin_Updater {
 		}
 
 		return $request;
-	}
-
-	/**
-	 * Show the changelog.
-	 *
-	 * @return void
-	 */
-	public function show_changelog() {
-		global $edd_plugin_data;
-
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) {
-			return;
-		}
-
-		if ( empty( $_REQUEST['plugin'] ) ) {
-			return;
-		}
-
-		if ( empty( $_REQUEST['slug'] ) ) {
-			return;
-		}
-		// phpcs:enable
-
-		if ( ! current_user_can( 'update_plugins' ) ) {
-			wp_die( esc_html__( 'You do not have permission to install plugin updates.', 'edd-sl-updater' ), esc_html__( 'Error', 'edd-sl-updater' ), [ 'response' => 403 ] );
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$data         = $edd_plugin_data[ sanitize_file_name( wp_unslash( $_REQUEST['slug'] ) ) ];
-		$beta         = ! empty( $data['beta'] ) ? true : false;
-		$version_info = $this->get_cached_version_info();
-
-		if ( false === $version_info ) {
-			$api_params = [
-				'edd_action' => 'get_version',
-				'item_name'  => isset( $data['item_name'] ) ? $data['item_name'] : false,
-				'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				'slug'       => sanitize_file_name( wp_unslash( $_REQUEST['slug'] ) ),
-				'author'     => $data['author'],
-				'url'        => home_url(),
-				'beta'       => ! empty( $data['beta'] ),
-			];
-
-			$version_info = $this->get_api_response( $this->api_url, $api_params );
-
-			if ( ! empty( $version_info ) && isset( $version_info->sections ) ) {
-				$version_info->sections = maybe_unserialize( $version_info->sections );
-			} else {
-				$version_info = false;
-			}
-
-			if ( ! empty( $version_info ) ) {
-				foreach ( $version_info->sections as $key => $section ) {
-					$version_info->$key = (array) $section;
-				}
-			}
-
-			$this->set_version_info_cache( $version_info );
-		}
-
-		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:#fff;padding:10px;">' . esc_attr( $version_info->sections['changelog'] ) . '</div>';
-		}
-
-		exit;
 	}
 
 	/**

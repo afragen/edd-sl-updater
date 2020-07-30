@@ -85,14 +85,14 @@ trait Base {
 	}
 
 	/**
-	 * Convert sections from object to array.
+	 * Convert sections from object to associative array.
+	 * Core expects an array.
 	 *
 	 * @param \stdClass $data Data from API.
 	 *
 	 * @return \stdClass
 	 */
 	public function convert_sections_to_array( $data ) {
-		// Convert sections into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $data->sections ) && is_object( $data->sections ) ) {
 			$data->sections = $this->convert_object_to_array( $data->sections );
 		}

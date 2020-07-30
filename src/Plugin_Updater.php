@@ -69,6 +69,27 @@ class Plugin_Updater {
 	public function load_hooks() {
 		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
 		add_filter( 'plugins_api', [ $this, 'plugins_api' ], 10, 3 );
+		add_action( 'shutdown', [ $this, 'update_transient' ] );
+	}
+
+	/**
+	 * Update 'update_plugins' transient.
+	 *
+	 * @return void
+	 */
+	public function update_transient() {
+		$transients = $this->get_repo_cache( 'transients' );
+		if ( $transients ) {
+			$transient = $transients['transient'];
+		}
+		$current = \get_site_transient( 'update_plugins' );
+
+		$response  = array_diff_key( $transient->response, $current->response );
+		$no_update = array_diff_key( $transient->no_update, $current->no_update );
+
+		if ( empty( $response ) && empty( $no_update ) ) {
+			\set_site_transient( 'update_transient', $current );
+		}
 	}
 
 	/**
@@ -112,6 +133,17 @@ class Plugin_Updater {
 		}
 		$transient->last_checked           = time();
 		$transient->checked[ $this->file ] = $this->version;
+
+		$transients = $this->get_repo_cache( 'transients' );
+		if ( ! $transients ) {
+			$this->set_repo_cache( 'transient', $transient, 'transients' );
+		} else {
+			if ( ! \array_key_exists( $this->file, $transients['transient']->response )
+			&& ! \array_key_exists( $this->file, $transients['transient']->no_update )
+			) {
+				$this->set_repo_cache( 'transient', $transient, 'transients' );
+			}
+		}
 
 		return $transient;
 	}

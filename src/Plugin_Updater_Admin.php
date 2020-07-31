@@ -120,7 +120,9 @@ class Plugin_Updater_Admin extends Settings {
 	 * @return void
 	 */
 	public function updater() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		// Kludge to override capability check when doing cron.
+		$doing_cron = defined('DOING_CRON') && DOING_CRON;
+		if ( ! current_user_can( 'manage_options' ) && ! $doing_cron ) {
 			return;
 		}
 

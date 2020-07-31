@@ -62,7 +62,7 @@ class Theme_Updater_Admin extends Settings {
 		$this->item_id     = $config['item_id'];
 		$this->download_id = $config['download_id'];
 		$this->slug        = sanitize_key( $config['slug'] );
-		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_option( $this->slug . '_license_key' ) );
+		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_site_option( $this->slug . '_license_key' ) );
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
 		$this->renew_url   = $config['renew_url'];
@@ -113,7 +113,7 @@ class Theme_Updater_Admin extends Settings {
 		}
 
 		// If there is no valid license key status, don't allow updates.
-		if ( 'valid' !== get_option( $this->slug . '_license_key_status', false ) ) {
+		if ( 'valid' !== get_site_option( $this->slug . '_license_key_status', false ) ) {
 			return;
 		}
 
@@ -143,7 +143,7 @@ class Theme_Updater_Admin extends Settings {
 		}
 
 		// If download_id was passed in the config, a renewal link can be constructed.
-		$license_key = trim( get_option( $this->slug . '_license_key', false ) );
+		$license_key = trim( get_site_option( $this->slug . '_license_key', false ) );
 		if ( ! empty( $this->download_id ) && $license_key ) {
 			$url  = esc_url( $this->api_url );
 			$url .= '/checkout/?edd_license_key=' . $license_key . '&download_id=' . $this->download_id;

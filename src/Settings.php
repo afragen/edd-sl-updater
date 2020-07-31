@@ -122,7 +122,7 @@ class Settings {
 				if ( false !== strpos( $option, '_license_key' ) ) {
 					$slug  = str_replace( '_license_key', '', $option );
 					$value = $this->sanitize_license( $slug, $value );
-					update_option( sanitize_key( $option ), sanitize_text_field( $value ) );
+					update_site_option( sanitize_key( $option ), sanitize_text_field( $value ) );
 					delete_transient( $slug . '_license_message' );
 				}
 			}
@@ -139,9 +139,9 @@ class Settings {
 	 * @return string $new
 	 */
 	public function sanitize_license( $slug, $new ) {
-		$old = get_option( $slug . '_license_key' );
+		$old = get_site_option( $slug . '_license_key' );
 		if ( $old && $old !== $new ) {
-			delete_option( $this->slug . '_license_key_status' );
+			delete_site_option( $this->slug . '_license_key_status' );
 			delete_transient( $this->slug . '_license_message' );
 		}
 
@@ -153,7 +153,7 @@ class Settings {
 	 */
 	public function license_page() {
 		$license = $this->license;
-		$status  = get_option( $this->slug . '_license_key_status', false );
+		$status  = get_site_option( $this->slug . '_license_key_status', false );
 
 		// Checks license status to display under license key.
 		if ( ! $license ) {

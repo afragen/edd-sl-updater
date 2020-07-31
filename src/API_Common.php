@@ -76,7 +76,7 @@ trait API_Common {
 	 * @return string $message License status message.
 	 */
 	public function check_license( $slug ) {
-		$license = trim( get_option( $slug . '_license_key' ) );
+		$license = trim( get_site_option( $slug . '_license_key' ) );
 
 		$api_params = [
 			'edd_action' => 'check_license',
@@ -97,13 +97,13 @@ trait API_Common {
 
 		// We need to update the license status at the same time the message isupdated.
 		if ( $license_data && isset( $license_data->license ) ) {
-			update_option( $slug . '_license_key_status', $license_data->license );
+			update_site_option( $slug . '_license_key_status', $license_data->license );
 		}
 
 		// Get expire date.
 		$expires = false;
 		if ( isset( $license_data->expires ) && 'lifetime' !== $license_data->expires ) {
-			$expires    = date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, time() ) );
+			$expires    = date_i18n( get_site_option( 'date_format' ), strtotime( $license_data->expires, time() ) );
 			$renew_link = '<a href="' . esc_url( $this->get_renewal_link() ) . '"target="_blank">' . esc_attr( $this->strings['renew'] ) . '</a>';
 		} elseif ( isset( $license_data->expires ) && 'lifetime' === $license_data->expires ) {
 			$expires = 'lifetime';

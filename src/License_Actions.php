@@ -73,7 +73,7 @@ trait License_Actions {
 				case 'expired':
 					$message = sprintf(
 						$this->strings['license-key-expired-%s'],
-						date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, time() ) )
+						date_i18n( get_site_option( 'date_format' ), strtotime( $license_data->expires, time() ) )
 					);
 					break;
 				case 'disabled':
@@ -99,7 +99,7 @@ trait License_Actions {
 			}
 		}
 		if ( isset( $license_data, $license_data->license ) ) {
-			update_option( $this->slug . '_license_key_status', $license_data->license );
+			update_site_option( $this->slug . '_license_key_status', $license_data->license );
 			delete_transient( $this->slug . '_license_message' );
 		}
 		if ( ! empty( $message ) ) {
@@ -150,7 +150,7 @@ trait License_Actions {
 			$message = $this->strings['error'];
 		}
 		if ( ! isset( $license_data->license ) || 'deactivated' === $license_data->license ) {
-			delete_option( $this->slug . '_license_key_status' );
+			delete_site_option( $this->slug . '_license_key_status' );
 			delete_transient( $this->slug . '_license_message' );
 		}
 		if ( ! empty( $message ) ) {

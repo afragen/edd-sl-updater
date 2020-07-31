@@ -16,6 +16,6 @@
 * remove some unnecessary function specific `$cache_key` references, [#1607](https://github.com/easydigitaldownloads/EDD-Software-Licensing/issues/1607)
 * add `update-available` to update transient so auto update link displays, WP 5.5
 * add plugin data to `$transient->no_update` so auto update link displays
-* refactor to use cache
 * remove calling custom update meta row
 * plugin updating via WP 5.5 auto-updating works, needed to bypass caps check during wp-cron 🤔
+* major refactor to combine common functions into `class Updater_Common` and `class API_Common`

@@ -110,7 +110,7 @@ class Theme_Updater_Admin extends Settings {
 	 */
 	public function updater() {
 		// Kludge to override capability check when doing cron.
-		$doing_cron = defined('DOING_CRON') && DOING_CRON;
+		$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
 		if ( ! current_user_can( 'manage_options' ) && ! $doing_cron ) {
 			return;
 		}

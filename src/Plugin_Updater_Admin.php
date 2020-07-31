@@ -137,6 +137,7 @@ class Plugin_Updater_Admin extends Settings {
 				'api_data'    => $this->api_data,
 				'name'        => $this->item_name,
 				'file'        => $this->file,
+				'item_name'   => $this->item_name,
 				'item_id'     => $this->item_id,
 				'slug'        => $this->slug,
 				'version'     => $this->version,

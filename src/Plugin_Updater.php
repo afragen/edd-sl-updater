@@ -44,10 +44,25 @@ class Plugin_Updater {
 	public function __construct( $args = [], $strings = [] ) {
 		global $edd_plugin_data;
 
+		$defaults = [
+			'api_url'   => 'http://easydigitaldownloads.com',
+			'slug'      => get_stylesheet(),
+			'item_name' => '',
+			'license'   => '',
+			'version'   => '',
+			'author'    => '',
+			'beta'      => false,
+		];
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$this->license                  = $args['license'];
 		$this->api_url                  = $args['api_url'];
 		$this->api_data                 = $args;
 		$this->file                     = $args['file'];
 		$this->slug                     = $args['slug'];
+		$this->item_name                = $args['item_name'];
+		$this->author                   = $args['author'];
 		$this->version                  = $args['version'];
 		$this->wp_override              = $args['wp_override'];
 		$this->beta                     = $args['beta'];

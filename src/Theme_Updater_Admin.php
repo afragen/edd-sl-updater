@@ -32,6 +32,7 @@ class Theme_Updater_Admin extends Settings {
 	protected $renew_url   = null;
 	protected $strings     = null;
 	protected $data        = null;
+	protected $cache_key   = null;
 	// phpcs:enable
 
 	/**
@@ -63,6 +64,7 @@ class Theme_Updater_Admin extends Settings {
 		$this->download_id = $config['download_id'];
 		$this->slug        = sanitize_key( $config['slug'] );
 		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_site_option( $this->slug . '_license_key' ) );
+		$this->api_data    = $config;
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
 		$this->renew_url   = $config['renew_url'];
@@ -121,12 +123,14 @@ class Theme_Updater_Admin extends Settings {
 		( new Theme_Updater(
 			[
 				'api_url'   => $this->api_url,
+				'api_data'  => $this->api_data,
 				'version'   => $this->version,
 				'license'   => $this->license,
 				'item_name' => $this->item_name,
 				'item_id'   => $this->item_id,
 				'author'    => $this->author,
 				'beta'      => $this->beta,
+				'cache_key' => $this->cache_key,
 			],
 			$this->strings
 		) )->load_hooks();

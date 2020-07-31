@@ -17,13 +17,16 @@ class Theme_Updater {
 	use Updater_Common;
 
 	// phpcs:disable Squiz.Commenting.VariableComment.Missing
-	private $api_url      = null;
-	private $response_key = null;
-	private $slug         = null;
-	private $license_key  = null;
-	private $version      = null;
-	private $author       = null;
-	private $strings      = null;
+	private $api_url              = null;
+	private $api_data             = [];
+	private $response_key         = null;
+	private $slug                 = null;
+	private $license_key          = null;
+	private $cache_key            = null;
+	private $version              = null;
+	private $author               = null;
+	private $strings              = null;
+	private $health_check_timeout = 5;
 	// phpcs:enable
 
 	/**
@@ -45,13 +48,15 @@ class Theme_Updater {
 
 		$args = wp_parse_args( $args, $defaults );
 
+		$this->api_url      = $args['api_url'];
+		$this->api_data     = $args;
 		$this->license      = $args['license'];
 		$this->item_name    = $args['item_name'];
 		$this->version      = $args['version'];
 		$this->slug         = sanitize_key( $args['slug'] );
 		$this->author       = $args['author'];
 		$this->beta         = $args['beta'];
-		$this->api_url      = $args['api_url'];
+		$this->cache_key    = $args['cache_key'];
 		$this->response_key = $this->slug . '-' . $this->beta . '-update-response';
 		$this->strings      = $strings;
 	}

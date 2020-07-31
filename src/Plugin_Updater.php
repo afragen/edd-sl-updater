@@ -69,12 +69,7 @@ class Plugin_Updater {
 	/**
 	 * Check for Updates at the defined API endpoint and modify the update array.
 	 *
-	 * This function dives into the update API just when WordPress creates its update array,
-	 * then adds a custom API call and injects the custom plugin data retrieved from the API.
-	 * It is reassembled from parts of the native WordPress plugin update code.
-	 * See wp-includes/update.php line 121 for the original wp_update_plugins() function.
-	 *
-	 * @uses api_request()
+	 * // TODO: figure out what to do with $this->wp_override.
 	 *
 	 * @param  array $transient Update array build by WordPress.
 	 * @return array Modified update array with custom plugin data.
@@ -84,15 +79,7 @@ class Plugin_Updater {
 			$transient = new \stdClass();
 		}
 
-		// TODO: figure out what to do with $this->wp_override.
-
-		$response = $this->get_repo_cache( $this->slug );
-
-		if ( ! $response || ! isset( $response['transient'] ) ) {
-			$current = $this->get_repo_api_data();
-		} else {
-			$current = $response['transient'];
-		}
+		$current = $this->get_repo_api_data();
 
 		if ( version_compare( $this->version, $current->new_version, '<' ) ) {
 			$transient->response[ $this->file ] = $current;
@@ -101,17 +88,6 @@ class Plugin_Updater {
 		}
 		$transient->last_checked           = time();
 		$transient->checked[ $this->file ] = $this->version;
-
-		$transients = $this->get_repo_cache( 'transients' );
-		if ( ! $transients ) {
-			$this->set_repo_cache( 'transient', $transient, 'transients' );
-		} else {
-			if ( ! \array_key_exists( $this->file, $transients['transient']->response )
-			&& ! \array_key_exists( $this->file, $transients['transient']->no_update )
-			) {
-				$this->set_repo_cache( 'transient', $transient, 'transients' );
-			}
-		}
 
 		return $transient;
 	}
@@ -134,7 +110,7 @@ class Plugin_Updater {
 			);
 		}
 
-		// Make sure the plugin property is set to the plugin's file/location.
+		// Make sure the plugin property is set to the plugin's file.
 		// See issue 1463 on Software Licensing's GitHub repo.
 		$version_info->{'plugin'} = $this->file;
 
@@ -143,7 +119,6 @@ class Plugin_Updater {
 
 		$version_info = $this->convert_sections_to_array( $version_info );
 		$this->set_version_info_cache( $version_info );
-		$this->set_repo_cache( 'transient', $version_info, $this->slug );
 
 		return $version_info;
 	}
@@ -165,12 +140,7 @@ class Plugin_Updater {
 			return $data;
 		}
 
-		$response = $this->get_repo_cache( $this->slug );
-		if ( ! $response || ! isset( $response['transient'] ) ) {
-			$data = $this->get_repo_api_data();
-		} else {
-			$data = $response['transient'];
-		}
+		$data = $this->get_repo_api_data();
 
 		return $data;
 	}

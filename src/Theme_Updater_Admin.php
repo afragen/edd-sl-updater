@@ -67,6 +67,7 @@ class Theme_Updater_Admin extends Settings {
 		$this->author      = $config['author'];
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
+		$this->cache_key   = 'edd_sl_' . md5( json_encode( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		// Populate version fallback.
 		if ( empty( $config['version'] ) ) {

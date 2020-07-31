@@ -75,7 +75,7 @@ class Plugin_Updater_Admin extends Settings {
 		$this->version     = $config['version'];
 		$this->wp_override = isset( $config['wp_override'] ) ? (bool) $config['wp_override'] : false;
 		$this->beta        = ! empty( $this->api_data['beta'] ) ? true : false;
-		$this->cache_key   = 'edd_sl_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
+		$this->cache_key   = 'edd_sl_' . md5( json_encode( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 

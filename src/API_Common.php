@@ -179,4 +179,120 @@ trait API_Common {
 		wp_safe_redirect( $location );
 		exit();
 	}
+
+	/**
+	 * Disable SSL verification in order to prevent download update failures.
+	 *
+	 * @param  array  $args Array of HTTP args.
+	 * @param  string $url  URL.
+	 * @return object $array
+	 */
+	public function http_request_args( $args, $url ) {
+		if ( false !== strpos( $url, 'https://' ) && strpos( $url, 'edd_action=package_download' ) ) {
+			$args['sslverify'] = $this->verify_ssl();
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Returns if the SSL of the store should be verified.
+	 *
+	 * @since  1.6.13
+	 * @return bool
+	 */
+	protected function verify_ssl() {
+		return (bool) apply_filters( 'edd_sl_api_request_verify_ssl', true, $this );
+	}
+
+	/**
+	 * Calls the API and, if successful, returns the object delivered by the API.
+	 *
+	 * @param  array $data Parameters for the API action.
+	 * @return false|object
+	 */
+	protected function api_request( $data ) {
+		global $edd_plugin_url_available;
+
+		// Do a quick status check on this domain if we haven't already checked it.
+		$store_hash = md5( $this->api_url );
+		if ( ! is_array( $edd_plugin_url_available ) || ! isset( $edd_plugin_url_available[ $store_hash ] ) ) {
+			$test_url_parts = parse_url( $this->api_url );
+
+			$scheme = ! empty( $test_url_parts['scheme'] ) ? $test_url_parts['scheme'] : 'http';
+			$host   = ! empty( $test_url_parts['host'] ) ? $test_url_parts['host'] : '';
+			$port   = ! empty( $test_url_parts['port'] ) ? ':' . $test_url_parts['port'] : '';
+
+			if ( empty( $host ) ) {
+				$edd_plugin_url_available[ $store_hash ] = false;
+			} else {
+				$test_url                                = $scheme . '://' . $host . $port;
+				$response                                = wp_remote_get(
+					$test_url,
+					[
+						'timeout'   => $this->health_check_timeout,
+						'sslverify' => $this->verify_ssl(),
+					]
+				);
+				$edd_plugin_url_available[ $store_hash ] = is_wp_error( $response ) ? false : true;
+			}
+		}
+
+		if ( false === $edd_plugin_url_available[ $store_hash ] ) {
+			return;
+		}
+
+		$data = array_merge( $this->api_data, $data );
+
+		if ( $this->slug !== $data['slug'] ) {
+			return;
+		}
+
+		/**
+		 * Plugins are not able to update from the store.
+		 * This would cause the store to go into maintence mode as the plugin
+		 * tries to update, likely resulting in a non-responsive site.
+		 *
+		 * @link https://github.com/easydigitaldownloads/easy-digital-downloads/issues/7168
+		 */
+		if ( trailingslashit( home_url() ) === $this->api_url ) {
+			return false; // Don't allow a plugin to ping itself.
+		}
+
+		$api_params = [
+			'edd_action' => 'get_version',
+			'license'    => ! empty( $data['license'] ) ? $data['license'] : '',
+			'item_name'  => isset( $data['name'] ) ? $data['name'] : false,
+			'item_id'    => isset( $data['item_id'] ) ? $data['item_id'] : false,
+			'version'    => isset( $data['version'] ) ? $data['version'] : false,
+			'slug'       => $data['slug'],
+			'author'     => $data['author'],
+			'url'        => home_url(),
+			'beta'       => ! empty( $data['beta'] ),
+		];
+
+		$request = $this->get_api_response( $this->api_url, $api_params );
+
+		if ( $request && isset( $request->sections ) ) {
+			$request->sections = maybe_unserialize( $request->sections );
+		} else {
+			$request = false;
+		}
+
+		if ( $request && isset( $request->banners ) ) {
+			$request->banners = maybe_unserialize( $request->banners );
+		}
+
+		if ( $request && isset( $request->icons ) ) {
+			$request->icons = maybe_unserialize( $request->icons );
+		}
+
+		if ( ! empty( $request->sections ) ) {
+			foreach ( $request->sections as $key => $section ) {
+				$request->$key = (array) $section;
+			}
+		}
+
+		return $request;
+	}
 }

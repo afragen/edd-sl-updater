@@ -46,7 +46,7 @@ class Plugin_Updater {
 
 		$defaults = [
 			'api_url'   => 'http://easydigitaldownloads.com',
-			'slug'      => get_stylesheet(),
+			'slug'      => '',
 			'item_name' => '',
 			'license'   => '',
 			'version'   => '',

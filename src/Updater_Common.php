@@ -114,11 +114,11 @@ trait Updater_Common {
 		}
 
 		$data = [
-			'timeout' => strtotime( '+6 hours', time() ),
+			'timeout' => strtotime( '+12 hours', time() ),
 			'value'   => json_encode( $value ),
 		];
 
-		update_site_option( $cache_key, $data, 'no' );
+		update_site_option( $cache_key, $data );
 	}
 
 	/**

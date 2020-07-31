@@ -18,3 +18,4 @@
 * add plugin data to `$transient->no_update` so auto update link displays
 * refactor to use cache
 * remove calling custom update meta row
+* plugin updating via WP 5.5 auto-updating works, needed to bypass caps check during wp-cron 🤔

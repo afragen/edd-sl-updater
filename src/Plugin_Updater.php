@@ -54,11 +54,6 @@ class Plugin_Updater {
 		$this->cache_key                = $args['cache_key'];
 		$this->strings                  = $strings;
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
-
-		$response = $this->get_repo_cache( $this->slug );
-		if ( ! $response || ! isset( $response['data'] ) ) {
-			$this->set_repo_cache( 'data', $args, $this->slug );
-		}
 	}
 
 	/**
@@ -67,29 +62,8 @@ class Plugin_Updater {
 	 * @return void
 	 */
 	public function load_hooks() {
-		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ] );
-		add_filter( 'plugins_api', [ $this, 'plugins_api' ], 10, 3 );
-		add_action( 'shutdown', [ $this, 'update_transient' ] );
-	}
-
-	/**
-	 * Update 'update_plugins' transient.
-	 *
-	 * @return void
-	 */
-	public function update_transient() {
-		$transients = $this->get_repo_cache( 'transients' );
-		if ( $transients ) {
-			$transient = $transients['transient'];
-		}
-		$current = \get_site_transient( 'update_plugins' );
-
-		$response  = array_diff_key( $transient->response, $current->response );
-		$no_update = array_diff_key( $transient->no_update, $current->no_update );
-
-		if ( empty( $response ) && empty( $no_update ) ) {
-			\set_site_transient( 'update_transient', $current );
-		}
+		add_filter( 'site_transient_update_plugins', [ $this, 'check_update' ], 10, 1 );
+		add_filter( 'plugins_api', [ $this, 'plugins_api' ], 99, 3 );
 	}
 
 	/**
@@ -110,16 +84,10 @@ class Plugin_Updater {
 			$transient = new \stdClass();
 		}
 
-		// if ( ! empty( $transient->response )
-		// && ( ! empty( $transient->response[ $this->file ] ) || ! empty( $transient->no_response[ $this->file ] ) )
-		// && false === $this->wp_override
-		// ) {
-		// return $transient;
-		// }
+		// TODO: figure out what to do with $this->wp_override.
 
 		$response = $this->get_repo_cache( $this->slug );
 
-		// TODO: use $this->wp_override.
 		if ( ! $response || ! isset( $response['transient'] ) ) {
 			$current = $this->get_repo_api_data();
 		} else {

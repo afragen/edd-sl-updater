@@ -152,6 +152,30 @@ trait API_Common {
 	}
 
 	/**
+	 * Constructs a renewal link.
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_renewal_link() {
+		// If a renewal link was passed in the config, use that.
+		if ( ! empty( $this->renew_url ) ) {
+			return $this->renew_url;
+		}
+
+		// If download_id was passed in the config, a renewal link can be constructed.
+		$license_key = trim( get_site_option( $this->slug . '_license_key', false ) );
+		if ( ! empty( $this->download_id ) && $license_key ) {
+			$url  = esc_url( $this->api_url );
+			$url .= '/checkout/?edd_license_key=' . $license_key . '&download_id=' . $this->download_id;
+
+			return $url;
+		}
+
+		// Otherwise return the api_url.
+		return $this->api_url;
+	}
+
+	/**
 	 * Redirect to where we came from.
 	 *
 	 * @param array $error_data Data for error notice.

@@ -130,6 +130,4 @@ class Theme_Updater_Admin extends Settings {
 			$this->strings
 		) )->load_hooks();
 	}
-
-
 }

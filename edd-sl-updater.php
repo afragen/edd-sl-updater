@@ -11,14 +11,14 @@
  * Plugin Name:       EDD Software Licensing Updater
  * Plugin URI:        https://github.com/afragen/edd-sl-updater
  * Description:       A universal updater for EDD Software Licensing products.
- * Version:           0.11.13
+ * Version:           0.11.14
  * Author:            Andy Fragen
  * License:           MIT
  * Network:           true
  * Text Domain:       edd-sl-updater
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/afragen/edd-sl-updater
- * Requires at least: 4.7
+ * Requires at least: 5.2
  * Requires PHP:      5.6
  */
 

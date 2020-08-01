@@ -5,7 +5,7 @@ Plugin URI: https://easydigitaldownloads.com
 Contributors: easydigitaldownloads, afragen
 Donate link: https://easydigitaldownloads.com/donate/
 Tags: easydigitaldownloads, updater
-Requires at least: 4.7
+Requires at least: 5.2
 Requires PHP: 5.6
 Tested up to: 5.5
 Stable Tag: x.x

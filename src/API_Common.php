@@ -319,4 +319,36 @@ trait API_Common {
 
 		return $request;
 	}
+
+	/**
+	 * Disable requests to wp.org repository for this theme.
+	 *
+	 * @since 1.0.0
+	 *
+	 * TODO: Is this necessary, if yes should we implement for plugins too?
+	 *
+	 * @param array  $r   An array of HTTP request arguments.
+	 * @param string $url The request URL.
+	 *
+	 * @return array
+	 */
+	public function disable_wporg_request( $r, $url ) {
+		// If it's not a theme update request, bail.
+		if ( 0 !== strpos( $url, 'https://api.wordpress.org/themes/update-check/1.1/' ) ) {
+			return $r;
+		}
+
+		// Decode the JSON response.
+		$themes = json_decode( $r['body']['themes'] );
+
+		// Remove the active parent and child themes from the check.
+		$parent = get_option( 'template' );
+		$child  = get_option( 'stylesheet' );
+		unset( $themes->themes->$parent, $themes->themes->$child );
+
+		// Encode the updated JSON response.
+		$r['body']['themes'] = wp_json_encode( $themes );
+
+		return $r;
+	}
 }

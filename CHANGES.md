@@ -19,3 +19,4 @@
 * remove calling custom update meta row
 * plugin updating via WP 5.5 auto-updating works, needed to bypass caps check during wp-cron 🤔
 * major refactor to combine common functions into `class Updater_Common` and `class API_Common`
+* move license check to `Updater_Common::update_transient()`

@@ -189,7 +189,10 @@ trait Updater_Common {
 			return $transient;
 		}
 
-		if ( version_compare( $this->version, $current->new_version, '<' ) ) {
+		// If there is no valid license key status, don't allow updates.
+		if ( version_compare( $this->version, $current->new_version, '<' )
+			&& 'valid' === get_site_option( $this->slug . '_license_key_status', false )
+		) {
 			$transient->response[ $file ] = 'plugin' === $type ? $current : (array) $current;
 		} else {
 			$transient->no_update[ $file ] = 'plugin' === $type ? $current : (array) $current;

@@ -115,11 +115,6 @@ class Theme_Updater_Admin extends Settings {
 			return;
 		}
 
-		// If there is no valid license key status, don't allow updates.
-		if ( 'valid' !== get_site_option( $this->slug . '_license_key_status', false ) ) {
-			return;
-		}
-
 		( new Theme_Updater(
 			[
 				'api_url'   => $this->api_url,

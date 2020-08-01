@@ -136,6 +136,8 @@ class Theme_Updater_Admin extends Settings {
 	 *
 	 * @since 1.0.0
 	 *
+	 * TODO: Is this necessary, if yes should we implement for plugins too?
+	 *
 	 * @param array  $r   An array of HTTP request arguments.
 	 * @param string $url The request URL.
 	 *

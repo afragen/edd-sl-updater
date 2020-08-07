@@ -32,6 +32,7 @@ class Theme_Updater_Admin extends Settings {
 	protected $renew_url   = null;
 	protected $strings     = null;
 	protected $data        = null;
+	protected $cache_key   = null;
 	// phpcs:enable
 
 	/**
@@ -62,11 +63,13 @@ class Theme_Updater_Admin extends Settings {
 		$this->item_id     = $config['item_id'];
 		$this->download_id = $config['download_id'];
 		$this->slug        = sanitize_key( $config['slug'] );
-		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_option( $this->slug . '_license_key' ) );
+		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_site_option( $this->slug . '_license_key' ) );
+		$this->api_data    = $config;
 		$this->version     = $config['version'];
 		$this->author      = $config['author'];
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
+		$this->cache_key   = 'edd_sl_' . md5( json_encode( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		// Populate version fallback.
 		if ( empty( $config['version'] ) ) {
@@ -106,80 +109,25 @@ class Theme_Updater_Admin extends Settings {
 	 * Creates the updater class.
 	 */
 	public function updater() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// If there is no valid license key status, don't allow updates.
-		if ( 'valid' !== get_option( $this->slug . '_license_key_status', false ) ) {
+		// Kludge to override capability check when doing cron.
+		$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
+		if ( ! current_user_can( 'manage_options' ) && ! $doing_cron ) {
 			return;
 		}
 
 		( new Theme_Updater(
 			[
 				'api_url'   => $this->api_url,
+				'api_data'  => $this->api_data,
 				'version'   => $this->version,
 				'license'   => $this->license,
 				'item_name' => $this->item_name,
 				'item_id'   => $this->item_id,
 				'author'    => $this->author,
 				'beta'      => $this->beta,
+				'cache_key' => $this->cache_key,
 			],
 			$this->strings
 		) )->load_hooks();
-	}
-
-	/**
-	 * Constructs a renewal link.
-	 *
-	 * @since 1.0.0
-	 */
-	public function get_renewal_link() {
-		// If a renewal link was passed in the config, use that.
-		if ( ! empty( $this->renew_url ) ) {
-			return $this->renew_url;
-		}
-
-		// If download_id was passed in the config, a renewal link can be constructed.
-		$license_key = trim( get_option( $this->slug . '_license_key', false ) );
-		if ( ! empty( $this->download_id ) && $license_key ) {
-			$url  = esc_url( $this->api_url );
-			$url .= '/checkout/?edd_license_key=' . $license_key . '&download_id=' . $this->download_id;
-
-			return $url;
-		}
-
-		// Otherwise return the api_url.
-		return $this->api_url;
-	}
-
-	/**
-	 * Disable requests to wp.org repository for this theme.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $r   An array of HTTP request arguments.
-	 * @param string $url The request URL.
-	 *
-	 * @return array
-	 */
-	public function disable_wporg_request( $r, $url ) {
-		// If it's not a theme update request, bail.
-		if ( 0 !== strpos( $url, 'https://api.wordpress.org/themes/update-check/1.1/' ) ) {
-			return $r;
-		}
-
-		// Decode the JSON response.
-		$themes = json_decode( $r['body']['themes'] );
-
-		// Remove the active parent and child themes from the check.
-		$parent = get_option( 'template' );
-		$child  = get_option( 'stylesheet' );
-		unset( $themes->themes->$parent, $themes->themes->$child );
-
-		// Encode the updated JSON response.
-		$r['body']['themes'] = wp_json_encode( $themes );
-
-		return $r;
 	}
 }

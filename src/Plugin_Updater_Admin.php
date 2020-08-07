@@ -70,12 +70,12 @@ class Plugin_Updater_Admin extends Settings {
 		$this->author      = $config['author'];
 		$this->renew_url   = $config['renew_url'];
 		$this->beta        = $config['beta'];
-		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_option( $this->slug . '_license_key' ) );
+		$this->license     = ! empty( $config['license'] ) ? $config['license'] : trim( get_site_option( $this->slug . '_license_key' ) );
 		$this->api_data    = $config;
 		$this->version     = $config['version'];
 		$this->wp_override = isset( $config['wp_override'] ) ? (bool) $config['wp_override'] : false;
 		$this->beta        = ! empty( $this->api_data['beta'] ) ? true : false;
-		$this->cache_key   = 'edd_sl_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
+		$this->cache_key   = 'edd_sl_' . md5( json_encode( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
 
@@ -120,12 +120,9 @@ class Plugin_Updater_Admin extends Settings {
 	 * @return void
 	 */
 	public function updater() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		// If there is no valid license key status, don't allow updates.
-		if ( 'valid' !== get_option( $this->slug . '_license_key_status', false ) ) {
+		// Kludge to override capability check when doing cron.
+		$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
+		if ( ! current_user_can( 'manage_options' ) && ! $doing_cron ) {
 			return;
 		}
 
@@ -135,6 +132,7 @@ class Plugin_Updater_Admin extends Settings {
 				'api_data'    => $this->api_data,
 				'name'        => $this->item_name,
 				'file'        => $this->file,
+				'item_name'   => $this->item_name,
 				'item_id'     => $this->item_id,
 				'slug'        => $this->slug,
 				'version'     => $this->version,

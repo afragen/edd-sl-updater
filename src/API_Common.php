@@ -263,13 +263,13 @@ trait API_Common {
 		}
 
 		if ( false === $edd_plugin_url_available[ $store_hash ] ) {
-			return;
+			return false;
 		}
 
 		$data = array_merge( $this->api_data, $data );
 
 		if ( $this->slug !== $data['slug'] ) {
-			return;
+			return false;
 		}
 
 		/**

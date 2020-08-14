@@ -79,11 +79,12 @@ trait API_Common {
 		$license = trim( get_site_option( $slug . '_license_key' ) );
 
 		$api_params = [
-			'edd_action' => 'check_license',
-			'license'    => $license,
-			'item_name'  => rawurlencode( $this->item_name ),
-			'item_id'    => $this->item_id,
-			'url'        => home_url(),
+			'edd_action'  => 'check_license',
+			'license'     => $license,
+			'item_name'   => rawurlencode( $this->item_name ),
+			'item_id'     => $this->item_id,
+			'url'         => home_url(),
+			'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : false,
 		];
 
 		$license_data = $this->get_api_response( $this->api_url, $api_params );

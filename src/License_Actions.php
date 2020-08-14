@@ -58,11 +58,12 @@ trait License_Actions {
 
 		// Data to send in our API request.
 		$api_params = [
-			'edd_action' => 'activate_license',
-			'license'    => $this->license,
-			'item_name'  => rawurlencode( $this->item_name ), // the name of our product in EDD.
-			'item_id'    => $this->item_id,
-			'url'        => home_url(),
+			'edd_action'  => 'activate_license',
+			'license'     => $this->license,
+			'item_name'   => rawurlencode( $this->item_name ), // the name of our product in EDD.
+			'item_id'     => $this->item_id,
+			'url'         => home_url(),
+			'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : false,
 		];
 
 		add_filter( 'edd_sl_api_request_verify_ssl', '__return_false' );
@@ -134,11 +135,12 @@ trait License_Actions {
 
 		// data to send in our API request.
 		$api_params = [
-			'edd_action' => 'deactivate_license',
-			'license'    => $this->license,
-			'item_name'  => rawurlencode( $this->item_name ), // the name of our product in EDD.
-			'item_id'    => $this->item_id,
-			'url'        => home_url(),
+			'edd_action'  => 'deactivate_license',
+			'license'     => $this->license,
+			'item_name'   => rawurlencode( $this->item_name ), // the name of our product in EDD.
+			'item_id'     => $this->item_id,
+			'url'         => home_url(),
+			'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : false,
 		];
 
 		// Call the custom API.

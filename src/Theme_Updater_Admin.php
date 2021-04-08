@@ -97,6 +97,15 @@ class Theme_Updater_Admin extends Settings {
 	 */
 	public function load_hooks() {
 		add_action( 'init', [ $this, 'updater' ] );
+		$this->load_settings();
+	}
+
+	/**
+	 * Load hooks for licence settings.
+	 *
+	 * @return void
+	 */
+	public function load_settings() {
 		add_action( 'admin_init', [ $this, 'register_option' ] );
 		add_action( 'admin_init', [ $this, 'license_action' ] );
 		add_action( 'admin_notices', [ $this, 'show_error' ] );

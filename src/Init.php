@@ -39,6 +39,25 @@ class Init {
 	}
 
 	/**
+	 * Universal settings loader.
+	 *
+	 * Load the correct settings from a single function.
+	 *
+	 * @param array $config Configuration data for plugin or theme.
+	 *
+	 * @return void
+	 */
+	public function no_updater( $config ) {
+		( new Settings() )->load_hooks();
+		if ( in_array( 'plugin', $config, true ) ) {
+			( new Plugin_Updater_Admin( $config ) )->load_settings();
+		}
+		if ( in_array( 'theme', $config, true ) ) {
+			( new Theme_Updater_Admin( $config ) )->load_settings();
+		}
+	}
+
+	/**
 	 * Universal updater.
 	 *
 	 * Load the correct updater from a single function.

@@ -21,3 +21,4 @@
 * major refactor to combine common functions into `class Updater_Common` and `class API_Common`
 * move license check to `Updater_Common::update_transient()`
 * add `environment` param per [#1670](https://github.com/easydigitaldownloads/EDD-Software-Licensing/pull/1670/)
+* add an initiation for just using the license settings page.

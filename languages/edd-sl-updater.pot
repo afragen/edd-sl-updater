@@ -1,15 +1,15 @@
-# Copyright (C) 2020 Andy Fragen
+# Copyright (C) 2021 Andy Fragen
 # This file is distributed under the same license as the EDD Software Licensing Updater plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: EDD Software Licensing Updater 0.11.8\n"
+"Project-Id-Version: EDD Software Licensing Updater 0.11.16\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/edd-sl-updater\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-04-02T17:31:00+00:00\n"
+"POT-Creation-Date: 2021-04-08T23:52:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: edd-sl-updater\n"
@@ -39,143 +39,125 @@ msgid "HTTP Error Code"
 msgstr ""
 
 #. translators: %s: item name
-#: src/License_Actions.php:110
-#: src/License_Actions.php:161
+#: src/License_Actions.php:111
+#: src/License_Actions.php:163
 msgid "activate_license-%s"
 msgstr ""
 
-#: src/License_Actions.php:176
+#: src/License_Actions.php:178
 msgid "Theme License"
 msgstr ""
 
-#: src/License_Actions.php:177
+#: src/License_Actions.php:179
 msgid "Plugin License"
 msgstr ""
 
-#: src/License_Actions.php:178
+#: src/License_Actions.php:180
 msgid "Enter your license key."
 msgstr ""
 
-#: src/License_Actions.php:179
+#: src/License_Actions.php:181
 #: src/Settings.php:78
 msgid "License Key"
 msgstr ""
 
-#: src/License_Actions.php:180
+#: src/License_Actions.php:182
 #: src/Settings.php:80
 msgid "License Action"
 msgstr ""
 
-#: src/License_Actions.php:181
+#: src/License_Actions.php:183
 msgid "Deactivate License"
 msgstr ""
 
-#: src/License_Actions.php:182
+#: src/License_Actions.php:184
 msgid "Activate License"
 msgstr ""
 
-#: src/License_Actions.php:183
-#: src/License_Actions.php:203
+#: src/License_Actions.php:185
+#: src/License_Actions.php:205
 msgid "License status is unknown."
 msgstr ""
 
-#: src/License_Actions.php:184
+#: src/License_Actions.php:186
 msgid "Invalid License."
 msgstr ""
 
 #. translators: %s: item name
-#: src/License_Actions.php:186
+#: src/License_Actions.php:188
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: src/License_Actions.php:187
+#: src/License_Actions.php:189
 msgid "Renew?"
 msgstr ""
 
-#: src/License_Actions.php:188
+#: src/License_Actions.php:190
 msgid "unlimited"
 msgstr ""
 
-#: src/License_Actions.php:189
+#: src/License_Actions.php:191
 msgid "License key is active."
 msgstr ""
 
 #. translators: %s: expiration date
-#: src/License_Actions.php:191
+#: src/License_Actions.php:193
 msgid "Expires %s."
 msgstr ""
 
-#: src/License_Actions.php:192
+#: src/License_Actions.php:194
 msgid "Lifetime License."
 msgstr ""
 
 #. translators: %1: number of sites activated, %2: total number of sites activated
-#: src/License_Actions.php:194
+#: src/License_Actions.php:196
 msgid "You have %1$s / %2$s sites activated."
 msgstr ""
 
 #. translators: %s: expiration date
-#: src/License_Actions.php:196
+#: src/License_Actions.php:198
 msgid "License key expired on %s."
 msgstr ""
 
-#: src/License_Actions.php:197
+#: src/License_Actions.php:199
 msgid "License key has expired."
 msgstr ""
 
-#: src/License_Actions.php:198
+#: src/License_Actions.php:200
 msgid "License keys do not match."
 msgstr ""
 
-#: src/License_Actions.php:199
+#: src/License_Actions.php:201
 msgid "License is inactive."
 msgstr ""
 
-#: src/License_Actions.php:200
+#: src/License_Actions.php:202
 msgid "License key is disabled."
 msgstr ""
 
-#: src/License_Actions.php:201
+#: src/License_Actions.php:203
 msgid "Your license is not active for this URL."
 msgstr ""
 
-#: src/License_Actions.php:202
+#: src/License_Actions.php:204
 msgid "Site is inactive."
 msgstr ""
 
-#: src/License_Actions.php:204
+#: src/License_Actions.php:206
 msgid "Your license key has reached its activation limit."
 msgstr ""
 
-#: src/License_Actions.php:205
+#: src/License_Actions.php:207
 msgid "Updating this theme will lose any customizations you have made. 'Cancel' to stop, 'OK' to update."
 msgstr ""
 
 #. translators: %1: Name, %2: new version, %3: URL, %4: link title, %5: URL, %6: opening tag
-#: src/License_Actions.php:207
+#: src/License_Actions.php:209
 msgid "<strong>%1$s %2$s</strong> is available. <a href=\"%3$s\" class=\"thickbox\" title=\"%4$s\">Check out what's new</a> or <a href=\"%5$s\"%6$s>update now</a>."
 msgstr ""
 
-#: src/License_Actions.php:208
+#: src/License_Actions.php:210
 msgid "An error occurred, please try again."
-msgstr ""
-
-#. translators: %1: item name, %2: open tag, %3: version number, %4: close tag
-#: src/Plugin_Updater.php:219
-msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
-msgstr ""
-
-#. translators: %1: item name, %2: open tag, %3: version number, %4: close tag, %5: open tag, %6: close tag
-#: src/Plugin_Updater.php:228
-msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s."
-msgstr ""
-
-#: src/Plugin_Updater.php:469
-msgid "You do not have permission to install plugin updates."
-msgstr ""
-
-#: src/Plugin_Updater.php:469
-msgid "Error"
 msgstr ""
 
 #: src/Settings.php:55

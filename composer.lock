@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/afragen/translations-updater.git",
-                "reference": "cb37ba535ab7e9525e23cad60998d0e14289e535"
+                "reference": "93cd3ad14f59e435f0cfa915c6971126095a29f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/afragen/translations-updater/zipball/cb37ba535ab7e9525e23cad60998d0e14289e535",
-                "reference": "cb37ba535ab7e9525e23cad60998d0e14289e535",
+                "url": "https://api.github.com/repos/afragen/translations-updater/zipball/93cd3ad14f59e435f0cfa915c6971126095a29f1",
+                "reference": "93cd3ad14f59e435f0cfa915c6971126095a29f1",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,11 @@
                 "updater",
                 "wordpress"
             ],
-            "time": "2019-06-29T17:19:03+00:00"
+            "support": {
+                "issues": "https://github.com/afragen/translations-updater/issues",
+                "source": "https://github.com/afragen/translations-updater"
+            },
+            "time": "2020-06-24T02:11:27+00:00"
         }
     ],
     "packages-dev": [],
@@ -65,5 +69,5 @@
         "php": ">=5.6"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

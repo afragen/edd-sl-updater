@@ -1,50 +1,59 @@
-[
-    {
-        "name": "afragen/translations-updater",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/afragen/translations-updater.git",
-            "reference": "cb37ba535ab7e9525e23cad60998d0e14289e535"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/afragen/translations-updater/zipball/cb37ba535ab7e9525e23cad60998d0e14289e535",
-            "reference": "cb37ba535ab7e9525e23cad60998d0e14289e535",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4"
-        },
-        "time": "2019-06-29T17:19:03+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Fragen\\Translations_Updater\\": "src/Translations_Updater/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Andy Fragen",
-                "email": "andy@thefragens.com",
-                "homepage": "https://thefragens.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "This framework provides automatic decoupled languate pack updates from a public repository for your WordPress plugin or theme.",
-        "keywords": [
-            "language pack",
-            "plugin",
-            "theme",
-            "translations",
-            "updater",
-            "wordpress"
-        ]
-    }
-]
+{
+    "packages": [
+        {
+            "name": "afragen/translations-updater",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/afragen/translations-updater.git",
+                "reference": "93cd3ad14f59e435f0cfa915c6971126095a29f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/afragen/translations-updater/zipball/93cd3ad14f59e435f0cfa915c6971126095a29f1",
+                "reference": "93cd3ad14f59e435f0cfa915c6971126095a29f1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "time": "2020-06-24T02:11:27+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Fragen\\Translations_Updater\\": "src/Translations_Updater/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Fragen",
+                    "email": "andy@thefragens.com",
+                    "homepage": "https://thefragens.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This framework provides automatic decoupled languate pack updates from a public repository for your WordPress plugin or theme.",
+            "keywords": [
+                "language pack",
+                "plugin",
+                "theme",
+                "translations",
+                "updater",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/afragen/translations-updater/issues",
+                "source": "https://github.com/afragen/translations-updater"
+            },
+            "install-path": "../afragen/translations-updater"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
